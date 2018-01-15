@@ -82,6 +82,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var app = new _main2.default("hello!");
 var newText = new _addText2.default("helooo wooorld");
+addChild(newText);
+
 console.log("work!");
 
 /***/ }),
@@ -124,7 +126,7 @@ var addText = function addText(text) {
 	var _y = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
 	var size = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 24;
-	var color = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "#FFFFFF";
+	var color = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "#FF0000";
 	var glow = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : undefined;
 
 	var _align = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : "center";
