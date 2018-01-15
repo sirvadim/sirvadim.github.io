@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>TEST Treasure Of DAO</title>
+		
+
+		<!-- dao.casino -->
+		<!--<script src="https://platform.dao.casino/api/lib/DC.js?v=1.10"></script>-->
+		
+		<!-- framework, pixi.js - v4.5.1 -->
+		<script src="javascript/jquery.min.js"></script>
+		<script src="javascript/pixi.min.js"></script>
+		<script src="javascript/tweenjs-0.6.2.min.js"></script>
+		<script src="javascript/ResizeManager.js"></script>
+		<script src="javascript/visibly.js"></script>
+		<script src="javascript/daoLang.js"></script>
+		
+		<!-- main program -->
+		<script src="javascript/main.js"></script>
+		<script src="javascript/GameLogic.js"></script>
+		<script src="javascript/ItemLoading.js"></script>
+		<script src="javascript/ItemBox.js"></script>
+		<script src="javascript/ScrGame.js"></script>
+		<script src="javascript/ScrMenu.js"></script>
+		<script src="javascript/WndInfo.js"></script>
+		<script src="javascript/WndDep.js"></script>
+		<script src="javascript/WndContinue.js"></script>
+
+
+		<!-- подключаем стили Mocha, для отображения результатов -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.css">
+		<!-- подключаем библиотеку Mocha -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/2.1.0/mocha.js"></script>
+		<!-- подключаем chai -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/chai/2.0.0/chai.js"></script>
+		<!-- в chai есть много всего, выносим assert в глобальную область -->
+		
+		<script>
+			var assert = chai.assert;
+
+			// настраиваем Mocha: предстоит BDD-тестирование
+			mocha.setup('bdd');
+
+			$(function(){ mocha.run(); })
+		</script>
+	</head>
+
+	<body>
+		<div id="mocha"></div>
+
+
+		<script>
+			const start_balance = 5
+			const testLogic = new GameLogic(start_balance)
+
+			describe("Test GameLogic functions", function() {
+				it("start_balance", function() {
+					assert.equal(testLogic.balance(), start_balance)
+				})
+
+				it("check setBet returns", function() {
+					
+					assert.equal(testLogic.setBet(2).bet, 2 )
+
+				});
+
+
+				describe("check runGame returns", function() {
+					var r = testLogic.runGame()
+					
+					it("is object", function() {
+						assert(typeof r === 'object')
+					});
+
+					it("res has balance", function() {
+						assert(r.balance>0)
+					});
+				});
+			});
+
+
+		</script>
+		
+	</body>
+</html>
