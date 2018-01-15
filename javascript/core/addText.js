@@ -1,5 +1,7 @@
 export default class addText {
-	constructor(text, _x = 0, _y = 0, size = 24, color = "#FFFFFF", glow = undefined, _align = "center", width = 600, px = 2, font = "Archivo Black"){
+	let RED = "#FF0000";
+	let WHITE = "#FFFFFF";
+	constructor(text, _x = 0, _y = 0, size = 24, color = RED, glow = undefined, _align = "center", width = 600, px = 2, font = "Archivo Black"){
 	var style;
 	
 	if(glow){
