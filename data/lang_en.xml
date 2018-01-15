@@ -1,0 +1,19 @@
+﻿<lang
+	title_game="Treasure Of DAO"
+	game_scene="Screen Game"
+	your_bet="bet"
+	game_condition_win="win!"
+	game_condition_lose="lose..."
+	address="Address"
+	balance="balance"
+	question_continue="Do you want to continue? SPL Yes - I want to play more and win more. SPL No - I want to keep my current winnings"
+	new_game="New game"
+	no="No"
+	open_channel_start="Please wait. SPL Sending BETs into the game."
+	set_bet="Select a bet"
+	set_deposit="Select the amount of BET SPL you are ready to play."
+	yes="Yes"
+	info="info"
+	error_balance_bet="You do not have enough BET."
+	
+/>
