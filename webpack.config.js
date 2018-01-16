@@ -9,6 +9,12 @@ module.exports = {
 	},
 	watch: true,
 	target: 'node',
+	devServer : {
+		contentBase      : path.join(__dirname, './'),
+        open             : true  ,
+        watchContentBase : true  ,
+        port             : 9669
+	},
 	module: {
 	    rules: [
 	      {
@@ -19,7 +25,8 @@ module.exports = {
 	          options: {
 	            presets: ['env']
 	          }
-	        }
+	        },
+	         // Settings for webpack-dev-server
 	      }
 	    ]
 	 }
