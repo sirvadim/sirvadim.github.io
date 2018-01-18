@@ -36,10 +36,7 @@ export default class addCircle {
 			obj.lock.visible = value;
 		};
 
-		obj.mousedown = function (moveData) {
-			console.log(obj.name);
-			obj.over.visible=!obj.over.visible
-		};
+		
 
 		return obj;
 	}

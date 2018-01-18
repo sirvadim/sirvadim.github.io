@@ -5,7 +5,7 @@ export default class Logic {
 		let arWhiteBalls = [];
 		let dataTickets = [];
 		let redBalls = 0;
-		let totalTicket = 1000;
+		let totalTicket = 1;
 		let priceTicket = 2;
 		let gotMoney = 0;
 		let paidMoney = 0;
@@ -35,7 +35,11 @@ export default class Logic {
 			checkResult();
 			showWinners();
 		}
-
+/*
+		returnResult = function(){
+			return arWhiteBalls;
+		}
+*/
 		init();
 
 		function getBalls(ar) {
@@ -82,6 +86,7 @@ export default class Logic {
 				// if(obj.white == 4 && obj.red == 1){
 					// count++;
 				// }
+				console.log("dataPrize:", obj.res, dataPrize[obj.res]);
 			}
 			// console.log("count 4:", count);
 		}
@@ -105,7 +110,18 @@ export default class Logic {
 			console.log("countWinners:", String(countWinners)+"/"+String(totalTicket));
 			console.log("gotMoney:", gotMoney);
 			console.log("paidMoney:", paidMoney);
+
 		}
 
+		let result = {
+			arr1 : arWhiteBalls,
+			red  : redBalls
+		}
+		return result;
+
+	}
+
+	get getResults(){
+		return result;
 	}
 }

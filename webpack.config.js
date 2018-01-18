@@ -1,22 +1,32 @@
 const webpack = require('webpack')
 const path = require('path')
 
+console.log(process.cwd() + '/dist')
+console.log(__dirname)
+
+
+
+let sourcemap, watcher
+
 module.exports = {
-	entry : path.join(__dirname, 'javascript/init.js'),
+	entry : path.join(__dirname, '/javascript/init.js'),
 	output: {
-		path: path.join(__dirname, '/dist'),
-		filename: '[name].bundle.js'
+		path: process.cwd(),
+		filename: 'main.bundle.js'
 	},
-	watch: true,
-	target: 'node',
+	watch:true,
 	devServer : {
-		contentBase      : path.join(__dirname, './'),
-		inline			 : true  ,
-		hot				 : true	 ,
+		contentBase      : process.cwd(),
         open             : true  ,
         watchContentBase : true  ,
         port             : 9669
 	},
+	plugins: [
+        new webpack.ProvidePlugin({
+            $      : 'jquery',
+            jQuery : 'jquery'
+        }),
+	],
 	module: {
 	    rules: [
 	      {
@@ -28,7 +38,6 @@ module.exports = {
 	            presets: ['env']
 	          }
 	        },
-	         // Settings for webpack-dev-server
 	      }
 	    ]
 	 }
