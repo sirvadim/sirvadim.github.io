@@ -11,6 +11,8 @@ module.exports = {
 	target: 'node',
 	devServer : {
 		contentBase      : path.join(__dirname, './'),
+		inline			 : true  ,
+		hot				 : true	 ,
         open             : true  ,
         watchContentBase : true  ,
         port             : 9669

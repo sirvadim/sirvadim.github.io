@@ -222,129 +222,10 @@ function addScreen(name) {
 	currentScreen.name = name;
 }
 // for protoyupe
-function addText(text, _x = 0, _y = 0, size = 24, color = "#FFFFFF", glow = undefined, _align = "center", width = 600, px = 2, font = fontMain){
-	var style;
-	
-	if(glow){
-		style = {
-			font : size + "px " + font,
-			fill : color,
-			align : _align,
-			stroke : glow,
-			strokeThickness : px,
-			wordWrap : true,
-			wordWrapWidth : width
-		};
-	} else {
-		style = {
-			font : size + "px " + font,
-			fill : color,
-			align : _align,
-			wordWrap : true,
-			wordWrapWidth : width
-		};
-	}
-	
-	var obj = new PIXI.Container();
-	
-	var tfMain = new PIXI.Text(text, style);
-	tfMain.y = 0;
-	obj.addChild(tfMain);
-	if(_align == "left"){
-		tfMain.x = 0;
-	} else if(_align == "right"){
-		tfMain.x = -tfMain.width;
-	} else {
-		tfMain.x = - tfMain.width/2;
-	}
-	
-	obj.width = Math.ceil(tfMain.width);
-	obj.height = Math.ceil(tfMain.height);
-	
-	obj.setText = function(value){
-		tfMain.text = value;
-		if(_align == "left"){
-			tfMain.x = 0;
-		} else if(_align == "right"){
-			tfMain.x = -tfMain.width;
-		} else {
-			tfMain.x = - tfMain.width/2;
-		}
-	};
-	
-	obj.getText = function(){
-		return tfMain.text;
-	};
 
-	obj.x = _x;
-	obj.y = _y;
-	
-	return obj;
-}
-function addGraphic(_x, _y, _w, _h, _color, rotate) {
-	if(_w){}else{_w = 100;}
-	if(_h){}else{_h = 100;}
-	if(_color){}else{_color = 0xFFC893;}
-	
-	var obj = new PIXI.Container();
 
-	var objImg = new PIXI.Graphics();
-	objImg.beginFill(_color).drawRect(-_w/2, -_h/2, _w, _h).endFill();
-	obj.addChild(objImg);
-	
-	obj.x = _x;
-	obj.y = _y;
-	obj.w = _w;
-	obj.h = _h;
-	obj.rotation = rotate; 
-	return obj;
-}
 
-function addChip(_name, _x, _y, _title, _r, _sizeTF, _color, _colorOver) {
-	if(_x){}else{_x = 0;}
-	if(_y){}else{_y = 0;}
-	if(_sizeTF){}else{_sizeTF = 30;}
-	if(_r){}else{_r = 50;}
-	if(_color){}else{_color = 0xFFC893;}
-	if(_colorOver){}else{_colorOver = 0xFFF7D2;}
-	
-	var obj = new PIXI.Container();
-	 
-	var objImg = new PIXI.Graphics();
-	objImg.beginFill(_color).drawCircle(0, 0, _r).endFill();
-	objImg.position.set(1, 1);
-	obj.addChild(objImg);
-	obj.over = new PIXI.Graphics();
-	obj.over.beginFill(_colorOver).drawCircle(0, 0, _r).endFill();
-	obj.over.visible = false;
-	obj.addChild(obj.over);
-	obj.lock = new PIXI.Graphics();
-	obj.lock.beginFill(0x999999).drawCircle(0, 0, _r).endFill();
-	obj.lock.visible = false;
-	obj.addChild(obj.lock);
 
-	if(_title){
-		obj.tf = addText(0, -_sizeTF/2, _title, _sizeTF, "#ffffff", "#000000", "center", _r-20, 4);
-		obj.addChild(obj.tf);
-	}
-	
-	obj.sc = 1;
-	obj.x = _x;
-	obj.y = _y;
-	obj.r = _r;
-	obj.name = _name;
-	obj._selected = false;
-	obj._disabled = false;
-	obj.interactive = true;
-	obj.buttonMode=true;
-	
-	obj.setDisabled = function(value){
-		obj._disabled = value;
-		obj.lock.visible = value;
-	};
-	
-	return obj;
-}
 
 function addButtonGr(_name, _x, _y, _title, _w, _h, _sizeTF, _color, _colorOver) {
 	if(_x){}else{_x = 0;}
@@ -439,58 +320,7 @@ function addObj(name, _x, _y, _scGr, _scaleX, _scaleY) {
 	
 	return obj;
 }
-function addButton(name, _x, _y, _scGr, _scaleX, _scaleY) {
-	if(_x){}else{_x = 0;}
-	if(_y){}else{_y = 0;}
-	if(_scGr){}else{_scGr = 1;}
-	if(_scaleX){}else{_scaleX = 1;}
-	if(_scaleY){}else{_scaleY = 1;}
-	var obj = new PIXI.Container();
-	
-	var objImg = null;
-	obj.setImg = function(name){
-		objImg = addObj(name);
-		obj.addChild(objImg);
-		obj.over = addObj(name + "Over");
-		if(obj.over){
-			obj.over.visible = false;
-			obj.addChild(obj.over);
-		} else {
-			obj.over = null;
-		}
-		obj.lock = addObj(name + "Lock");
-		if(obj.lock){
-			obj.lock.visible = false;
-			obj.addChild(obj.lock);
-		} else {
-			obj.lock = null;
-		}
-		
-		obj.sc = _scGr;
-		obj.scale.x = _scGr*_scaleX;
-		obj.scale.y = _scGr*_scaleY;
-		obj.vX = _scaleX;
-		obj.vY = _scaleY;
-		obj.x = _x;
-		obj.y = _y;
-		obj.w = objImg.width*_scGr;
-		obj.h = objImg.height*_scGr;
-		obj.r = obj.w/2;
-		obj.rr = obj.r*obj.r;
-		obj.name = name;
-		obj._selected = false;
-		if(obj.w < 50){
-			obj.w = 50;
-		}
-		if(obj.h < 50){
-			obj.h = 50;
-		}
-	};
-	
-	obj.setImg(name);
-	
-	return obj;
-}
+
 function addButton2(name, _x, _y, _scGr, _scaleX, _scaleY) {
 	if(_x){}else{_x = 0;}
 	if(_y){}else{_y = 0;}

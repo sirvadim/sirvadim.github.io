@@ -1,3 +1,4 @@
+import addText from "./addText";
 export default class addCircle {
 	constructor(_name, _x = 0, _y = 0, _title, _r = 50, _sizeTF = 30, _color = 0xFFC893, _colorOver = 0xFFF7D2){
 		var obj = new PIXI.Container();
@@ -16,7 +17,7 @@ export default class addCircle {
 		obj.addChild(obj.lock);
 
 		if(_title){
-			obj.tf = addText(0, -_sizeTF/2, _title, _sizeTF, "#ffffff", "#000000", "center", _r-20, 4);
+			obj.tf = new addText(_title, 0, -_sizeTF/2, _sizeTF, "#ffffff", "#000000", "center", _r-20, 4);
 			obj.addChild(obj.tf);
 		}
 		
@@ -34,7 +35,12 @@ export default class addCircle {
 			obj._disabled = value;
 			obj.lock.visible = value;
 		};
-		
+
+		obj.mousedown = function (moveData) {
+			console.log(obj.name);
+			obj.over.visible=!obj.over.visible
+		};
+
 		return obj;
 	}
 }

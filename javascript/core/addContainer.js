@@ -1,20 +1,6 @@
-export default class addText {
-	constructor(text, _x = 0, _y = 0, size = 24, color = "#000000", glow = undefined, _align = "left", width = 600, px = 2, font = "Times New Roman"){
-		let style = {
-			font : size + "px " + font,
-			fill : color,
-			align : _align,
-			wordWrap : true,
-			wordWrapWidth : width
-		};
-		
-		if(glow){
-			style.stroke = glow,
-			style.strokeThickness = px
-		}
-		
+export default class addContainer {
+	constructor(){
 		let obj = new PIXI.Container();
-		
 		let tfMain = new PIXI.Text(text, style);
 		tfMain.y = 0;
 		obj.addChild(tfMain);
@@ -41,10 +27,6 @@ export default class addText {
 		obj.getText = function(){
 			return tfMain.text;
 		};
-
-		obj.getSize = function(){
-			return style;
-		}
 
 		obj.x = _x;
 		obj.y = _y;
