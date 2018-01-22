@@ -1,3 +1,4 @@
+import addText from "./addText";
 export default class addButton {
 	constructor(_name, _x, _y, _title, _w, _h, _sizeTF, _color, _colorOver){
 		if(_x){}else{_x = 0;}
@@ -23,7 +24,7 @@ export default class addButton {
 		obj.addChild(obj.lock);
 		
 		if(_title){
-			obj.tf = addText(_title, _sizeTF, "#ffffff", "#000000", "center", _w-20, 4);
+			obj.tf = new addText(_title, 0,0,_sizeTF, "#ffffff", "#000000", "center", _w-20, 4);
 			obj.tf.x = 0;
 			obj.tf.y = -obj.tf.height/2;
 			obj.addChild(obj.tf);

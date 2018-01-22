@@ -4,6 +4,7 @@ import addText from "./core/addText"
 import addGraphic from "./core/addGraphic"
 import addCircle from "./core/addCircle"
 import addButton from "./core/addButton"
+import addTicket from "./core/addTicket"
 
 var app = new myclass("hello!");
 
@@ -18,36 +19,22 @@ let tickets = [
 	]*/
 ]
 
+let numOfTickets = 1;
+let currentTicket = 1;
+
 function init() {
 	//initialize the stage
 	renderer = PIXI.autoDetectRenderer(_W, _H);
 	console.log(document.body);
 	document.body.appendChild(renderer.view);
 	stage = new PIXI.Container();
-	var layer = new PIXI.Container();
+	renderer.backgroundColor = 0x2F4F4F;
+	/*пример текста*/
+	var newText = new addText(currentTicket+"/"+numOfTickets);
+	newText.x = 520;
+	newText.y = 200;
 
-	var graphics = new PIXI.Graphics();
-
-	graphics.beginFill(0xFFFF00);
-
-	// set the line style to have a width of 5 and set the color to red
-	graphics.lineStyle(5, 0xFF0000);
-
-	// draw a rectangle
-	graphics.drawRect(0, 0, 300, 200);
-
-	layer.addChild(graphics);
-	stage.addChild(layer);
-	var newText = new addText("dasfagkihfdjhadsappMYAAA",undefined,undefined,undefined,undefined,"#ff00fc");
-	//var newGr = new addGraphic();
-	var newC = new addCircle("1");
-	//stage.addChild(newGr)
 	stage.addChild(newText);
-	stage.addChild(newC)
-
-	
-
-	console.log("???")
 
 	let _x = 1000;
 	let _y = 100;
@@ -101,15 +88,11 @@ function init() {
 		stage.addChild(newCircle);
 	}
 
-	let btn_roll = new addButton("roll", 200, 400);
+	let btn_roll = new addButton("roll", 200, 400, "roll");
 	stage.addChild(btn_roll);
 
-	let btn_ticket = new addButton("new ticket", 200, 520);
+	let btn_ticket = new addButton("new ticket", 200, 520, "new ticket");
 	stage.addChild(btn_ticket);
-
-	console.log(newText.getSize())
-	console.log(newText.getSize())
-	console.log(newText.getSize())
 
 	btn_roll.mousedown = function (moveData) {
 		var _logic = new Logic();
@@ -166,6 +149,14 @@ function init() {
 	};
 
 	btn_ticket.mousedown = function (moveData) {
+		if(numOfTickets==25){
+			alert("TICKETS LIMIT!");
+			return;
+		}
+		numOfTickets++;
+		arrow1.visible=true;
+		newText.setText(currentTicket+"/"+numOfTickets);
+/*
 		let white = 0;
 		let red = 0;
 		let mas_ticket = [];
@@ -208,12 +199,58 @@ function init() {
 		num_group1 = 0;
 		num_group2 = 0;
 
-		console.log("new ticket! prev length:",tickets.length);
+		console.log("new ticket! prev length:",tickets.length);*/
 	};
 	//покупка тикетов, получение выигрыша
 	/*stage.interactive = true;
 	stage.mousedown = function (moveData) {	console.log("mousedown stage ");};
 */
+	let _ticket = new addTicket();
+	let ticket = _ticket.getObj();
+	stage.addChild(ticket);
+	ticket.x=450;
+	ticket.y=250;
+	let arrow1 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
+	let arrow2 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
+	stage.addChild(arrow1);
+	stage.addChild(arrow2);
+	arrow1.scale.x/=-8;
+	arrow1.scale.y/=8;
+	arrow2.scale.x/=8;
+	arrow2.scale.y/=8;
+	arrow1.x=720
+	arrow2.x=360
+	arrow1.y = 450;
+	arrow2.y = 450;
+
+	arrow1.interactive = true;
+	arrow1.buttonMode = true;
+
+	arrow2.interactive = true;
+	arrow2.buttonMode = true;
+
+	arrow1.visible=false;
+	arrow2.visible=false;
+	arrow1.mousedown = function (moveData) {
+		_ticket.getNums();
+		_ticket.changeField();
+		currentTicket++;
+		newText.setText(currentTicket+"/"+numOfTickets);
+		if(currentTicket == numOfTickets){
+			arrow1.visible=false;
+			arrow2.visible=true;
+		}
+	}
+
+	arrow2.mousedown = function (moveData) {
+		currentTicket--;
+		newText.setText(currentTicket+"/"+numOfTickets);
+		if(currentTicket == 1){
+			arrow1.visible=true;
+			arrow2.visible=false;
+		}
+	}
+
 	update();
 }
 let getTime = () => {

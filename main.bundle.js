@@ -167,6 +167,10 @@ var _addButton = __webpack_require__(6);
 
 var _addButton2 = _interopRequireDefault(_addButton);
 
+var _addTicket = __webpack_require__(7);
+
+var _addTicket2 = _interopRequireDefault(_addTicket);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = new _main2.default("hello!");
@@ -182,34 +186,22 @@ var tickets = [
  ]*/
 ];
 
+var numOfTickets = 1;
+var currentTicket = 1;
+
 function init() {
 	//initialize the stage
 	renderer = PIXI.autoDetectRenderer(_W, _H);
 	console.log(document.body);
 	document.body.appendChild(renderer.view);
 	stage = new PIXI.Container();
-	var layer = new PIXI.Container();
+	renderer.backgroundColor = 0x2F4F4F;
+	/*пример текста*/
+	var newText = new _addText2.default(currentTicket + "/" + numOfTickets);
+	newText.x = 520;
+	newText.y = 200;
 
-	var graphics = new PIXI.Graphics();
-
-	graphics.beginFill(0xFFFF00);
-
-	// set the line style to have a width of 5 and set the color to red
-	graphics.lineStyle(5, 0xFF0000);
-
-	// draw a rectangle
-	graphics.drawRect(0, 0, 300, 200);
-
-	layer.addChild(graphics);
-	stage.addChild(layer);
-	var newText = new _addText2.default("dasfagkihfdjhadsappMYAAA", undefined, undefined, undefined, undefined, "#ff00fc");
-	//var newGr = new addGraphic();
-	var newC = new _addCircle2.default("1");
-	//stage.addChild(newGr)
 	stage.addChild(newText);
-	stage.addChild(newC);
-
-	console.log("???");
 
 	var _x = 1000;
 	var _y = 100;
@@ -265,15 +257,11 @@ function init() {
 		_loop2();
 	}
 
-	var btn_roll = new _addButton2.default("roll", 200, 400);
+	var btn_roll = new _addButton2.default("roll", 200, 400, "roll");
 	stage.addChild(btn_roll);
 
-	var btn_ticket = new _addButton2.default("new ticket", 200, 520);
+	var btn_ticket = new _addButton2.default("new ticket", 200, 520, "new ticket");
 	stage.addChild(btn_ticket);
-
-	console.log(newText.getSize());
-	console.log(newText.getSize());
-	console.log(newText.getSize());
 
 	btn_roll.mousedown = function (moveData) {
 		var _logic = new _Logic2.default();
@@ -329,54 +317,108 @@ function init() {
 	};
 
 	btn_ticket.mousedown = function (moveData) {
-		var white = 0;
-		var red = 0;
-		var mas_ticket = [];
-		var mas_white = [];
-		var num_red = void 0;
-		mas_btns1.forEach(function (item, i, arr) {
-			if (item.over.visible) {
-				white++;
-				mas_white.push(item.name);
-			}
-		});
-		mas_btns2.forEach(function (item, i, arr) {
-			if (item.over.visible) {
-				red++;
-				num_red = item.name;
-			}
-		});
-
-		if (white != 5 || red != 1) {
-			alert("fill ticket correctly!");
+		if (numOfTickets == 25) {
+			alert("TICKETS LIMIT!");
 			return;
 		}
-
-		mas_ticket.push(mas_white);
-		mas_ticket.push(num_red);
-
-		tickets.push(mas_ticket);
-
-		mas_btns1.forEach(function (item, i, arr) {
-			if (item.over.visible) {
-				item.over.visible = !item.over.visible;
-			}
-		});
-		mas_btns2.forEach(function (item, i, arr) {
-			if (item.over.visible) {
-				item.over.visible = !item.over.visible;
-			}
-		});
-
-		num_group1 = 0;
-		num_group2 = 0;
-
-		console.log("new ticket! prev length:", tickets.length);
+		numOfTickets++;
+		arrow1.visible = true;
+		newText.setText(currentTicket + "/" + numOfTickets);
+		/*
+  		let white = 0;
+  		let red = 0;
+  		let mas_ticket = [];
+  		let mas_white = [];
+  		let num_red;
+  		mas_btns1.forEach(function(item, i, arr) {
+  		  	if(item.over.visible){
+  		  		white++;
+  		  		mas_white.push(item.name);
+  		  	}
+  		});
+  		mas_btns2.forEach(function(item, i, arr) {
+  		  	if(item.over.visible){
+    				red++;
+    				num_red = item.name;
+  		  	}
+  		});
+  
+  		if (white != 5 || red != 1){
+  			alert("fill ticket correctly!");
+  			return;
+  		}
+  
+  		mas_ticket.push(mas_white);
+  		mas_ticket.push(num_red);
+  
+  		tickets.push(mas_ticket);
+  
+  		mas_btns1.forEach(function(item, i, arr) {
+  		  	if(item.over.visible){
+  		  		item.over.visible = !item.over.visible;
+  		  	}
+  		});
+  		mas_btns2.forEach(function(item, i, arr) {
+  		  	if(item.over.visible){
+  		  		item.over.visible = !item.over.visible;
+  		  	}
+  		});
+  
+  		num_group1 = 0;
+  		num_group2 = 0;
+  
+  		console.log("new ticket! prev length:",tickets.length);*/
 	};
 	//покупка тикетов, получение выигрыша
 	/*stage.interactive = true;
  stage.mousedown = function (moveData) {	console.log("mousedown stage ");};
  */
+	var _ticket = new _addTicket2.default();
+	var ticket = _ticket.getObj();
+	stage.addChild(ticket);
+	ticket.x = 450;
+	ticket.y = 250;
+	var arrow1 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
+	var arrow2 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
+	stage.addChild(arrow1);
+	stage.addChild(arrow2);
+	arrow1.scale.x /= -8;
+	arrow1.scale.y /= 8;
+	arrow2.scale.x /= 8;
+	arrow2.scale.y /= 8;
+	arrow1.x = 720;
+	arrow2.x = 360;
+	arrow1.y = 450;
+	arrow2.y = 450;
+
+	arrow1.interactive = true;
+	arrow1.buttonMode = true;
+
+	arrow2.interactive = true;
+	arrow2.buttonMode = true;
+
+	arrow1.visible = false;
+	arrow2.visible = false;
+	arrow1.mousedown = function (moveData) {
+		_ticket.getNums();
+		_ticket.changeField();
+		currentTicket++;
+		newText.setText(currentTicket + "/" + numOfTickets);
+		if (currentTicket == numOfTickets) {
+			arrow1.visible = false;
+			arrow2.visible = true;
+		}
+	};
+
+	arrow2.mousedown = function (moveData) {
+		currentTicket--;
+		newText.setText(currentTicket + "/" + numOfTickets);
+		if (currentTicket == 1) {
+			arrow1.visible = true;
+			arrow2.visible = false;
+		}
+	};
+
 	update();
 }
 var getTime = function getTime() {
@@ -712,6 +754,12 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _addText = __webpack_require__(0);
+
+var _addText2 = _interopRequireDefault(_addText);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var addButton = function addButton(_name, _x, _y, _title, _w, _h, _sizeTF, _color, _colorOver) {
@@ -754,7 +802,7 @@ var addButton = function addButton(_name, _x, _y, _title, _w, _h, _sizeTF, _colo
 	obj.addChild(obj.lock);
 
 	if (_title) {
-		obj.tf = addText(_title, _sizeTF, "#ffffff", "#000000", "center", _w - 20, 4);
+		obj.tf = new _addText2.default(_title, 0, 0, _sizeTF, "#ffffff", "#000000", "center", _w - 20, 4);
 		obj.tf.x = 0;
 		obj.tf.y = -obj.tf.height / 2;
 		obj.addChild(obj.tf);
@@ -788,6 +836,182 @@ var addButton = function addButton(_name, _x, _y, _title, _w, _h, _sizeTF, _colo
 };
 
 exports.default = addButton;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _addText = __webpack_require__(0);
+
+var _addText2 = _interopRequireDefault(_addText);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var addTicket = function () {
+	function addTicket() {
+		var _this = this;
+
+		_classCallCheck(this, addTicket);
+
+		var obj = new PIXI.Container();
+		var mas = [];
+		var _x = 0;
+		var _y = 0;
+		var _self = this;
+		this.score = 0;
+		this.score2 = 0;
+
+		console.log(this.score);
+		console.log(this.score2);
+
+		var _loop = function _loop(i) {
+			var newBlueField = new PIXI.Container();
+
+			var bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png');
+			var bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
+			newBlueField.addChild(bb);
+			newBlueField.addChild(bb2);
+			bb2.visible = false;
+			bb.visible = true;
+			obj.addChild(newBlueField);
+			newBlueField.x = _x;
+			newBlueField.y = _y;
+			newBlueField.name = i;
+			console.log(newBlueField.height);
+
+			obj.tf = new _addText2.default(i, _x + 13, _y + 3, 20, undefined, undefined, "center");
+			obj.addChild(obj.tf);
+
+			// if(i%6)_y+=26;
+			if (i % 6 == 0) {
+				_y += 30;
+				_x = 0;
+			} else {
+				_x += 30;
+			}
+
+			newBlueField.interactive = true;
+			newBlueField.buttonMode = true;
+
+			newBlueField.mousedown = function (e) {
+				console.log(e.target.name);
+				if (bb.visible && _this.score > 4) return;
+
+				if (bb.visible) _this.score++;else _this.score--;
+
+				bb2.visible = !bb2.visible;
+				bb.visible = !bb.visible;
+				console.log(_this.score);
+			};
+			mas.push(newBlueField);
+		};
+
+		for (var i = 1; i < 70; i++) {
+			_loop(i);
+		}
+
+		_y += 60;
+		_x = 0;
+
+		var _loop2 = function _loop2(i) {
+			var newBlueField = new PIXI.Container();
+
+			var bb = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0001.png');
+			var bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0003.png');
+			newBlueField.addChild(bb);
+			newBlueField.addChild(bb2);
+			bb2.visible = false;
+			bb.visible = true;
+			obj.addChild(newBlueField);
+			newBlueField.x = _x;
+			newBlueField.y = _y;
+			newBlueField.name = i;
+			console.log(newBlueField.height);
+
+			obj.tf = new _addText2.default(i, _x + 13, _y + 3, 20, undefined, undefined, "center");
+			obj.addChild(obj.tf);
+
+			// if(i%6)_y+=26;
+			if (i % 6 == 0) {
+				_y += 30;
+				_x = 0;
+			} else {
+				_x += 30;
+			}
+
+			newBlueField.interactive = true;
+			newBlueField.buttonMode = true;
+
+			newBlueField.mousedown = function (moveData) {
+				console.log(this.name);
+				if (bb.visible && _self.score2 > 0) return;
+
+				if (bb.visible) _self.score2++;else _self.score2--;
+
+				bb2.visible = !bb2.visible;
+				bb.visible = !bb.visible;
+				console.log(_self.score2);
+			};
+			mas.push(newBlueField);
+		};
+
+		for (var i = 1; i < 30; i++) {
+			_loop2(i);
+		}
+		this.obj = obj;
+		//return obj;
+		this.mas = mas;
+	}
+
+	_createClass(addTicket, [{
+		key: 'getObj',
+		value: function getObj() {
+			//console.log(this.obj);
+			return this.obj;
+		}
+	}, {
+		key: 'changeField',
+		value: function changeField() {
+			var _self = this;
+			_self.score = 0;
+			_self.score2 = 0;
+			this.mas.forEach(function (item, i, arr) {
+				if (item.children[1].visible == true) {
+					item.children[1].visible = false;
+					item.children[0].visible = true;
+				}
+			});
+			console.log("works");
+		}
+	}, {
+		key: 'getNums',
+		value: function getNums() {
+			var numArr = [];
+			this.mas.forEach(function (item, i, arr) {
+				if (item.children[1].visible == true) {
+					numArr.push(item.name);
+					console.log(item.name);
+				}
+			});
+			return numArr;
+		}
+	}]);
+
+	return addTicket;
+}();
+
+exports.default = addTicket;
 
 /***/ })
 /******/ ]);
