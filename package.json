@@ -5,7 +5,7 @@
   "main": "web3-light.js",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server --hot"
+    "start": "webpack-dev-server --hot --inline"
   },
   "author": "",
   "license": "ISC",

@@ -113,15 +113,29 @@ export default class Logic {
 
 		}
 
-		let result = {
+		this.dataPrize = dataPrize
+
+		this.result = {
 			arr1 : arWhiteBalls,
 			red  : redBalls
 		}
-		return result;
 
 	}
 
+
+	getResults(){
+		return this.result;
+	}
+
+	getDataPrize(){
+		return this.dataPrize;
+	}
+/*
+	static getResults(){
+		return result;
+	}
+/*
 	get getResults(){
 		return result;
-	}
+	}*/
 }

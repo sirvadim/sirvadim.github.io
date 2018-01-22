@@ -17,6 +17,8 @@ module.exports = {
 	watch:true,
 	devServer : {
 		contentBase      : process.cwd(),
+		hot				 : true  ,
+		inline           : true  ,
         open             : true  ,
         watchContentBase : true  ,
         port             : 9669
