@@ -130,12 +130,4 @@ export default class Logic {
 	getDataPrize(){
 		return this.dataPrize;
 	}
-/*
-	static getResults(){
-		return result;
-	}
-/*
-	get getResults(){
-		return result;
-	}*/
 }

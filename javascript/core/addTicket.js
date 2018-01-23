@@ -1,17 +1,24 @@
 import addText from "./addText";
+//TODO оптимизировать циклы, избавиться от одинакового кода
 export default class addTicket {
+	//constructor выполняется по умолчанию
 	constructor(){
+		//указывает на конструктор
+		let _self = this;
+		//слой, в который отрисовываются все ячейки (графика)
 		let obj = new PIXI.Container();
+		//массив, в который пушатся синие (для клика и получения номера)
 		let mas = [];
+		//массив, в который пушатся красные (для клика и получения номера)
+		let mas2 = [];
+		//координаты, в которые отрисовываются ячейки
 		let _x = 0;
 		let _y = 0;
-		let _self = this;
+		
+		//счет (чтобы нельзя было нажать все ячейки)
 		this.score = 0;
 		this.score2 = 0;
-
-		console.log(this.score)
-		console.log(this.score2)
-
+		//рисуем синие
 		for(let i = 1; i < 70; i++){
 			let newBlueField = new PIXI.Container();
 			
@@ -62,6 +69,7 @@ export default class addTicket {
 		_y += 60;
 		_x = 0;
 
+		//рисуем красные
 		for(let i = 1; i < 30; i++){
 			let newBlueField = new PIXI.Container();
 			
@@ -105,42 +113,88 @@ export default class addTicket {
 				bb.visible = !bb.visible;
 				console.log(_self.score2)
 			}
-			mas.push(newBlueField);
+			mas2.push(newBlueField);
 		}
 		this.obj = obj;
-		//return obj;
 		this.mas = mas;
-
+		this.mas2 = mas2;
 	}
 
 	getObj(){
-		//console.log(this.obj);
+		//возвращаем слой, чтобы нарисовать его на экране
 		return this.obj;
 	}
 
 	changeField(){
-		let _self = this;
-		_self.score = 0;
-		_self.score2 = 0;
+		//очищаем поле от выбранных ячеек (для переключения между билетами)
+		this.score = 0;
+		this.score2 = 0;
 		this.mas.forEach(function(item, i, arr) {
 			if(item.children[1].visible == true){
 		  		item.children[1].visible = false;
 		  		item.children[0].visible = true;
 			}
 		});
-		console.log("works")
+		this.mas2.forEach(function(item, i, arr) {
+			if(item.children[1].visible == true){
+		  		item.children[1].visible = false;
+		  		item.children[0].visible = true;
+			}
+		});
 	}
 
-	getNums(){
+	getBlueNums(){
+		//получаем массив с номерами синих
 		let numArr = [];
 		this.mas.forEach(function(item, i, arr) {
 			if(item.children[1].visible == true){
 				numArr.push(item.name);
-				console.log(item.name);
-
 			}
 		});
 		return numArr;
+	}
+
+	getRedNums(){
+		//получаем массив с номерами красных
+		let numArr = undefined;
+		this.mas2.forEach(function(item, i, arr) {
+			if(item.children[1].visible == true){
+				numArr = item.name;
+			}
+		});
+		return numArr;
+	}
+
+	changeFieldVisTrue(_masBlue, _red){
+		//отображаем заполненный билет
+		console.log("changeFieldVisTrue",_masBlue, _red)
+
+		//синие
+		if(_masBlue){
+			this.score = _masBlue.length;
+			this.mas.forEach(function(item, i, arr) {
+				for(let j = 0; j < _masBlue.length; j++){
+					console.log(item.name,_masBlue[j])
+					if(item.children[1].visible == false && item.name == _masBlue[j]){
+				  		item.children[1].visible = true;
+				  		item.children[0].visible = false;
+					}
+				}
+			});
+		}
+
+		//красные
+		if(_red != undefined){
+			console.log("2")
+			this.score2 = 1;
+			this.mas2.forEach(function(item, i, arr) {
+				if(item.children[1].visible == false && item.name == _red){
+			  		item.children[1].visible = true;
+			  		item.children[0].visible = false;
+				}
+			});
+		}
+
 	}
 
 }

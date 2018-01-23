@@ -6,12 +6,12 @@ import addCircle from "./core/addCircle"
 import addButton from "./core/addButton"
 import addTicket from "./core/addTicket"
 
-var app = new myclass("hello!");
+let app = new myclass("hello!");
 
-var _W = 1920; // game width
-var _H = 1080; // game height
+let _W = 1920; // game width
+let _H = 1080; // game height
 
-var renderer, stage; // pixi;
+let renderer, stage; // pixi;
 
 let tickets = [
 	/*[
@@ -19,74 +19,23 @@ let tickets = [
 	]*/
 ]
 
+let BlueNumbersArray = [];
+let RedNumberArray = [];
+
 let numOfTickets = 1;
 let currentTicket = 1;
 
 function init() {
 	//initialize the stage
 	renderer = PIXI.autoDetectRenderer(_W, _H);
-	console.log(document.body);
+	// console.log(document.body);
 	document.body.appendChild(renderer.view);
 	stage = new PIXI.Container();
 	renderer.backgroundColor = 0x2F4F4F;
-	/*пример текста*/
-	var newText = new addText(currentTicket+"/"+numOfTickets);
-	newText.x = 520;
-	newText.y = 200;
+
+	let newText = new addText(currentTicket+"/"+numOfTickets,520,200);
 
 	stage.addChild(newText);
-
-	let _x = 1000;
-	let _y = 100;
-	const NUM_group1 = 5;
-	const NUM_group2 = 1;
-
-	let num_group1 = 0;
-	let num_group2 = 0;
-
-	let mas_btns1 = [];
-	let mas_btns2 = [];
-	
-	for (var i = 1; i <= 69; i++) {
-		let newCircle = new addCircle(i, _x, _y, i, 25);
-		mas_btns1.push(newCircle);
-		newCircle.mousedown = function (moveData) {
-			if (num_group1 > 4 && !newCircle.over.visible)
-				return;
-			newCircle.over.visible ? num_group1-- : num_group1++;
-			newCircle.over.visible = !newCircle.over.visible
-		};
-		if(i % 8 == 0){
-			_y += 55;
-			_x = 1000;
-		} else 
-			_x += 55;
-		stage.addChild(newCircle);
-	}
-
-	_x = 1000;
-	_y = 700;
-
-
-
-	for (var i = 1; i <= 26; i++) {
-		
-		let newCircle = new addCircle(i, _x, _y, i, 25);
-		mas_btns2.push(newCircle);
-
-		newCircle.mousedown = function (moveData) {
-			if (num_group2 > 0 && !newCircle.over.visible)
-				return;
-			newCircle.over.visible ? num_group2-- : num_group2++;
-			newCircle.over.visible = !newCircle.over.visible
-		};
-		if(i % 8 == 0){
-			_y += 55;
-			_x = 1000;
-		} else 
-			_x += 55;
-		stage.addChild(newCircle);
-	}
 
 	let btn_roll = new addButton("roll", 200, 400, "roll");
 	stage.addChild(btn_roll);
@@ -94,58 +43,68 @@ function init() {
 	let btn_ticket = new addButton("new ticket", 200, 520, "new ticket");
 	stage.addChild(btn_ticket);
 
+	let btn_remove_ticket = new addButton("remove ticket", 200, 640, "remove ticket");
+	stage.addChild(btn_remove_ticket);
+
 	btn_roll.mousedown = function (moveData) {
-		var _logic = new Logic();
-		var logic = _logic.getResults();
-		// console.log("logic",logic)
-		// console.log("btn_roll");
+		let _logic = new Logic();
+		let logic = _logic.getResults();
+
 		let white = 0;
 		let red = 0;
-		mas_btns1.forEach(function(item, i, arr) {
-		  	if(item.over.visible){
-		  		for(let j = 0; j < 5; j++)
-		  			if(item.name == logic.arr1[j])
-		  				white++;
-		  	}
-		});
-		mas_btns2.forEach(function(item, i, arr) {
-		  	if(item.over.visible){
-	  			if(item.name == logic.red)
-	  				red++;
-		  	}
-		});
-		// console.log("itog:",white, red);
-		var prize = _logic.getDataPrize();
-		if(prize[white+"_"+red]){
-			console.log("выигрыш: ",prize[white+"_"+red]);
-		} else {
-			console.log("проиграл")
+
+
+		//мы не можем отследить, менялись ли значения в текущем билете, прежде чем был нажат ролл.
+		//заново получаем его данные
+		let _mas = _ticket.getBlueNums();
+		BlueNumbersArray[currentTicket] = _mas;
+		let _num = _ticket.getRedNums();
+		RedNumberArray[currentTicket] = _num;
+
+		//проверка на заполненность ВСЕХ билетов включая текущий
+		if(BlueNumbersArray[currentTicket] == undefined || RedNumberArray[currentTicket] == undefined){
+			alert("fill ticket correctly!");
+			return;
 		}
 
-		for (var i = tickets.length - 1; i >= 0; i--) {
-			let white = 0;
-			let red = 0;
-			let curticket = tickets[i];
-			var whites = curticket[0]
-			console.log(curticket[0], curticket[1])
-
-			for (var k = 0; k < 5; k++){
-				for(let j = 0; j < 5; j++)
-					if (whites[k] == logic.arr1[j])
-						white ++;
+		for(let i = 1; i <= numOfTickets; i++){
+			if(BlueNumbersArray[i].length != 5 || RedNumberArray[i] == undefined){
+				alert("fill ticket correctly!");
+				return;
 			}
+		}
 
-			if(curticket[1] == logic.red){
-				red ++;
-			}
+		//все билеты заполнены! проверяем каждый на выигрыш
+		for(let i = 1; i <= numOfTickets; i++){
+			//i наш текущий билет
+			//подсчитываем сколько мы угадали синих
 
-			prize = _logic.getDataPrize();
+			//и угадали ли мы красный
+
+			//показываем результат
+			/*mas_btns1.forEach(function(item, i, arr) {
+			  	if(item.over.visible){
+			  		for(let j = 0; j < 5; j++)
+			  			if(item.name == logic.arr1[j])
+			  				white++;
+			  	}
+			});
+			mas_btns2.forEach(function(item, i, arr) {
+			  	if(item.over.visible){
+		  			if(item.name == logic.red)
+		  				red++;
+			  	}
+			});
+			// console.log("itog:",white, red);
+			let prize = _logic.getDataPrize();
 			if(prize[white+"_"+red]){
 				console.log("выигрыш: ",prize[white+"_"+red]);
 			} else {
 				console.log("проиграл")
-			}
+			}*/
+
 		}
+
 	};
 
 	btn_ticket.mousedown = function (moveData) {
@@ -156,55 +115,33 @@ function init() {
 		numOfTickets++;
 		arrow1.visible=true;
 		newText.setText(currentTicket+"/"+numOfTickets);
-/*
-		let white = 0;
-		let red = 0;
-		let mas_ticket = [];
-		let mas_white = [];
-		let num_red;
-		mas_btns1.forEach(function(item, i, arr) {
-		  	if(item.over.visible){
-		  		white++;
-		  		mas_white.push(item.name);
-		  	}
-		});
-		mas_btns2.forEach(function(item, i, arr) {
-		  	if(item.over.visible){
-  				red++;
-  				num_red = item.name;
-		  	}
-		});
+	};
 
-		if (white != 5 || red != 1){
-			alert("fill ticket correctly!");
+	btn_remove_ticket.mousedown = function (moveData) {
+		if(currentTicket == 1){
+			alert("cant remove first ticket")
 			return;
 		}
 
-		mas_ticket.push(mas_white);
-		mas_ticket.push(num_red);
+		numOfTickets--;
+		BlueNumbersArray.splice(currentTicket);
+		RedNumberArray.splice(currentTicket);
+		newText.setText(currentTicket+"/"+numOfTickets);
+		//arrow2.mousedown();
 
-		tickets.push(mas_ticket);
+		_ticket.changeField();
+		currentTicket--;
+		newText.setText(currentTicket+"/"+numOfTickets);
+		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket],RedNumberArray[currentTicket]);
 
-		mas_btns1.forEach(function(item, i, arr) {
-		  	if(item.over.visible){
-		  		item.over.visible = !item.over.visible;
-		  	}
-		});
-		mas_btns2.forEach(function(item, i, arr) {
-		  	if(item.over.visible){
-		  		item.over.visible = !item.over.visible;
-		  	}
-		});
+		if(currentTicket == 1){
+			arrow2.visible = false;
+		}
 
-		num_group1 = 0;
-		num_group2 = 0;
+		if(numOfTickets == 1)
+			arrow1.visible = false;
+	}
 
-		console.log("new ticket! prev length:",tickets.length);*/
-	};
-	//покупка тикетов, получение выигрыша
-	/*stage.interactive = true;
-	stage.mousedown = function (moveData) {	console.log("mousedown stage ");};
-*/
 	let _ticket = new addTicket();
 	let ticket = _ticket.getObj();
 	stage.addChild(ticket);
@@ -231,40 +168,57 @@ function init() {
 
 	arrow1.visible=false;
 	arrow2.visible=false;
+
+	//стрелка вперед
 	arrow1.mousedown = function (moveData) {
-		_ticket.getNums();
+		let _mas = _ticket.getBlueNums();
+		BlueNumbersArray[currentTicket] = _mas;
+		let _num = _ticket.getRedNums();
+		RedNumberArray[currentTicket] = _num;
 		_ticket.changeField();
 		currentTicket++;
 		newText.setText(currentTicket+"/"+numOfTickets);
+		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket],RedNumberArray[currentTicket]);
 		if(currentTicket == numOfTickets){
-			arrow1.visible=false;
-			arrow2.visible=true;
+			arrow1.visible = false;
 		}
+		arrow2.visible = true;
 	}
-
+	//стрелка назад
 	arrow2.mousedown = function (moveData) {
+		let _mas = _ticket.getBlueNums();
+		BlueNumbersArray[currentTicket] = _mas;
+		let _num = _ticket.getRedNums();
+		RedNumberArray[currentTicket] = _num;
+		_ticket.changeField();
 		currentTicket--;
 		newText.setText(currentTicket+"/"+numOfTickets);
+		console.log("tickets:",BlueNumbersArray[currentTicket]);
+		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket],RedNumberArray[currentTicket]);
 		if(currentTicket == 1){
-			arrow1.visible=true;
-			arrow2.visible=false;
+			arrow2.visible = false;
 		}
+		arrow1.visible = true;
 	}
+
+	/*
+		при rolle проверять все билеты (что они заполнены)
+		показывать результат (возможно подчеркивать красным те числа, которые не угадал, а зеленым которые угадал)
+	*/
 
 	update();
 }
+/*
+пример стрелочной функции
 let getTime = () => {
   let date = new Date();
   let hours = date.getHours();
   let minutes = date.getMinutes();
   return hours + ':' + minutes;
 };
-
+*/
 init()
 function update() {
 	renderer.render(stage);
 	requestAnimationFrame(update);
 }
-
-console.log("work!")
-console.log(PIXI)
