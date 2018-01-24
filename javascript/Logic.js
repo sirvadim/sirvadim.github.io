@@ -86,7 +86,7 @@ export default class Logic {
 				// if(obj.white == 4 && obj.red == 1){
 					// count++;
 				// }
-				console.log("dataPrize:", obj.res, dataPrize[obj.res]);
+				//console.log("dataPrize:", obj.res, dataPrize[obj.res]);
 			}
 			// console.log("count 4:", count);
 		}

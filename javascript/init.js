@@ -5,6 +5,7 @@ import addGraphic from "./core/addGraphic"
 import addCircle from "./core/addCircle"
 import addButton from "./core/addButton"
 import addTicket from "./core/addTicket"
+import ResizeManager from "./core/ResizeManager"
 
 let app = new myclass("hello!");
 
@@ -19,6 +20,9 @@ let tickets = [
 	]*/
 ]
 
+let address = "0x000000000"
+let balance = 100; //100 bets
+
 let BlueNumbersArray = [];
 let RedNumberArray = [];
 
@@ -27,23 +31,34 @@ let currentTicket = 1;
 
 function init() {
 	//initialize the stage
+	var s=document.documentElement.style;
+	s.cssText=s.cssText?"":"overflow:hidden;width:100%;height:100%";
+
 	renderer = PIXI.autoDetectRenderer(_W, _H);
 	// console.log(document.body);
 	document.body.appendChild(renderer.view);
 	stage = new PIXI.Container();
 	renderer.backgroundColor = 0x2F4F4F;
 
-	let newText = new addText(currentTicket+"/"+numOfTickets,520,200);
+	let newText = new addText(currentTicket+"/"+numOfTickets,_W/2,200);
+	newText.x -= newText.width/2;
 
 	stage.addChild(newText);
+	let balance_txt = new addText(balance+" bets",100,100);
 
-	let btn_roll = new addButton("roll", 200, 400, "roll");
+	stage.addChild(balance_txt);
+
+	let address_txt = new addText("address: "+address,100,50);
+
+	stage.addChild(address_txt);
+
+	let btn_roll = new addButton("roll", 200, 1010, "roll");
 	stage.addChild(btn_roll);
 
-	let btn_ticket = new addButton("new ticket", 200, 520, "new ticket");
+	let btn_ticket = new addButton("new ticket", 600, 1010, "new ticket");
 	stage.addChild(btn_ticket);
 
-	let btn_remove_ticket = new addButton("remove ticket", 200, 640, "remove ticket");
+	let btn_remove_ticket = new addButton("remove ticket", 1000, 1010, "remove ticket");
 	stage.addChild(btn_remove_ticket);
 
 	btn_roll.mousedown = function (moveData) {
@@ -82,28 +97,25 @@ function init() {
 			//и угадали ли мы красный
 
 			//показываем результат
-			/*mas_btns1.forEach(function(item, i, arr) {
-			  	if(item.over.visible){
-			  		for(let j = 0; j < 5; j++)
-			  			if(item.name == logic.arr1[j])
-			  				white++;
-			  	}
+			let blue = 0;
+			let red = 0;
+			BlueNumbersArray[i].forEach(function(item, i, arr) {
+		  		for(let j = 0; j < 5; j++)
+		  			if(item.name == logic.arr1[j])
+		  				blue++;
 			});
-			mas_btns2.forEach(function(item, i, arr) {
-			  	if(item.over.visible){
-		  			if(item.name == logic.red)
-		  				red++;
-			  	}
-			});
+			if(RedNumberArray[i] == logic.red)
+		  		red++;
 			// console.log("itog:",white, red);
 			let prize = _logic.getDataPrize();
 			if(prize[white+"_"+red]){
 				console.log("выигрыш: ",prize[white+"_"+red]);
 			} else {
 				console.log("проиграл")
-			}*/
-
+			}
+			balance += prize[white+"_"+red];
 		}
+		balance_txt.setText(balance+" bets");
 
 	};
 
@@ -112,9 +124,18 @@ function init() {
 			alert("TICKETS LIMIT!");
 			return;
 		}
+
+		if (balance < 2){
+			alert("not enough balance!");
+			return;
+		}
+
 		numOfTickets++;
 		arrow1.visible=true;
 		newText.setText(currentTicket+"/"+numOfTickets);
+
+		balance -= 2;
+		balance_txt.setText(balance+" bets");
 	};
 
 	btn_remove_ticket.mousedown = function (moveData) {
@@ -140,13 +161,19 @@ function init() {
 
 		if(numOfTickets == 1)
 			arrow1.visible = false;
+
+		balance += 2;
+		balance_txt.setText(balance+" bets");
 	}
 
 	let _ticket = new addTicket();
 	let ticket = _ticket.getObj();
 	stage.addChild(ticket);
-	ticket.x=450;
-	ticket.y=250;
+	ticket.x=_W/2;
+	ticket.y=_H/2;
+	ticket.x -= ticket.width/2;
+	ticket.y -= ticket.height/2;
+
 	let arrow1 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 	let arrow2 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 	stage.addChild(arrow1);
@@ -205,9 +232,14 @@ function init() {
 		при rolle проверять все билеты (что они заполнены)
 		показывать результат (возможно подчеркивать красным те числа, которые не угадал, а зеленым которые угадал)
 	*/
-
+	// renderer.autoResize = true;
+	// console.log(renderer)
+	let _ResizeManager = new ResizeManager;
+	window.addEventListener("resize", function(){_ResizeManager.onResize(renderer, stage, _W, _H)}, false);
+	_ResizeManager.onResize(renderer, stage, _W, _H);
 	update();
 }
+
 /*
 пример стрелочной функции
 let getTime = () => {

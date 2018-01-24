@@ -171,6 +171,10 @@ var _addTicket = __webpack_require__(7);
 
 var _addTicket2 = _interopRequireDefault(_addTicket);
 
+var _ResizeManager2 = __webpack_require__(8);
+
+var _ResizeManager3 = _interopRequireDefault(_ResizeManager2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = new _main2.default("hello!");
@@ -178,7 +182,8 @@ var app = new _main2.default("hello!");
 var _W = 1920; // game width
 var _H = 1080; // game height
 
-var renderer, stage; // pixi;
+var renderer = void 0,
+    stage = void 0; // pixi;
 
 var tickets = [
 	/*[
@@ -186,134 +191,105 @@ var tickets = [
  ]*/
 ];
 
+var address = "0x000000000";
+var balance = 100; //100 bets
+
+var BlueNumbersArray = [];
+var RedNumberArray = [];
+
 var numOfTickets = 1;
 var currentTicket = 1;
 
 function init() {
 	//initialize the stage
+	var s = document.documentElement.style;
+	s.cssText = s.cssText ? "" : "overflow:hidden;width:100%;height:100%";
+
 	renderer = PIXI.autoDetectRenderer(_W, _H);
-	console.log(document.body);
+	// console.log(document.body);
 	document.body.appendChild(renderer.view);
 	stage = new PIXI.Container();
 	renderer.backgroundColor = 0x2F4F4F;
-	/*пример текста*/
-	var newText = new _addText2.default(currentTicket + "/" + numOfTickets);
-	newText.x = 520;
-	newText.y = 200;
+
+	var newText = new _addText2.default(currentTicket + "/" + numOfTickets, _W / 2, 200);
+	newText.x -= newText.width / 2;
 
 	stage.addChild(newText);
+	var balance_txt = new _addText2.default(balance + " bets", 100, 100);
 
-	var _x = 1000;
-	var _y = 100;
-	var NUM_group1 = 5;
-	var NUM_group2 = 1;
+	stage.addChild(balance_txt);
 
-	var num_group1 = 0;
-	var num_group2 = 0;
+	var address_txt = new _addText2.default("address: " + address, 100, 50);
 
-	var mas_btns1 = [];
-	var mas_btns2 = [];
+	stage.addChild(address_txt);
 
-	var _loop = function _loop() {
-		var newCircle = new _addCircle2.default(i, _x, _y, i, 25);
-		mas_btns1.push(newCircle);
-		newCircle.mousedown = function (moveData) {
-			if (num_group1 > 4 && !newCircle.over.visible) return;
-			newCircle.over.visible ? num_group1-- : num_group1++;
-			newCircle.over.visible = !newCircle.over.visible;
-		};
-		if (i % 8 == 0) {
-			_y += 55;
-			_x = 1000;
-		} else _x += 55;
-		stage.addChild(newCircle);
-	};
-
-	for (var i = 1; i <= 69; i++) {
-		_loop();
-	}
-
-	_x = 1000;
-	_y = 700;
-
-	var _loop2 = function _loop2() {
-
-		var newCircle = new _addCircle2.default(i, _x, _y, i, 25);
-		mas_btns2.push(newCircle);
-
-		newCircle.mousedown = function (moveData) {
-			if (num_group2 > 0 && !newCircle.over.visible) return;
-			newCircle.over.visible ? num_group2-- : num_group2++;
-			newCircle.over.visible = !newCircle.over.visible;
-		};
-		if (i % 8 == 0) {
-			_y += 55;
-			_x = 1000;
-		} else _x += 55;
-		stage.addChild(newCircle);
-	};
-
-	for (var i = 1; i <= 26; i++) {
-		_loop2();
-	}
-
-	var btn_roll = new _addButton2.default("roll", 200, 400, "roll");
+	var btn_roll = new _addButton2.default("roll", 200, 1010, "roll");
 	stage.addChild(btn_roll);
 
-	var btn_ticket = new _addButton2.default("new ticket", 200, 520, "new ticket");
+	var btn_ticket = new _addButton2.default("new ticket", 600, 1010, "new ticket");
 	stage.addChild(btn_ticket);
+
+	var btn_remove_ticket = new _addButton2.default("remove ticket", 1000, 1010, "remove ticket");
+	stage.addChild(btn_remove_ticket);
 
 	btn_roll.mousedown = function (moveData) {
 		var _logic = new _Logic2.default();
 		var logic = _logic.getResults();
-		// console.log("logic",logic)
-		// console.log("btn_roll");
+
 		var white = 0;
 		var red = 0;
-		mas_btns1.forEach(function (item, i, arr) {
-			if (item.over.visible) {
-				for (var j = 0; j < 5; j++) {
-					if (item.name == logic.arr1[j]) white++;
-				}
-			}
-		});
-		mas_btns2.forEach(function (item, i, arr) {
-			if (item.over.visible) {
-				if (item.name == logic.red) red++;
-			}
-		});
-		// console.log("itog:",white, red);
-		var prize = _logic.getDataPrize();
-		if (prize[white + "_" + red]) {
-			console.log("выигрыш: ", prize[white + "_" + red]);
-		} else {
-			console.log("проиграл");
+
+		//мы не можем отследить, менялись ли значения в текущем билете, прежде чем был нажат ролл.
+		//заново получаем его данные
+		var _mas = _ticket.getBlueNums();
+		BlueNumbersArray[currentTicket] = _mas;
+		var _num = _ticket.getRedNums();
+		RedNumberArray[currentTicket] = _num;
+
+		//проверка на заполненность ВСЕХ билетов включая текущий
+		if (BlueNumbersArray[currentTicket] == undefined || RedNumberArray[currentTicket] == undefined) {
+			alert("fill ticket correctly!");
+			return;
 		}
 
-		for (var i = tickets.length - 1; i >= 0; i--) {
-			var _white = 0;
-			var _red = 0;
-			var curticket = tickets[i];
-			var whites = curticket[0];
-			console.log(curticket[0], curticket[1]);
+		for (var i = 1; i <= numOfTickets; i++) {
+			if (BlueNumbersArray[i].length != 5 || RedNumberArray[i] == undefined) {
+				alert("fill ticket correctly!");
+				return;
+			}
+		}
 
-			for (var k = 0; k < 5; k++) {
+		//все билеты заполнены! проверяем каждый на выигрыш
+
+		var _loop = function _loop(_i) {
+			//i наш текущий билет
+			//подсчитываем сколько мы угадали синих
+
+			//и угадали ли мы красный
+
+			//показываем результат
+			var blue = 0;
+			var red = 0;
+			BlueNumbersArray[_i].forEach(function (item, i, arr) {
 				for (var j = 0; j < 5; j++) {
-					if (whites[k] == logic.arr1[j]) _white++;
+					if (item.name == logic.arr1[j]) blue++;
 				}
-			}
-
-			if (curticket[1] == logic.red) {
-				_red++;
-			}
-
-			prize = _logic.getDataPrize();
-			if (prize[_white + "_" + _red]) {
-				console.log("выигрыш: ", prize[_white + "_" + _red]);
+			});
+			if (RedNumberArray[_i] == logic.red) red++;
+			// console.log("itog:",white, red);
+			var prize = _logic.getDataPrize();
+			if (prize[white + "_" + red]) {
+				console.log("выигрыш: ", prize[white + "_" + red]);
 			} else {
 				console.log("проиграл");
 			}
+			balance += prize[white + "_" + red];
+		};
+
+		for (var _i = 1; _i <= numOfTickets; _i++) {
+			_loop(_i);
 		}
+		balance_txt.setText(balance + " bets");
 	};
 
 	btn_ticket.mousedown = function (moveData) {
@@ -321,63 +297,55 @@ function init() {
 			alert("TICKETS LIMIT!");
 			return;
 		}
+
+		if (balance < 2) {
+			alert("not enough balance!");
+			return;
+		}
+
 		numOfTickets++;
 		arrow1.visible = true;
 		newText.setText(currentTicket + "/" + numOfTickets);
-		/*
-  		let white = 0;
-  		let red = 0;
-  		let mas_ticket = [];
-  		let mas_white = [];
-  		let num_red;
-  		mas_btns1.forEach(function(item, i, arr) {
-  		  	if(item.over.visible){
-  		  		white++;
-  		  		mas_white.push(item.name);
-  		  	}
-  		});
-  		mas_btns2.forEach(function(item, i, arr) {
-  		  	if(item.over.visible){
-    				red++;
-    				num_red = item.name;
-  		  	}
-  		});
-  
-  		if (white != 5 || red != 1){
-  			alert("fill ticket correctly!");
-  			return;
-  		}
-  
-  		mas_ticket.push(mas_white);
-  		mas_ticket.push(num_red);
-  
-  		tickets.push(mas_ticket);
-  
-  		mas_btns1.forEach(function(item, i, arr) {
-  		  	if(item.over.visible){
-  		  		item.over.visible = !item.over.visible;
-  		  	}
-  		});
-  		mas_btns2.forEach(function(item, i, arr) {
-  		  	if(item.over.visible){
-  		  		item.over.visible = !item.over.visible;
-  		  	}
-  		});
-  
-  		num_group1 = 0;
-  		num_group2 = 0;
-  
-  		console.log("new ticket! prev length:",tickets.length);*/
+
+		balance -= 2;
+		balance_txt.setText(balance + " bets");
 	};
-	//покупка тикетов, получение выигрыша
-	/*stage.interactive = true;
- stage.mousedown = function (moveData) {	console.log("mousedown stage ");};
- */
+
+	btn_remove_ticket.mousedown = function (moveData) {
+		if (currentTicket == 1) {
+			alert("cant remove first ticket");
+			return;
+		}
+
+		numOfTickets--;
+		BlueNumbersArray.splice(currentTicket);
+		RedNumberArray.splice(currentTicket);
+		newText.setText(currentTicket + "/" + numOfTickets);
+		//arrow2.mousedown();
+
+		_ticket.changeField();
+		currentTicket--;
+		newText.setText(currentTicket + "/" + numOfTickets);
+		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
+
+		if (currentTicket == 1) {
+			arrow2.visible = false;
+		}
+
+		if (numOfTickets == 1) arrow1.visible = false;
+
+		balance += 2;
+		balance_txt.setText(balance + " bets");
+	};
+
 	var _ticket = new _addTicket2.default();
 	var ticket = _ticket.getObj();
 	stage.addChild(ticket);
-	ticket.x = 450;
-	ticket.y = 250;
+	ticket.x = _W / 2;
+	ticket.y = _H / 2;
+	ticket.x -= ticket.width / 2;
+	ticket.y -= ticket.height / 2;
+
 	var arrow1 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 	var arrow2 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 	stage.addChild(arrow1);
@@ -399,43 +367,67 @@ function init() {
 
 	arrow1.visible = false;
 	arrow2.visible = false;
+
+	//стрелка вперед
 	arrow1.mousedown = function (moveData) {
-		_ticket.getNums();
+		var _mas = _ticket.getBlueNums();
+		BlueNumbersArray[currentTicket] = _mas;
+		var _num = _ticket.getRedNums();
+		RedNumberArray[currentTicket] = _num;
 		_ticket.changeField();
 		currentTicket++;
 		newText.setText(currentTicket + "/" + numOfTickets);
+		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
 		if (currentTicket == numOfTickets) {
 			arrow1.visible = false;
-			arrow2.visible = true;
 		}
+		arrow2.visible = true;
 	};
-
+	//стрелка назад
 	arrow2.mousedown = function (moveData) {
+		var _mas = _ticket.getBlueNums();
+		BlueNumbersArray[currentTicket] = _mas;
+		var _num = _ticket.getRedNums();
+		RedNumberArray[currentTicket] = _num;
+		_ticket.changeField();
 		currentTicket--;
 		newText.setText(currentTicket + "/" + numOfTickets);
+		console.log("tickets:", BlueNumbersArray[currentTicket]);
+		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
 		if (currentTicket == 1) {
-			arrow1.visible = true;
 			arrow2.visible = false;
 		}
+		arrow1.visible = true;
 	};
 
+	/*
+ 	при rolle проверять все билеты (что они заполнены)
+ 	показывать результат (возможно подчеркивать красным те числа, которые не угадал, а зеленым которые угадал)
+ */
+	// renderer.autoResize = true;
+	// console.log(renderer)
+	var _ResizeManager = new _ResizeManager3.default();
+	window.addEventListener("resize", function () {
+		_ResizeManager.onResize(renderer, stage, _W, _H);
+	}, false);
+	_ResizeManager.onResize(renderer, stage, _W, _H);
 	update();
 }
-var getTime = function getTime() {
-	var date = new Date();
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
-	return hours + ':' + minutes;
-};
 
+/*
+пример стрелочной функции
+let getTime = () => {
+  let date = new Date();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  return hours + ':' + minutes;
+};
+*/
 init();
 function update() {
 	renderer.render(stage);
 	requestAnimationFrame(update);
 }
-
-console.log("work!");
-console.log(PIXI);
 
 /***/ }),
 /* 2 */
@@ -563,7 +555,7 @@ var Logic = function () {
 				// if(obj.white == 4 && obj.red == 1){
 				// count++;
 				// }
-				console.log("dataPrize:", obj.res, dataPrize[obj.res]);
+				//console.log("dataPrize:", obj.res, dataPrize[obj.res]);
 			}
 			// console.log("count 4:", count);
 		}
@@ -607,15 +599,6 @@ var Logic = function () {
 		value: function getDataPrize() {
 			return this.dataPrize;
 		}
-		/*
-  	static getResults(){
-  		return result;
-  	}
-  /*
-  	get getResults(){
-  		return result;
-  	}*/
-
 	}]);
 
 	return Logic;
@@ -858,22 +841,30 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+//TODO оптимизировать циклы, избавиться от одинакового кода
 var addTicket = function () {
+	//constructor выполняется по умолчанию
 	function addTicket() {
 		var _this = this;
 
 		_classCallCheck(this, addTicket);
 
+		//указывает на конструктор
+		var _self = this;
+		//слой, в который отрисовываются все ячейки (графика)
 		var obj = new PIXI.Container();
+		//массив, в который пушатся синие (для клика и получения номера)
 		var mas = [];
+		//массив, в который пушатся красные (для клика и получения номера)
+		var mas2 = [];
+		//координаты, в которые отрисовываются ячейки
 		var _x = 0;
 		var _y = 0;
-		var _self = this;
+
+		//счет (чтобы нельзя было нажать все ячейки)
 		this.score = 0;
 		this.score2 = 0;
-
-		console.log(this.score);
-		console.log(this.score2);
+		//рисуем синие
 
 		var _loop = function _loop(i) {
 			var newBlueField = new PIXI.Container();
@@ -924,6 +915,8 @@ var addTicket = function () {
 		_y += 60;
 		_x = 0;
 
+		//рисуем красные
+
 		var _loop2 = function _loop2(i) {
 			var newBlueField = new PIXI.Container();
 
@@ -963,48 +956,97 @@ var addTicket = function () {
 				bb.visible = !bb.visible;
 				console.log(_self.score2);
 			};
-			mas.push(newBlueField);
+			mas2.push(newBlueField);
 		};
 
 		for (var i = 1; i < 30; i++) {
 			_loop2(i);
 		}
 		this.obj = obj;
-		//return obj;
 		this.mas = mas;
+		this.mas2 = mas2;
 	}
 
 	_createClass(addTicket, [{
 		key: 'getObj',
 		value: function getObj() {
-			//console.log(this.obj);
+			//возвращаем слой, чтобы нарисовать его на экране
 			return this.obj;
 		}
 	}, {
 		key: 'changeField',
 		value: function changeField() {
-			var _self = this;
-			_self.score = 0;
-			_self.score2 = 0;
+			//очищаем поле от выбранных ячеек (для переключения между билетами)
+			this.score = 0;
+			this.score2 = 0;
 			this.mas.forEach(function (item, i, arr) {
 				if (item.children[1].visible == true) {
 					item.children[1].visible = false;
 					item.children[0].visible = true;
 				}
 			});
-			console.log("works");
+			this.mas2.forEach(function (item, i, arr) {
+				if (item.children[1].visible == true) {
+					item.children[1].visible = false;
+					item.children[0].visible = true;
+				}
+			});
 		}
 	}, {
-		key: 'getNums',
-		value: function getNums() {
+		key: 'getBlueNums',
+		value: function getBlueNums() {
+			//получаем массив с номерами синих
 			var numArr = [];
 			this.mas.forEach(function (item, i, arr) {
 				if (item.children[1].visible == true) {
 					numArr.push(item.name);
-					console.log(item.name);
 				}
 			});
 			return numArr;
+		}
+	}, {
+		key: 'getRedNums',
+		value: function getRedNums() {
+			//получаем массив с номерами красных
+			var numArr = undefined;
+			this.mas2.forEach(function (item, i, arr) {
+				if (item.children[1].visible == true) {
+					numArr = item.name;
+				}
+			});
+			return numArr;
+		}
+	}, {
+		key: 'changeFieldVisTrue',
+		value: function changeFieldVisTrue(_masBlue, _red) {
+			//отображаем заполненный билет
+			console.log("changeFieldVisTrue", _masBlue, _red);
+
+			//синие
+			if (_masBlue) {
+				this.score = _masBlue.length;
+				this.mas.forEach(function (item, i, arr) {
+					for (var j = 0; j < _masBlue.length; j++) {
+						console.log(item.name, _masBlue[j]);
+						if (item.children[1].visible == false && item.name == _masBlue[j]) {
+							item.children[1].visible = true;
+							item.children[0].visible = false;
+						}
+					}
+				});
+			}
+
+			//красные
+			if (_red != undefined) {
+				console.log("2");
+				this.score2 = 1;
+				this.mas2.forEach(function (item, i, arr) {
+					if (item.children[1].visible == false && item.name == _red) {
+						item.children[1].visible = true;
+						item.children[0].visible = false;
+					}
+				});
+			}
 		}
 	}]);
 
@@ -1012,6 +1054,62 @@ var addTicket = function () {
 }();
 
 exports.default = addTicket;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ResizeManager = function () {
+    function ResizeManager() {
+        _classCallCheck(this, ResizeManager);
+
+        this.globalScale = 1;
+        this.isCanvas = true;
+        this.renderSize = 1;
+        this.stageScale = 1;
+    }
+
+    _createClass(ResizeManager, [{
+        key: 'onResize',
+        value: function onResize(renderer, stage, _W, _H) {
+            if (!renderer) return;
+
+            var realW = window.innerWidth;
+            var realH = window.innerHeight;
+
+            this.globalScale = Math.min(realW / _W, realH / _H);
+
+            if (renderer instanceof PIXI.CanvasRenderer) this.isCanvas = true;else this.isCanvas = false;
+
+            renderer.resize(_W / this.renderSize, _H / this.renderSize);
+
+            renderer.view.style.width = _W * this.globalScale + 'px';
+            renderer.view.style.height = _H * this.globalScale + 'px';
+
+            renderer.view.style.position = 'absolute';
+            renderer.view.style.left = realW / 2 - _W * this.globalScale / 2 + 'px';
+            renderer.view.style.top = realH / 2 - _H * this.globalScale / 2 + 'px';
+
+            stage.scale.x = this.stageScale;
+            stage.scale.y = this.stageScale;
+        }
+    }]);
+
+    return ResizeManager;
+}();
+
+exports.default = ResizeManager;
 
 /***/ })
 /******/ ]);
