@@ -185,15 +185,12 @@ var _H = 1080; // game height
 var renderer = void 0,
     stage = void 0; // pixi;
 
-var tickets = [
-	/*[
- [],[]
- ]*/
-];
-
 var address = "0x000000000";
 var balance = 100; //100 bets
 
+//массив для визуальных билетов (графика)
+var tickets = [];
+//массивы для результатов
 var BlueNumbersArray = [];
 var RedNumberArray = [];
 
@@ -228,9 +225,32 @@ function init() {
 
 	var btn_ticket = new _addButton2.default("new ticket", 600, 1010, "new ticket");
 	stage.addChild(btn_ticket);
+	/*
+ 	let btn_remove_ticket = new addButton("remove ticket", 1000, 1010, "remove ticket");
+ 	stage.addChild(btn_remove_ticket);
+ */
+	//слой в котором лежит графика билетов
+	var layer_tickets = new PIXI.Container();
+	//win ticket
+	var arrResult = [];
+	var res_x = _W / 2 - 90;
+	for (var i = 0; i < 6; i++) {
+		var result_layer = new PIXI.Container();
+		var bb = void 0;
 
-	var btn_remove_ticket = new _addButton2.default("remove ticket", 1000, 1010, "remove ticket");
-	stage.addChild(btn_remove_ticket);
+		if (i == 5) bb = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0001.png');else bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png');
+
+		result_layer.addChild(bb);
+		result_layer.tf = new _addText2.default(i, 13, 3, 20, undefined, undefined, "center");
+		result_layer.tf.visible = false;
+		result_layer.x = res_x;
+		result_layer.y = 50;
+		result_layer.addChild(result_layer.tf);
+		res_x += 30;
+		stage.addChild(result_layer);
+
+		arrResult.push(result_layer);
+	}
 
 	btn_roll.mousedown = function (moveData) {
 		var _logic = new _Logic2.default();
@@ -252,8 +272,8 @@ function init() {
 			return;
 		}
 
-		for (var i = 1; i <= numOfTickets; i++) {
-			if (BlueNumbersArray[i].length != 5 || RedNumberArray[i] == undefined) {
+		for (var _i = 1; _i <= numOfTickets; _i++) {
+			if (BlueNumbersArray[_i].length != 5 || RedNumberArray[_i] == undefined) {
 				alert("fill ticket correctly!");
 				return;
 			}
@@ -261,7 +281,7 @@ function init() {
 
 		//все билеты заполнены! проверяем каждый на выигрыш
 
-		var _loop = function _loop(_i) {
+		var _loop = function _loop(_i2) {
 			//i наш текущий билет
 			//подсчитываем сколько мы угадали синих
 
@@ -270,26 +290,31 @@ function init() {
 			//показываем результат
 			var blue = 0;
 			var red = 0;
-			BlueNumbersArray[_i].forEach(function (item, i, arr) {
+			BlueNumbersArray[_i2].forEach(function (item, i, arr) {
 				for (var j = 0; j < 5; j++) {
 					if (item.name == logic.arr1[j]) blue++;
 				}
 			});
-			if (RedNumberArray[_i] == logic.red) red++;
+			if (RedNumberArray[_i2] == logic.red) red++;
 			// console.log("itog:",white, red);
 			var prize = _logic.getDataPrize();
 			if (prize[white + "_" + red]) {
 				console.log("выигрыш: ", prize[white + "_" + red]);
+				balance += prize[white + "_" + red];
 			} else {
 				console.log("проиграл");
 			}
-			balance += prize[white + "_" + red];
 		};
 
-		for (var _i = 1; _i <= numOfTickets; _i++) {
-			_loop(_i);
+		for (var _i2 = 1; _i2 <= numOfTickets; _i2++) {
+			_loop(_i2);
 		}
 		balance_txt.setText(balance + " bets");
+
+		for (var _i3 = 0; _i3 < 6; _i3++) {
+			arrResult[_i3].tf.visible = true;
+			if (_i3 == 5) arrResult[_i3].tf.setText(logic.red);else arrResult[_i3].tf.setText(logic.arr1[_i3]);
+		}
 	};
 
 	btn_ticket.mousedown = function (moveData) {
@@ -304,47 +329,60 @@ function init() {
 		}
 
 		numOfTickets++;
+		currentTicket++;
 		arrow1.visible = true;
 		newText.setText(currentTicket + "/" + numOfTickets);
 
 		balance -= 2;
 		balance_txt.setText(balance + " bets");
+
+		createTicket(false);
 	};
+	/*
+ 	btn_remove_ticket.mousedown = function (moveData) {
+ 		
+ 	}
+ */
+	function createTicket(_bool) {
+		//добавление билета. колбэк-удаление этого билета
+		var _ticket = new _addTicket2.default(_bool, function () {
+			if (currentTicket == 1) {
+				alert("cant remove first ticket");
+				return;
+			}
 
-	btn_remove_ticket.mousedown = function (moveData) {
-		if (currentTicket == 1) {
-			alert("cant remove first ticket");
-			return;
-		}
+			stage.removeChild(tickets[currentTicket - 1].getObj());
+			numOfTickets--;
+			BlueNumbersArray.splice(currentTicket);
+			RedNumberArray.splice(currentTicket);
+			newText.setText(currentTicket + "/" + numOfTickets);
+			//arrow2.mousedown();
 
-		numOfTickets--;
-		BlueNumbersArray.splice(currentTicket);
-		RedNumberArray.splice(currentTicket);
-		newText.setText(currentTicket + "/" + numOfTickets);
-		//arrow2.mousedown();
+			_ticket.changeField();
+			currentTicket--;
+			newText.setText(currentTicket + "/" + numOfTickets);
+			_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
 
-		_ticket.changeField();
-		currentTicket--;
-		newText.setText(currentTicket + "/" + numOfTickets);
-		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
+			if (currentTicket == 1) {
+				arrow2.visible = false;
+			}
 
-		if (currentTicket == 1) {
-			arrow2.visible = false;
-		}
+			if (numOfTickets == 1) arrow1.visible = false;
 
-		if (numOfTickets == 1) arrow1.visible = false;
+			balance += 2;
+			balance_txt.setText(balance + " bets");
+		}, stage);
 
-		balance += 2;
-		balance_txt.setText(balance + " bets");
-	};
+		var ticket = _ticket.getObj();
+		tickets.push(_ticket);
+		stage.addChild(ticket);
+		ticket.x = _W / 2 - ticket.width / 2;
+		ticket.y = _H / 2 - ticket.height / 2;
+		console.log("ticket.width", ticket.width);
+		console.log("ticket.height", ticket.height);
+	}
 
-	var _ticket = new _addTicket2.default();
-	var ticket = _ticket.getObj();
-	stage.addChild(ticket);
-	ticket.x = _W / 2;
-	ticket.y = _H / 2;
-	ticket.x -= ticket.width / 2;
-	ticket.y -= ticket.height / 2;
+	createTicket(true);
 
 	var arrow1 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 	var arrow2 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
@@ -370,14 +408,17 @@ function init() {
 
 	//стрелка вперед
 	arrow1.mousedown = function (moveData) {
-		var _mas = _ticket.getBlueNums();
+		console.log(tickets[currentTicket - 1]);
+		console.log(tickets[currentTicket]);
+
+		var _mas = tickets[currentTicket - 1].getBlueNums();
 		BlueNumbersArray[currentTicket] = _mas;
-		var _num = _ticket.getRedNums();
+		var _num = tickets[currentTicket - 1].getRedNums();
 		RedNumberArray[currentTicket] = _num;
-		_ticket.changeField();
+		tickets[currentTicket - 1].changeField();
 		currentTicket++;
 		newText.setText(currentTicket + "/" + numOfTickets);
-		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
+		tickets[currentTicket - 1].changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
 		if (currentTicket == numOfTickets) {
 			arrow1.visible = false;
 		}
@@ -385,15 +426,15 @@ function init() {
 	};
 	//стрелка назад
 	arrow2.mousedown = function (moveData) {
-		var _mas = _ticket.getBlueNums();
+		var _mas = tickets[currentTicket - 1].getBlueNums();
 		BlueNumbersArray[currentTicket] = _mas;
-		var _num = _ticket.getRedNums();
+		var _num = tickets[currentTicket - 1].getRedNums();
 		RedNumberArray[currentTicket] = _num;
-		_ticket.changeField();
+		tickets[currentTicket - 1].changeField();
 		currentTicket--;
 		newText.setText(currentTicket + "/" + numOfTickets);
 		console.log("tickets:", BlueNumbersArray[currentTicket]);
-		_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
+		tickets[currentTicket - 1].changeFieldVisTrue(BlueNumbersArray[currentTicket], RedNumberArray[currentTicket]);
 		if (currentTicket == 1) {
 			arrow2.visible = false;
 		}
@@ -401,8 +442,7 @@ function init() {
 	};
 
 	/*
- 	при rolle проверять все билеты (что они заполнены)
- 	показывать результат (возможно подчеркивать красным те числа, которые не угадал, а зеленым которые угадал)
+ 	(возможно подчеркивать красным те числа, которые не угадал, а зеленым которые угадал)
  */
 	// renderer.autoResize = true;
 	// console.log(renderer)
@@ -413,6 +453,11 @@ function init() {
 	_ResizeManager.onResize(renderer, stage, _W, _H);
 	update();
 }
+
+/*
+рядом с каждым билетом крестик
+при удалении чистить во всех массивах - и с графикой, и с логикой
+*/
 
 /*
 пример стрелочной функции
@@ -726,6 +771,12 @@ var addCircle = function addCircle(_name) {
 
 exports.default = addCircle;
 
+
+function a() {
+	var b = 1;
+	function c() {}
+}
+
 /***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -844,11 +895,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //TODO оптимизировать циклы, избавиться от одинакового кода
 var addTicket = function () {
 	//constructor выполняется по умолчанию
-	function addTicket() {
+	function addTicket(first, callback, parent) {
 		var _this = this;
 
 		_classCallCheck(this, addTicket);
 
+		/*function loadManifest(){
+  preloader = new PIXI.loaders.Loader();
+  	preloader.add("logo", "images/logo.png");
+  preloader.add("bgMenu", "images/bg/bgMenu.jpg");
+  preloader.add("bgGame1", "images/bg/bgGame1.jpg");
+  preloader.add("bgGame2", "images/bg/bgGame2.jpg");
+  preloader.add("wndInfo", "images/bg/wndInfo.png");
+  	preloader.add("images/texture/ItemsTexure.json");
+  	
+  //сохраняем счетчик кол-ва файлов для загрузки
+  preloader.on("progress", handleProgress);
+  preloader.load(handleComplete);
+  }*/
+		//TODO параметром будет флаг показывающий, является ли билет первым (если он первый, не будет крестика)
+		//также передавать родителя и колбэк
 		//указывает на конструктор
 		var _self = this;
 		//слой, в который отрисовываются все ячейки (графика)
@@ -864,6 +930,37 @@ var addTicket = function () {
 		//счет (чтобы нельзя было нажать все ячейки)
 		this.score = 0;
 		this.score2 = 0;
+
+		//рисуем подложку билета TODO
+		/*var data = preloader.resources[name];
+  if(data){
+  	objImg = new PIXI.Sprite(data.texture);
+  } else {
+  	return null;
+  }*/
+
+		var bg_ticket_layer = new PIXI.Container();
+		var bg_ticket = PIXI.Sprite.fromImage('../../images/items/bgTicket.png');
+		bg_ticket.x -= 12;
+		bg_ticket.y -= 12;
+		bg_ticket_layer.addChild(bg_ticket);
+		obj.addChild(bg_ticket_layer);
+		console.log(bg_ticket_layer.width);
+		bg_ticket_layer.width = bg_ticket_layer.width;
+
+		//TODO рисуем крестик для удаления билета
+		var close_btn = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
+		close_btn.y = -25;
+		close_btn.x = 174;
+		close_btn.interactive = true;
+		close_btn.buttonMode = true;
+
+		close_btn.mousedown = function (e) {
+			// close_btn.
+			if (callback) callback();
+		};
+
+		obj.addChild(close_btn);
 		//рисуем синие
 
 		var _loop = function _loop(i) {
@@ -879,7 +976,6 @@ var addTicket = function () {
 			newBlueField.x = _x;
 			newBlueField.y = _y;
 			newBlueField.name = i;
-			console.log(newBlueField.height);
 
 			obj.tf = new _addText2.default(i, _x + 13, _y + 3, 20, undefined, undefined, "center");
 			obj.addChild(obj.tf);
@@ -912,7 +1008,7 @@ var addTicket = function () {
 			_loop(i);
 		}
 
-		_y += 60;
+		_y += 40;
 		_x = 0;
 
 		//рисуем красные
@@ -930,7 +1026,6 @@ var addTicket = function () {
 			newBlueField.x = _x;
 			newBlueField.y = _y;
 			newBlueField.name = i;
-			console.log(newBlueField.height);
 
 			obj.tf = new _addText2.default(i, _x + 13, _y + 3, 20, undefined, undefined, "center");
 			obj.addChild(obj.tf);

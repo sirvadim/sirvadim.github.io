@@ -2,7 +2,25 @@ import addText from "./addText";
 //TODO оптимизировать циклы, избавиться от одинакового кода
 export default class addTicket {
 	//constructor выполняется по умолчанию
-	constructor(){
+	constructor(first,callback,parent){
+		/*function loadManifest(){
+	preloader = new PIXI.loaders.Loader();
+	
+	preloader.add("logo", "images/logo.png");
+	preloader.add("bgMenu", "images/bg/bgMenu.jpg");
+	preloader.add("bgGame1", "images/bg/bgGame1.jpg");
+	preloader.add("bgGame2", "images/bg/bgGame2.jpg");
+	preloader.add("wndInfo", "images/bg/wndInfo.png");
+	
+	preloader.add("images/texture/ItemsTexure.json");
+	
+	
+	//сохраняем счетчик кол-ва файлов для загрузки
+	preloader.on("progress", handleProgress);
+	preloader.load(handleComplete);
+}*/
+		//TODO параметром будет флаг показывающий, является ли билет первым (если он первый, не будет крестика)
+		//также передавать родителя и колбэк
 		//указывает на конструктор
 		let _self = this;
 		//слой, в который отрисовываются все ячейки (графика)
@@ -18,12 +36,44 @@ export default class addTicket {
 		//счет (чтобы нельзя было нажать все ячейки)
 		this.score = 0;
 		this.score2 = 0;
+
+		//рисуем подложку билета TODO
+		/*var data = preloader.resources[name];
+		if(data){
+			objImg = new PIXI.Sprite(data.texture);
+		} else {
+			return null;
+		}*/
+
+		let bg_ticket_layer = new PIXI.Container();
+		let bg_ticket = PIXI.Sprite.fromImage('../../images/items/bgTicket.png');
+		bg_ticket.x-=12;
+		bg_ticket.y-=12;
+		bg_ticket_layer.addChild(bg_ticket);
+		obj.addChild(bg_ticket_layer);
+		console.log(bg_ticket_layer.width)
+		bg_ticket_layer.width = bg_ticket_layer.width;
+
+		//TODO рисуем крестик для удаления билета
+		let close_btn = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
+		close_btn.y = -25;
+		close_btn.x = 174;
+		close_btn.interactive = true;
+		close_btn.buttonMode = true;
+
+		close_btn.mousedown = (e) => {
+			// close_btn.
+			if(callback)
+				callback();
+		}
+
+		obj.addChild(close_btn);
 		//рисуем синие
 		for(let i = 1; i < 70; i++){
 			let newBlueField = new PIXI.Container();
 			
-			let bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png')
-			let bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png')
+			let bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png');
+			let bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
 			bb2.visible = false;
@@ -32,7 +82,6 @@ export default class addTicket {
 			newBlueField.x = _x;
 			newBlueField.y = _y;
 			newBlueField.name = i;
-			console.log(newBlueField.height);
 
 			obj.tf = new addText(i,_x+13,_y+3,20,undefined,undefined,"center");
 			obj.addChild(obj.tf);
@@ -66,7 +115,7 @@ export default class addTicket {
 			mas.push(newBlueField);
 		}
 
-		_y += 60;
+		_y += 40;
 		_x = 0;
 
 		//рисуем красные
@@ -83,7 +132,6 @@ export default class addTicket {
 			newBlueField.x = _x;
 			newBlueField.y = _y;
 			newBlueField.name = i;
-			console.log(newBlueField.height);
 
 			obj.tf = new addText(i,_x+13,_y+3,20,undefined,undefined,"center");
 			obj.addChild(obj.tf);

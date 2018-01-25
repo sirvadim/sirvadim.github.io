@@ -41,3 +41,12 @@ export default class addCircle {
 		return obj;
 	}
 }
+
+
+
+function a () {
+	var b = 1
+	function c () {
+		
+	}
+}
