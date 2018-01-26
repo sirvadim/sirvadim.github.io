@@ -41,8 +41,8 @@ export default class addTicket{
 
 			close_btn.mousedown = (e) => {
 				// close_btn.
-				if(callback)
-					callback();
+				let target = e.target || e.currentTarget
+				if(callback) callback(target);
 			}
 
 			obj.addChild(close_btn);

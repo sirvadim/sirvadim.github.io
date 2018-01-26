@@ -191,13 +191,14 @@ function init() {
 		};
 		function createTicket(_bool){
 			//добавление билета. колбэк-удаление этого билета
-			let _ticket = new addTicket(_bool,function(){
+			let _ticket = new addTicket(_bool,function(target){
 				if(currentTicket == 1){
 					alert("cant remove first ticket")
 					return;
 				}
-
-				layer_tickets.removeChild(tickets[currentTicket-1].getObj());
+				// console.log(_ticket.name)
+				// layer_tickets.removeChild(target);
+				layer_tickets.removeChild(tickets[_ticket.name-1].getObj());
 				numOfTickets--;
 				BlueNumbersArray.splice(currentTicket);
 				RedNumberArray.splice(currentTicket);
@@ -220,10 +221,15 @@ function init() {
 				balance += 2;
 				balance_txt.setText(balance+" bets");
 
-				if(_bool == false)
-					layer_tickets.x+=ticket.width/2
-			},stage);
+				for(let k = _ticket.name; k <= numOfTickets; k++){
+					console.log(k)
+					tickets[tickets.length-1].getObj().x -= 200;
+					// tickets[k].x
+				}
 
+			},stage);
+			_ticket.name = currentTicket;
+			console.log("name",_ticket.name)
 			let ticket = _ticket.getObj();
 			tickets.push(_ticket)
 			layer_tickets.addChild(ticket);
