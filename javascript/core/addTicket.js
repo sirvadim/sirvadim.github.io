@@ -1,24 +1,9 @@
 import addText from "./addText";
+import Preloader from "./Preloader";
 //TODO оптимизировать циклы, избавиться от одинакового кода
-export default class addTicket {
+export default class addTicket{
 	//constructor выполняется по умолчанию
 	constructor(first,callback,parent){
-		/*function loadManifest(){
-	preloader = new PIXI.loaders.Loader();
-	
-	preloader.add("logo", "images/logo.png");
-	preloader.add("bgMenu", "images/bg/bgMenu.jpg");
-	preloader.add("bgGame1", "images/bg/bgGame1.jpg");
-	preloader.add("bgGame2", "images/bg/bgGame2.jpg");
-	preloader.add("wndInfo", "images/bg/wndInfo.png");
-	
-	preloader.add("images/texture/ItemsTexure.json");
-	
-	
-	//сохраняем счетчик кол-ва файлов для загрузки
-	preloader.on("progress", handleProgress);
-	preloader.load(handleComplete);
-}*/
 		//TODO параметром будет флаг показывающий, является ли билет первым (если он первый, не будет крестика)
 		//также передавать родителя и колбэк
 		//указывает на конструктор
@@ -37,37 +22,32 @@ export default class addTicket {
 		this.score = 0;
 		this.score2 = 0;
 
-		//рисуем подложку билета TODO
-		/*var data = preloader.resources[name];
-		if(data){
-			objImg = new PIXI.Sprite(data.texture);
-		} else {
-			return null;
-		}*/
-
 		let bg_ticket_layer = new PIXI.Container();
-		let bg_ticket = PIXI.Sprite.fromImage('../../images/items/bgTicket.png');
+		let bg_ticket = new PIXI.Sprite.fromImage(Preloader.getimg('bg').path);
 		bg_ticket.x-=12;
 		bg_ticket.y-=12;
 		bg_ticket_layer.addChild(bg_ticket);
+		
 		obj.addChild(bg_ticket_layer);
-		console.log(bg_ticket_layer.width)
 		bg_ticket_layer.width = bg_ticket_layer.width;
 
 		//TODO рисуем крестик для удаления билета
-		let close_btn = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
-		close_btn.y = -25;
-		close_btn.x = 174;
-		close_btn.interactive = true;
-		close_btn.buttonMode = true;
+		if(first == false){
+			let close_btn = new PIXI.Sprite.fromImage(Preloader.getimg('blue_selected').path);
+			close_btn.y = -25;
+			close_btn.x = 174;
+			close_btn.interactive = true;
+			close_btn.buttonMode = true;
 
-		close_btn.mousedown = (e) => {
-			// close_btn.
-			if(callback)
-				callback();
+			close_btn.mousedown = (e) => {
+				// close_btn.
+				if(callback)
+					callback();
+			}
+
+			obj.addChild(close_btn);
 		}
-
-		obj.addChild(close_btn);
+		
 		//рисуем синие
 		for(let i = 1; i < 70; i++){
 			let newBlueField = new PIXI.Container();
@@ -99,7 +79,7 @@ export default class addTicket {
 
 
 			newBlueField.mousedown = (e) => {
-				console.log(e.target.name);
+				// console.log(e.target.name);
 				if(bb.visible && this.score > 4)
 					return
 
@@ -110,7 +90,7 @@ export default class addTicket {
 
 				bb2.visible = !bb2.visible;
 				bb.visible = !bb.visible;
-				console.log(this.score)
+				// console.log(this.score)
 			}
 			mas.push(newBlueField);
 		}
@@ -148,7 +128,7 @@ export default class addTicket {
 			newBlueField.buttonMode = true;
 			
 			newBlueField.mousedown = function (moveData) {
-				console.log(this.name);
+				// console.log(this.name);
 				if(bb.visible && _self.score2 > 0)
 					return
 
@@ -159,7 +139,7 @@ export default class addTicket {
 				
 				bb2.visible = !bb2.visible;
 				bb.visible = !bb.visible;
-				console.log(_self.score2)
+				// console.log(_self.score2)
 			}
 			mas2.push(newBlueField);
 		}
@@ -215,14 +195,14 @@ export default class addTicket {
 
 	changeFieldVisTrue(_masBlue, _red){
 		//отображаем заполненный билет
-		console.log("changeFieldVisTrue",_masBlue, _red)
+		// console.log("changeFieldVisTrue",_masBlue, _red)
 
 		//синие
 		if(_masBlue){
 			this.score = _masBlue.length;
 			this.mas.forEach(function(item, i, arr) {
 				for(let j = 0; j < _masBlue.length; j++){
-					console.log(item.name,_masBlue[j])
+					// console.log(item.name,_masBlue[j])
 					if(item.children[1].visible == false && item.name == _masBlue[j]){
 				  		item.children[1].visible = true;
 				  		item.children[0].visible = false;
@@ -233,7 +213,7 @@ export default class addTicket {
 
 		//красные
 		if(_red != undefined){
-			console.log("2")
+			// console.log("2")
 			this.score2 = 1;
 			this.mas2.forEach(function(item, i, arr) {
 				if(item.children[1].visible == false && item.name == _red){
