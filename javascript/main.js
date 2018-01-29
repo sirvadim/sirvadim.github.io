@@ -89,7 +89,7 @@ function init() {
 
 }
 
-function iniSetArt(set_name) {	
+function iniSetArt(set_name) {
 	var json = preloader.resources[set_name]
 	if(json){}else{
 		console.log("ERROR: " + set_name + " is undefined");

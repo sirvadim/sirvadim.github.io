@@ -35,11 +35,7 @@ export default class Logic {
 			checkResult();
 			showWinners();
 		}
-/*
-		returnResult = function(){
-			return arWhiteBalls;
-		}
-*/
+
 		init();
 
 		function getBalls(ar) {
@@ -66,7 +62,6 @@ export default class Logic {
 				rb = getBalls(ar);
 				dataTickets.push({ar:ar, rb:rb, pp:pp, white:0, red:0, res:""});
 				gotMoney += price;
-				// console.log("ticketBalls:", ar, rb);
 			}
 		}
 
@@ -83,12 +78,7 @@ export default class Logic {
 					obj.red = 1;
 				}
 				obj.res = String(obj.white) + "_" + String(obj.red);
-				// if(obj.white == 4 && obj.red == 1){
-					// count++;
-				// }
-				//console.log("dataPrize:", obj.res, dataPrize[obj.res]);
 			}
-			// console.log("count 4:", count);
 		}
 
 		function showWinners() {
@@ -106,11 +96,9 @@ export default class Logic {
 					}
 				}
 			}
-			
 			console.log("countWinners:", String(countWinners)+"/"+String(totalTicket));
 			console.log("gotMoney:", gotMoney);
 			console.log("paidMoney:", paidMoney);
-
 		}
 
 		this.dataPrize = dataPrize
@@ -119,9 +107,7 @@ export default class Logic {
 			arr1 : arWhiteBalls,
 			red  : redBalls
 		}
-
 	}
-
 
 	getResults(){
 		return this.result;
