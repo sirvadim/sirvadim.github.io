@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -144,6 +144,100 @@ exports.default = addText;
 
 
 Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _addText = __webpack_require__(0);
+
+var _addText2 = _interopRequireDefault(_addText);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var addButton = function addButton(_name, _x, _y, _title, _w, _h, _sizeTF, _color, _colorOver) {
+	_classCallCheck(this, addButton);
+
+	if (_x) {} else {
+		_x = 0;
+	}
+	if (_y) {} else {
+		_y = 0;
+	}
+	if (_w) {} else {
+		_w = 200;
+	}
+	if (_h) {} else {
+		_h = 70;
+	}
+	if (_sizeTF) {} else {
+		_sizeTF = 30;
+	}
+	if (_color) {} else {
+		_color = 0xFFC893;
+	}
+	if (_colorOver) {} else {
+		_colorOver = 0xFFF7D2;
+	}
+
+	var obj = new PIXI.Container();
+
+	var objImg = new PIXI.Graphics();
+	objImg.beginFill(_color).drawRect(-_w / 2, -_h / 2, _w, _h).endFill();
+	obj.addChild(objImg);
+	obj.over = new PIXI.Graphics();
+	obj.over.beginFill(_colorOver).drawRect(-_w / 2, -_h / 2, _w, _h).endFill();
+	obj.over.visible = false;
+	obj.addChild(obj.over);
+	obj.lock = new PIXI.Graphics();
+	obj.lock.beginFill(0x999999).drawRect(-_w / 2, -_h / 2, _w, _h).endFill();
+	obj.lock.visible = false;
+	obj.addChild(obj.lock);
+
+	if (_title) {
+		obj.tf = new _addText2.default(_title, 0, 0, _sizeTF, "#ffffff", "#000000", "center", _w - 20, 4);
+		obj.tf.x = 0;
+		obj.tf.y = -obj.tf.height / 2;
+		obj.addChild(obj.tf);
+	}
+
+	obj.sc = 1;
+	obj.x = _x;
+	obj.y = _y;
+	obj.w = _w;
+	obj.h = _h;
+	obj.r = obj.w / 2;
+	obj.rr = obj.r * obj.r;
+	obj.name = _name;
+	obj._selected = false;
+	obj._disabled = false;
+	obj.interactive = true;
+	obj.buttonMode = true;
+	if (obj.w < 50) {
+		obj.w = 50;
+	}
+	if (obj.h < 50) {
+		obj.h = 50;
+	}
+
+	obj.setDisabled = function (value) {
+		obj._disabled = value;
+		obj.lock.visible = value;
+	};
+
+	return obj;
+};
+
+exports.default = addButton;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
@@ -192,17 +286,17 @@ exports.default = new (function () {
 }())();
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _main = __webpack_require__(3);
+var _main = __webpack_require__(4);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _Logic = __webpack_require__(4);
+var _Logic = __webpack_require__(5);
 
 var _Logic2 = _interopRequireDefault(_Logic);
 
@@ -210,15 +304,15 @@ var _addText = __webpack_require__(0);
 
 var _addText2 = _interopRequireDefault(_addText);
 
-var _addGraphic = __webpack_require__(5);
+var _addGraphic = __webpack_require__(6);
 
 var _addGraphic2 = _interopRequireDefault(_addGraphic);
 
-var _addCircle = __webpack_require__(6);
+var _addCircle = __webpack_require__(7);
 
 var _addCircle2 = _interopRequireDefault(_addCircle);
 
-var _addButton = __webpack_require__(7);
+var _addButton = __webpack_require__(1);
 
 var _addButton2 = _interopRequireDefault(_addButton);
 
@@ -230,9 +324,13 @@ var _ResizeManager2 = __webpack_require__(9);
 
 var _ResizeManager3 = _interopRequireDefault(_ResizeManager2);
 
-var _Preloader = __webpack_require__(1);
+var _Preloader = __webpack_require__(2);
 
 var _Preloader2 = _interopRequireDefault(_Preloader);
+
+var _addInfoWindow = __webpack_require__(10);
+
+var _addInfoWindow2 = _interopRequireDefault(_addInfoWindow);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -240,6 +338,9 @@ var app = new _main2.default("hello!");
 
 var _W = 1920; // game width
 var _H = 1080; // game height
+
+var fps = 30;
+var interval = 1000 / fps;
 
 var renderer = void 0,
     stage = void 0; // pixi;
@@ -255,6 +356,13 @@ var RedNumberArray = [];
 
 var numOfTickets = 1;
 var currentTicket = 1;
+
+var animLeft = false,
+    animRight = false,
+    startTime = void 0;
+
+//слой в котором лежит графика билетов
+var layer_tickets = new PIXI.Container();
 
 function init() {
 	//initialize the stage
@@ -294,17 +402,25 @@ function init() {
 	}, {
 		name: "blue",
 		path: "../../images/buttons/btnNW_0001.png"
+	}, {
+		name: "rules",
+		path: "../../images/items/rules.jpg"
+	}, {
+		name: "red",
+		path: "../../images/buttons/btnRed.png"
+	}, {
+		name: "green",
+		path: "../../images/buttons/btnGreen.png"
 	}], function () {
 		start();
 	});
 
 	function start() {
-		//слой в котором лежит графика билетов
-		var layer_tickets = new PIXI.Container();
 		stage.addChild(layer_tickets);
 		//win ticket
 		var arrResult = [];
-		var res_x = _W / 2 - 90;
+		var res_x = 0;
+		var res_layer = new PIXI.Container();
 		for (var i = 0; i < 6; i++) {
 			var result_layer = new PIXI.Container();
 			var bb = void 0;
@@ -318,11 +434,12 @@ function init() {
 			result_layer.y = 50;
 			result_layer.addChild(result_layer.tf);
 			res_x += 30;
-			stage.addChild(result_layer);
 
 			arrResult.push(result_layer);
+			res_layer.addChild(result_layer);
 		}
-
+		stage.addChild(res_layer);
+		res_layer.x = _W / 2 - res_layer.width / 2;
 		btn_roll.mousedown = function (moveData) {
 			//проверка на заполненность ВСЕХ билетов
 			for (var _i = 0; _i < numOfTickets; _i++) {
@@ -384,7 +501,7 @@ function init() {
 
 			numOfTickets++;
 			currentTicket++;
-			arrow1.visible = true;
+			//arrow1.visible=true;
 			newText.setText(currentTicket + "/" + numOfTickets);
 
 			balance -= 2;
@@ -431,11 +548,22 @@ function init() {
 			layer_tickets.addChild(ticket);
 			ticket.x = _W / 2 - ticket.width / 2 + 230 * (tickets.length - 1);
 			ticket.y = _H / 2 - ticket.height / 2;
-			if (_bool == false) layer_tickets.x -= ticket.width / 2;
+			if (_bool == false) layer_tickets.x -= ticket.width / 2 + 6;
+			/*else{
+   	ticket.x-=6.25;
+   	layer_tickets.x+=6.25;
+   	ticket.y-=6.25;
+   }*/
+			if (layer_tickets.width > _W) {
+				arrow1.visible = true;
+				arrow2.visible = true;
+			}
 		};
 
 		createTicket(true);
-
+		layer_tickets.x += 30;
+		console.log("X:", layer_tickets.x);
+		console.log("WIDTH:", layer_tickets.width);
 		var arrow1 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 		var arrow2 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 		stage.addChild(arrow1);
@@ -455,16 +583,24 @@ function init() {
 		arrow2.interactive = true;
 		arrow2.buttonMode = true;
 
-		arrow1.visible = true;
-		arrow2.visible = true;
+		arrow1.visible = false;
+		arrow2.visible = false;
 
 		//стрелка вперед
 		arrow1.mousedown = function (moveData) {
-			layer_tickets.x += 100;
+			// layer_tickets.x+=100
+			animRight = true;
+			animLeft = false;
+			createjs.Tween.get(layer_tickets) /*.wait(TIME_NEW_CARD*delay)*/.to({ y: 0, alpha: 1 }, 300).to({ x: layer_tickets.x - 120 }, 1000);
+			/*var t = new TWEEN.Tween( layer_tickets).to({y:0, alpha:1});
+   t.start();*/
 		};
 		//стрелка назад
 		arrow2.mousedown = function (moveData) {
-			layer_tickets.x -= 100;
+			// layer_tickets.x-=100
+			animRight = false;
+			animLeft = true;
+			createjs.Tween.get(layer_tickets) /*.wait(TIME_NEW_CARD*delay)*/.to({ y: 0, alpha: 1 }, 300).to({ x: layer_tickets.x + 120 }, 1000);
 		};
 
 		/*(возможно подчеркивать красным те числа, которые не угадал, а зеленым которые угадал)*/
@@ -474,6 +610,13 @@ function init() {
 		}, false);
 		_ResizeManager.onResize(renderer, stage, _W, _H);
 		update();
+
+		var wnd = new _addInfoWindow2.default(function () {
+			stage.removeChild(wnd);
+		});
+		wnd.x = _W / 2;
+		wnd.y = _H / 2;
+		stage.addChild(wnd);
 	}
 }
 
@@ -487,13 +630,56 @@ let getTime = () => {
 };
 */
 init();
+animate();
 function update() {
 	renderer.render(stage);
 	requestAnimationFrame(update);
+
+	var difftime = getTimer() - startTime;
+	/*if (diffTime > interval) {
+ 	update(diffTime);
+ }*/
+
+	startTime = getTimer();
+	/*
+ 	if(animRight)
+ 		layer_tickets.x+=0.4*difftime;
+ 	if(animLeft)
+ 		layer_tickets.x-=0.4*difftime;*/
 }
 
+function animate(time) {
+	requestAnimationFrame(animate);
+	TWEEN.update(time);
+}
+
+function getTimer() {
+	var d = new Date();
+	var n = d.getTime();
+	return n;
+}
+
+function refreshTime() {
+	startTime = getTimer();
+}
+/*
+function update() {
+	requestAnimationFrame(update);
+	renderer.render(stage);
+	
+	
+		/*
+		if(!options_pause){
+			for (var i = 0; i < arClips.length; i++) {
+				var clip = arClips[i];
+				if(clip){
+					clip.enter_frame();
+				}
+			}
+		}*/
+
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -514,7 +700,7 @@ var myclass = function myclass(text) {
 exports.default = myclass;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -659,7 +845,7 @@ var Logic = function () {
 exports.default = Logic;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -703,7 +889,7 @@ var addGraphic = function addGraphic() {
 exports.default = addGraphic;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -785,100 +971,6 @@ function a() {
 }
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _addText = __webpack_require__(0);
-
-var _addText2 = _interopRequireDefault(_addText);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var addButton = function addButton(_name, _x, _y, _title, _w, _h, _sizeTF, _color, _colorOver) {
-	_classCallCheck(this, addButton);
-
-	if (_x) {} else {
-		_x = 0;
-	}
-	if (_y) {} else {
-		_y = 0;
-	}
-	if (_w) {} else {
-		_w = 200;
-	}
-	if (_h) {} else {
-		_h = 70;
-	}
-	if (_sizeTF) {} else {
-		_sizeTF = 30;
-	}
-	if (_color) {} else {
-		_color = 0xFFC893;
-	}
-	if (_colorOver) {} else {
-		_colorOver = 0xFFF7D2;
-	}
-
-	var obj = new PIXI.Container();
-
-	var objImg = new PIXI.Graphics();
-	objImg.beginFill(_color).drawRect(-_w / 2, -_h / 2, _w, _h).endFill();
-	obj.addChild(objImg);
-	obj.over = new PIXI.Graphics();
-	obj.over.beginFill(_colorOver).drawRect(-_w / 2, -_h / 2, _w, _h).endFill();
-	obj.over.visible = false;
-	obj.addChild(obj.over);
-	obj.lock = new PIXI.Graphics();
-	obj.lock.beginFill(0x999999).drawRect(-_w / 2, -_h / 2, _w, _h).endFill();
-	obj.lock.visible = false;
-	obj.addChild(obj.lock);
-
-	if (_title) {
-		obj.tf = new _addText2.default(_title, 0, 0, _sizeTF, "#ffffff", "#000000", "center", _w - 20, 4);
-		obj.tf.x = 0;
-		obj.tf.y = -obj.tf.height / 2;
-		obj.addChild(obj.tf);
-	}
-
-	obj.sc = 1;
-	obj.x = _x;
-	obj.y = _y;
-	obj.w = _w;
-	obj.h = _h;
-	obj.r = obj.w / 2;
-	obj.rr = obj.r * obj.r;
-	obj.name = _name;
-	obj._selected = false;
-	obj._disabled = false;
-	obj.interactive = true;
-	obj.buttonMode = true;
-	if (obj.w < 50) {
-		obj.w = 50;
-	}
-	if (obj.h < 50) {
-		obj.h = 50;
-	}
-
-	obj.setDisabled = function (value) {
-		obj._disabled = value;
-		obj.lock.visible = value;
-	};
-
-	return obj;
-};
-
-exports.default = addButton;
-
-/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -895,7 +987,7 @@ var _addText = __webpack_require__(0);
 
 var _addText2 = _interopRequireDefault(_addText);
 
-var _Preloader = __webpack_require__(1);
+var _Preloader = __webpack_require__(2);
 
 var _Preloader2 = _interopRequireDefault(_Preloader);
 
@@ -934,26 +1026,36 @@ var addTicket = function () {
 		bg_ticket.x -= 12;
 		bg_ticket.y -= 12;
 		bg_ticket_layer.addChild(bg_ticket);
+		/*
+  		let bg_ticket_layer = new PIXI.Container();
+  	var graphics = new PIXI.Graphics();
+  graphics.beginFill(0xFFFF00);
+  // set the line style to have a width of 5 and set the color to red
+  graphics.lineStyle(5, 0xFF0000);
+  // draw a rectangle
+  graphics.drawRect(0, 0, 300,600);
+  bg_ticket_layer.addChild(graphics);
+  */
 
 		obj.addChild(bg_ticket_layer);
 		bg_ticket_layer.width = bg_ticket_layer.width;
 
 		//TODO рисуем крестик для удаления билета
-		if (first == false) {
-			var close_btn = new PIXI.Sprite.fromImage(_Preloader2.default.getimg('blue_selected').path);
-			close_btn.y = -25;
-			close_btn.x = 174;
-			close_btn.interactive = true;
-			close_btn.buttonMode = true;
+		//if(first == false){
+		var close_btn = new PIXI.Sprite.fromImage(_Preloader2.default.getimg('blue_selected').path);
+		close_btn.y = -25;
+		close_btn.x = 174;
+		close_btn.interactive = true;
+		close_btn.buttonMode = true;
 
-			close_btn.mousedown = function (e) {
-				// close_btn.
-				var target = e.target || e.currentTarget;
-				if (callback) callback(target);
-			};
+		close_btn.mousedown = function (e) {
+			// close_btn.
+			var target = e.target || e.currentTarget;
+			if (callback) callback(target);
+		};
 
-			obj.addChild(close_btn);
-		}
+		obj.addChild(close_btn);
+		//}
 
 		//рисуем синие
 
@@ -962,8 +1064,17 @@ var addTicket = function () {
 
 			var bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png');
 			var bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
+			var bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
+			var bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
+
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
+			newBlueField.addChild(bb3);
+			newBlueField.addChild(bb4);
+
+			bb4.visible = false;
+			bb3.visible = false;
+
 			bb2.visible = false;
 			bb.visible = true;
 			obj.addChild(newBlueField);
@@ -1012,8 +1123,15 @@ var addTicket = function () {
 
 			var bb = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0001.png');
 			var bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0003.png');
+			var bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
+			var bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
+			newBlueField.addChild(bb3);
+			newBlueField.addChild(bb4);
+
+			bb4.visible = false;
+			bb3.visible = false;
 			bb2.visible = false;
 			bb.visible = true;
 			obj.addChild(newBlueField);
@@ -1199,6 +1317,99 @@ var ResizeManager = function () {
 }();
 
 exports.default = ResizeManager;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _addButton = __webpack_require__(1);
+
+var _addButton2 = _interopRequireDefault(_addButton);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var addInfoWindow = function addInfoWindow(callback) {
+	_classCallCheck(this, addInfoWindow);
+
+	var obj = new PIXI.Container();
+
+	var bg_layer = new PIXI.Container();
+
+	var graphics = new PIXI.Graphics();
+
+	graphics.beginFill(0xFFFF00);
+
+	// set the line style to have a width of 5 and set the color to red
+	graphics.lineStyle(5, 0xFF0000);
+
+	// draw a rectangle
+	graphics.drawRect(0, 0, 800, 600);
+
+	bg_layer.addChild(graphics);
+	obj.addChild(bg_layer);
+	bg_layer.x -= obj.width / 2;
+	bg_layer.y -= obj.height / 2;
+
+	var btn_ok = new _addButton2.default("ok", 0, 250, "ok");
+	obj.addChild(btn_ok);
+
+	var rules_info = PIXI.Sprite.fromImage('../../images/items/rules.jpg');
+	bg_layer.addChild(rules_info);
+
+	obj.interactive = true;
+	rules_info.scale.x *= 1.1;
+	rules_info.scale.y *= 1.1;
+
+	btn_ok.mousedown = function (e) {
+		callback();
+	};
+	/*
+ var objImg = new PIXI.Graphics();
+ objImg.beginFill(_color).drawCircle(0, 0, _r).endFill();
+ objImg.position.set(1, 1);
+ obj.addChild(objImg);
+ obj.over = new PIXI.Graphics();
+ obj.over.beginFill(_colorOver).drawCircle(0, 0, _r).endFill();
+ obj.over.visible = false;
+ obj.addChild(obj.over);
+ obj.lock = new PIXI.Graphics();
+ obj.lock.beginFill(0x999999).drawCircle(0, 0, _r).endFill();
+ obj.lock.visible = false;
+ obj.addChild(obj.lock);
+ 	if(_title){
+ 	obj.tf = new addText(_title, 0, -_sizeTF/2, _sizeTF, "#ffffff", "#000000", "center", _r-20, 4);
+ 	obj.addChild(obj.tf);
+ }
+ 
+ obj.sc = 1;
+ obj.x = _x;
+ obj.y = _y;
+ obj.r = _r;
+ obj.name = _name;
+ obj._selected = false;
+ obj._disabled = false;
+ obj.interactive = true;
+ obj.buttonMode = true;
+ 
+ obj.setDisabled = function(value){
+ 	obj._disabled = value;
+ 	obj.lock.visible = value;
+ };
+ 	*/
+
+	return obj;
+};
+
+exports.default = addInfoWindow;
 
 /***/ })
 /******/ ]);

@@ -7,12 +7,16 @@ import addButton from "./core/addButton"
 import addTicket from "./core/addTicket"
 import ResizeManager from "./core/ResizeManager"
 import Preloader from "./core/Preloader";
+import addInfoWindow from "./core/addInfoWindow";
 
 
 let app = new myclass("hello!");
 
 let _W = 1920; // game width
 let _H = 1080; // game height
+
+var fps = 30;
+var interval = 1000/fps;
 
 let renderer, stage; // pixi;
 
@@ -27,6 +31,11 @@ let RedNumberArray = [];
 
 let numOfTickets = 1;
 let currentTicket = 1;
+
+let animLeft = false, animRight = false, startTime;
+
+//слой в котором лежит графика билетов
+let layer_tickets = new PIXI.Container();
 
 function init() {
 	//initialize the stage
@@ -69,16 +78,27 @@ function init() {
 	    {
 	        name:"blue", 
 	        path:"../../images/buttons/btnNW_0001.png"
+	    },
+	    {
+	        name:"rules", 
+	        path:"../../images/items/rules.jpg"
+	    },
+	    {
+	        name:"red", 
+	        path:"../../images/buttons/btnRed.png"
+	    },
+	    {
+	        name:"green", 
+	        path:"../../images/buttons/btnGreen.png"
 	    }
 	], function(){start();})
 
 	function start(){
-		//слой в котором лежит графика билетов
-		let layer_tickets = new PIXI.Container();
 		stage.addChild(layer_tickets);
 		//win ticket
 		let arrResult = [];
-		let res_x = _W/2-90;
+		let res_x = 0;
+		let res_layer = new PIXI.Container();
 		for(let i = 0; i < 6; i++){
 			let result_layer = new PIXI.Container();
 			let bb;
@@ -95,11 +115,12 @@ function init() {
 			result_layer.y = 50;
 			result_layer.addChild(result_layer.tf);
 			res_x += 30;
-			stage.addChild(result_layer);
 
 			arrResult.push(result_layer);
+			res_layer.addChild(result_layer);
 		}
-
+		stage.addChild(res_layer);
+		res_layer.x = _W/2-res_layer.width/2;
 		btn_roll.mousedown = function (moveData) {
 			//проверка на заполненность ВСЕХ билетов
 			for(let i = 0; i < numOfTickets; i++){
@@ -161,7 +182,7 @@ function init() {
 
 			numOfTickets++;
 			currentTicket++;
-			arrow1.visible=true;
+			//arrow1.visible=true;
 			newText.setText(currentTicket+"/"+numOfTickets);
 
 			balance -= 2;
@@ -211,11 +232,22 @@ function init() {
 			ticket.x=_W/2 - ticket.width/2 +(230*(tickets.length-1));
 			ticket.y=_H/2 - ticket.height/2;
 			if(_bool == false)
-				layer_tickets.x-=ticket.width/2;
+				layer_tickets.x-=(ticket.width/2+6);
+			/*else{
+				ticket.x-=6.25;
+				layer_tickets.x+=6.25;
+				ticket.y-=6.25;
+			}*/
+			if(layer_tickets.width > _W){
+				arrow1.visible = true;
+				arrow2.visible = true;
+			}
 		};
 
 		createTicket(true);
-
+		layer_tickets.x += 30;
+		console.log("X:",layer_tickets.x)
+		console.log("WIDTH:",layer_tickets.width);
 		let arrow1 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 		let arrow2 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
 		stage.addChild(arrow1);
@@ -235,16 +267,24 @@ function init() {
 		arrow2.interactive = true;
 		arrow2.buttonMode = true;
 
-		arrow1.visible=true;
-		arrow2.visible=true;
+		arrow1.visible=false;
+		arrow2.visible=false;
 
 		//стрелка вперед
 		arrow1.mousedown = function (moveData) {
-			layer_tickets.x+=100
+			// layer_tickets.x+=100
+			animRight = true;
+			animLeft=false;
+			createjs.Tween.get(layer_tickets)/*.wait(TIME_NEW_CARD*delay)*/.to({y:0, alpha:1},300).to({x:layer_tickets.x-120},1000);
+			/*var t = new TWEEN.Tween( layer_tickets).to({y:0, alpha:1});
+			t.start();*/
 		}
 		//стрелка назад
 		arrow2.mousedown = function (moveData) {
-			layer_tickets.x-=100
+			// layer_tickets.x-=100
+			animRight = false;
+			animLeft=true;
+			createjs.Tween.get(layer_tickets)/*.wait(TIME_NEW_CARD*delay)*/.to({y:0, alpha:1},300).to({x:layer_tickets.x+120},1000);
 		}
 
 		/*(возможно подчеркивать красным те числа, которые не угадал, а зеленым которые угадал)*/
@@ -252,6 +292,15 @@ function init() {
 		window.addEventListener("resize", function(){_ResizeManager.onResize(renderer, stage, _W, _H)}, false);
 		_ResizeManager.onResize(renderer, stage, _W, _H);
 		update();
+
+		let wnd = new addInfoWindow(
+			function(){
+				stage.removeChild(wnd);
+			}
+		);
+		wnd.x=_W/2;
+		wnd.y=_H/2;
+		stage.addChild(wnd);
 	}
 }
 
@@ -265,7 +314,52 @@ let getTime = () => {
 };
 */
 init()
+animate();
 function update() {
 	renderer.render(stage);
 	requestAnimationFrame(update);
+
+	var difftime = getTimer() - startTime;
+	/*if (diffTime > interval) {
+		update(diffTime);
+	}*/
+
+	startTime = getTimer();
+/*
+	if(animRight)
+		layer_tickets.x+=0.4*difftime;
+	if(animLeft)
+		layer_tickets.x-=0.4*difftime;*/
 }
+
+function animate( time ) {
+	requestAnimationFrame( animate );
+	TWEEN.update( time );
+}
+
+function getTimer(){
+	var d = new Date();
+	var n = d.getTime();
+	return n;
+}
+
+function refreshTime(){
+	startTime = getTimer();
+}
+/*
+function update() {
+	requestAnimationFrame(update);
+	renderer.render(stage);
+	
+	
+		/*
+		if(!options_pause){
+			for (var i = 0; i < arClips.length; i++) {
+				var clip = arClips[i];
+				if(clip){
+					clip.enter_frame();
+				}
+			}
+		}*/
+		
+		

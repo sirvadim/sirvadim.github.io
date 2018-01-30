@@ -27,12 +27,27 @@ export default class addTicket{
 		bg_ticket.x-=12;
 		bg_ticket.y-=12;
 		bg_ticket_layer.addChild(bg_ticket);
-		
+		/*
+				let bg_ticket_layer = new PIXI.Container();
+
+		var graphics = new PIXI.Graphics();
+
+	graphics.beginFill(0xFFFF00);
+
+	// set the line style to have a width of 5 and set the color to red
+	graphics.lineStyle(5, 0xFF0000);
+
+	// draw a rectangle
+	graphics.drawRect(0, 0, 300,600);
+
+	bg_ticket_layer.addChild(graphics);
+*/
+
 		obj.addChild(bg_ticket_layer);
 		bg_ticket_layer.width = bg_ticket_layer.width;
 
 		//TODO рисуем крестик для удаления билета
-		if(first == false){
+		//if(first == false){
 			let close_btn = new PIXI.Sprite.fromImage(Preloader.getimg('blue_selected').path);
 			close_btn.y = -25;
 			close_btn.x = 174;
@@ -46,7 +61,7 @@ export default class addTicket{
 			}
 
 			obj.addChild(close_btn);
-		}
+		//}
 		
 		//рисуем синие
 		for(let i = 1; i < 70; i++){
@@ -54,8 +69,17 @@ export default class addTicket{
 			
 			let bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png');
 			let bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
+			let bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
+			let bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
+
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
+			newBlueField.addChild(bb3);
+			newBlueField.addChild(bb4);
+
+			bb4.visible= false;
+			bb3.visible= false;
+
 			bb2.visible = false;
 			bb.visible = true;
 			obj.addChild(newBlueField);	
@@ -104,8 +128,15 @@ export default class addTicket{
 			
 			let bb = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0001.png')
 			let bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0003.png')
+			let bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
+			let bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
+			newBlueField.addChild(bb3);
+			newBlueField.addChild(bb4);
+
+			bb4.visible= false;
+			bb3.visible= false;
 			bb2.visible = false;
 			bb.visible = true;
 			obj.addChild(newBlueField);	
