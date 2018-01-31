@@ -361,6 +361,7 @@ var animLeft = false,
     animRight = false,
     startTime = void 0;
 
+var main_layer_tickets = new PIXI.Container();
 //слой в котором лежит графика билетов
 var layer_tickets = new PIXI.Container();
 
@@ -372,7 +373,7 @@ function init() {
 	renderer = PIXI.autoDetectRenderer(_W, _H);
 	document.body.appendChild(renderer.view);
 	stage = new PIXI.Container();
-	renderer.backgroundColor = 0x2F4F4F;
+	renderer.backgroundColor = 0x483E48;
 
 	var newText = new _addText2.default(currentTicket + "/" + numOfTickets, _W / 2, 200);
 	newText.x -= newText.width / 2;
@@ -389,8 +390,13 @@ function init() {
 	var btn_roll = new _addButton2.default("roll", 200, 1010, "roll");
 	stage.addChild(btn_roll);
 
-	var btn_ticket = new _addButton2.default("new ticket", 600, 1010, "new ticket");
+	// let btn_ticket = new addButton("new ticket", 600, 1010, "new ticket");
+	var btn_ticket = PIXI.Sprite.fromImage('../../images/btnAdd.png');
+	btn_ticket.interactive = true;
+	btn_ticket.buttonMode = true;
 	stage.addChild(btn_ticket);
+	btn_ticket.y = 900;
+	btn_ticket.x = 900;
 
 	//прелоадер, колбэк-запуск игры
 	_Preloader2.default.addAll([{
@@ -411,12 +417,64 @@ function init() {
 	}, {
 		name: "green",
 		path: "../../images/buttons/btnGreen.png"
+	}, {
+		name: "bgRedNum",
+		path: "../../images/bgRedNum.png"
+	}, {
+		name: "bgTicket",
+		path: "../../images/bgTicket.png"
+	}, {
+		name: "bgWhiteNum",
+		path: "../../images/bgWhiteNum.png"
+	}, {
+		name: "btnAdd",
+		path: "../../images/btnAdd.png"
+	}, {
+		name: "btnArrow",
+		path: "../../images/btnArrow.png"
+	}, {
+		name: "btnClose",
+		path: "../../images/btnClose.png"
+	}, {
+		name: "btnContract",
+		path: "../../images/btnContract.png"
+	}, {
+		name: "btnFullscreen",
+		path: "../../images/btnFullscreen.png"
+	}, {
+		name: "btnInstruct",
+		path: "../../images/btnInstruct.png"
+	}, {
+		name: "btnText",
+		path: "../../images/btnText.png"
+	}, {
+		name: "cellR",
+		path: "../../images/cellR.png"
+	}, {
+		name: "cellRS",
+		path: "../../images/cellRS.png"
+	}, {
+		name: "cellW",
+		path: "../../images/cellW.png"
+	}, {
+		name: "cellWS",
+		path: "../../images/cellWS.png"
+	}, {
+		name: "icoBet",
+		path: "../../images/icoBet.png"
+	}, {
+		name: "icoKey",
+		path: "../../images/icoKey.png"
+	}, {
+		name: "icoTime",
+		path: "../../images/icoTime.png"
 	}], function () {
 		start();
 	});
 
 	function start() {
-		stage.addChild(layer_tickets);
+		stage.addChild(main_layer_tickets);
+		main_layer_tickets.addChild(layer_tickets);
 		//win ticket
 		var arrResult = [];
 		var res_x = 0;
@@ -425,21 +483,35 @@ function init() {
 			var result_layer = new PIXI.Container();
 			var bb = void 0;
 
-			if (i == 5) bb = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0001.png');else bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png');
+			if (i == 5) bb = PIXI.Sprite.fromImage('../../images/bgWhiteNum.png');else bb = PIXI.Sprite.fromImage('../../images/bgRedNum.png');
 
 			result_layer.addChild(bb);
-			result_layer.tf = new _addText2.default(i, 13, 3, 20, undefined, undefined, "center");
+			result_layer.tf = new _addText2.default(i, 47, 25, 45, undefined, undefined, "center");
 			result_layer.tf.visible = false;
 			result_layer.x = res_x;
 			result_layer.y = 50;
 			result_layer.addChild(result_layer.tf);
-			res_x += 30;
+			res_x += 10 + bb.width;
 
 			arrResult.push(result_layer);
 			res_layer.addChild(result_layer);
 		}
 		stage.addChild(res_layer);
 		res_layer.x = _W / 2 - res_layer.width / 2;
+
+		var icoKey = PIXI.Sprite.fromImage('../../images/icoKey.png');
+		var icoBet = PIXI.Sprite.fromImage('../../images/icoBet.png');
+		var icoTime = PIXI.Sprite.fromImage('../../images/icoTime.png');
+		stage.addChild(icoKey);
+		stage.addChild(icoBet);
+		stage.addChild(icoTime);
+		icoKey.y = 10;
+		icoBet.y = 80;
+		icoTime.y = 150;
+		icoKey.x = 10;
+		icoBet.x = 10;
+		icoTime.x = 10;
+
 		btn_roll.mousedown = function (moveData) {
 			//проверка на заполненность ВСЕХ билетов
 			for (var _i = 0; _i < numOfTickets; _i++) {
@@ -546,32 +618,55 @@ function init() {
 			var ticket = _ticket.getObj();
 			tickets.push(_ticket);
 			layer_tickets.addChild(ticket);
-			ticket.x = _W / 2 - ticket.width / 2 + 230 * (tickets.length - 1);
+			ticket.x = _W / 2 - ticket.width / 2 + 213 * (tickets.length - 1);
 			ticket.y = _H / 2 - ticket.height / 2;
-			if (_bool == false) layer_tickets.x -= ticket.width / 2 + 6;
+			layer_tickets.x -= 13;
+			if (_bool == false) layer_tickets.x -= ticket.width / 2;
 			/*else{
    	ticket.x-=6.25;
    	layer_tickets.x+=6.25;
    	ticket.y-=6.25;
    }*/
-			if (layer_tickets.width > _W) {
+			console.log(ticket.width);
+			console.log(layer_tickets.width);
+
+			if (layer_tickets.width == wMask) {
+				layer_tickets.x += 6.5;
 				arrow1.visible = true;
 				arrow2.visible = true;
 			}
+			/*if(layer_tickets.width > wMask){
+   	layer_tickets.x-=(ticket.width/2)+13;
+   }*/
 		};
 
 		createTicket(true);
-		layer_tickets.x += 30;
+
+		var wMask = 1362;
+		var hMask = 720;
+
+		var masker = new PIXI.Graphics();
+		masker.beginFill(0xFF0000, 1);
+		masker.drawRect(-wMask / 2, -hMask / 2, wMask, hMask);
+		masker.endFill();
+		masker.x = _W / 2;
+		masker.y = _H / 2;
+		masker.alpha = 0.5;
+		main_layer_tickets.addChild(masker);
+		// main_layer_tickets.mask=masker;
+
+
+		//layer_tickets.x += 30;
 		console.log("X:", layer_tickets.x);
 		console.log("WIDTH:", layer_tickets.width);
-		var arrow1 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
-		var arrow2 = PIXI.Sprite.fromImage('../../images/buttons/arrow.png');
+		var arrow1 = PIXI.Sprite.fromImage('../../images/btnArrow.png');
+		var arrow2 = PIXI.Sprite.fromImage('../../images/btnArrow.png');
 		stage.addChild(arrow1);
 		stage.addChild(arrow2);
-		arrow1.scale.x /= -8;
-		arrow1.scale.y /= 8;
-		arrow2.scale.x /= 8;
-		arrow2.scale.y /= 8;
+		arrow1.scale.x /= -1;
+		/*arrow1.scale.y/=8;
+  arrow2.scale.x/=8;
+  arrow2.scale.y/=8;*/
 		arrow1.x = 720;
 		arrow2.x = 360;
 		arrow1.y = 840;
@@ -583,8 +678,8 @@ function init() {
 		arrow2.interactive = true;
 		arrow2.buttonMode = true;
 
-		arrow1.visible = false;
-		arrow2.visible = false;
+		arrow1.visible = true;
+		arrow2.visible = true;
 
 		//стрелка вперед
 		arrow1.mousedown = function (moveData) {
@@ -1014,17 +1109,17 @@ var addTicket = function () {
 		//массив, в который пушатся красные (для клика и получения номера)
 		var mas2 = [];
 		//координаты, в которые отрисовываются ячейки
-		var _x = 0;
-		var _y = 0;
+		var _x = 19;
+		var _y = 12;
 
 		//счет (чтобы нельзя было нажать все ячейки)
 		this.score = 0;
 		this.score2 = 0;
 
 		var bg_ticket_layer = new PIXI.Container();
-		var bg_ticket = new PIXI.Sprite.fromImage(_Preloader2.default.getimg('bg').path);
-		bg_ticket.x -= 12;
-		bg_ticket.y -= 12;
+		var bg_ticket = new PIXI.Sprite.fromImage(_Preloader2.default.getimg('bgTicket').path);
+		//bg_ticket.x-=12;
+		//bg_ticket.y-=12;
 		bg_ticket_layer.addChild(bg_ticket);
 		/*
   		let bg_ticket_layer = new PIXI.Container();
@@ -1042,9 +1137,10 @@ var addTicket = function () {
 
 		//TODO рисуем крестик для удаления билета
 		//if(first == false){
-		var close_btn = new PIXI.Sprite.fromImage(_Preloader2.default.getimg('blue_selected').path);
-		close_btn.y = -25;
-		close_btn.x = 174;
+		var close_btn = new PIXI.Sprite.fromImage(_Preloader2.default.getimg('btnClose').path);
+		//close_btn.y = 556;
+		close_btn.y = 520;
+		close_btn.x = 108.5 - 22;
 		close_btn.interactive = true;
 		close_btn.buttonMode = true;
 
@@ -1062,8 +1158,8 @@ var addTicket = function () {
 		var _loop = function _loop(i) {
 			var newBlueField = new PIXI.Container();
 
-			var bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png');
-			var bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
+			var bb = PIXI.Sprite.fromImage('../../images/cellW.png');
+			var bb2 = PIXI.Sprite.fromImage('../../images/cellWS.png');
 			var bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
 			var bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
 
@@ -1088,7 +1184,7 @@ var addTicket = function () {
 			// if(i%6)_y+=26;
 			if (i % 6 == 0) {
 				_y += 30;
-				_x = 0;
+				_x = 19;
 			} else {
 				_x += 30;
 			}
@@ -1114,17 +1210,17 @@ var addTicket = function () {
 		}
 
 		_y += 40;
-		_x = 0;
+		_x = 19;
 
 		//рисуем красные
 
 		var _loop2 = function _loop2(i) {
 			var newBlueField = new PIXI.Container();
 
-			var bb = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0001.png');
-			var bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0003.png');
-			var bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
-			var bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
+			var bb = PIXI.Sprite.fromImage('../../images/cellR.png');
+			var bb2 = PIXI.Sprite.fromImage('../../images/cellRS.png');
+			var bb3 = PIXI.Sprite.fromImage('../../images/btnRed.png');
+			var bb4 = PIXI.Sprite.fromImage('../../images/btnGreen.png');
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
 			newBlueField.addChild(bb3);
@@ -1139,13 +1235,13 @@ var addTicket = function () {
 			newBlueField.y = _y;
 			newBlueField.name = i;
 
-			obj.tf = new _addText2.default(i, _x + 13, _y + 3, 20, undefined, undefined, "center");
+			obj.tf = new _addText2.default(i, _x + 13, _y + 3, 20, "#000000", undefined, "center");
 			obj.addChild(obj.tf);
 
 			// if(i%6)_y+=26;
 			if (i % 6 == 0) {
 				_y += 30;
-				_x = 0;
+				_x = 19;
 			} else {
 				_x += 30;
 			}
@@ -1166,7 +1262,7 @@ var addTicket = function () {
 			mas2.push(newBlueField);
 		};
 
-		for (var i = 1; i < 30; i++) {
+		for (var i = 1; i < 27; i++) {
 			_loop2(i);
 		}
 		this.obj = obj;

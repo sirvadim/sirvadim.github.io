@@ -15,17 +15,17 @@ export default class addTicket{
 		//массив, в который пушатся красные (для клика и получения номера)
 		let mas2 = [];
 		//координаты, в которые отрисовываются ячейки
-		let _x = 0;
-		let _y = 0;
+		let _x = 19;
+		let _y = 12;
 		
 		//счет (чтобы нельзя было нажать все ячейки)
 		this.score = 0;
 		this.score2 = 0;
 
 		let bg_ticket_layer = new PIXI.Container();
-		let bg_ticket = new PIXI.Sprite.fromImage(Preloader.getimg('bg').path);
-		bg_ticket.x-=12;
-		bg_ticket.y-=12;
+		let bg_ticket = new PIXI.Sprite.fromImage(Preloader.getimg('bgTicket').path);
+		//bg_ticket.x-=12;
+		//bg_ticket.y-=12;
 		bg_ticket_layer.addChild(bg_ticket);
 		/*
 				let bg_ticket_layer = new PIXI.Container();
@@ -48,9 +48,10 @@ export default class addTicket{
 
 		//TODO рисуем крестик для удаления билета
 		//if(first == false){
-			let close_btn = new PIXI.Sprite.fromImage(Preloader.getimg('blue_selected').path);
-			close_btn.y = -25;
-			close_btn.x = 174;
+			let close_btn = new PIXI.Sprite.fromImage(Preloader.getimg('btnClose').path);
+			//close_btn.y = 556;
+			close_btn.y = 520;
+			close_btn.x = 108.5-22;
 			close_btn.interactive = true;
 			close_btn.buttonMode = true;
 
@@ -67,8 +68,8 @@ export default class addTicket{
 		for(let i = 1; i < 70; i++){
 			let newBlueField = new PIXI.Container();
 			
-			let bb = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0001.png');
-			let bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNW_0003.png');
+			let bb = PIXI.Sprite.fromImage('../../images/cellW.png');
+			let bb2 = PIXI.Sprite.fromImage('../../images/cellWS.png');
 			let bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
 			let bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
 
@@ -93,7 +94,7 @@ export default class addTicket{
 			// if(i%6)_y+=26;
 			if(i%6==0){
 				_y += 30;
-				_x = 0;
+				_x = 19;
 			} else {
 				_x += 30;
 			}
@@ -120,16 +121,16 @@ export default class addTicket{
 		}
 
 		_y += 40;
-		_x = 0;
+		_x = 19;
 
 		//рисуем красные
-		for(let i = 1; i < 30; i++){
+		for(let i = 1; i < 27; i++){
 			let newBlueField = new PIXI.Container();
 			
-			let bb = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0001.png')
-			let bb2 = PIXI.Sprite.fromImage('../../images/buttons/btnNR_0003.png')
-			let bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
-			let bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
+			let bb = PIXI.Sprite.fromImage('../../images/cellR.png')
+			let bb2 = PIXI.Sprite.fromImage('../../images/cellRS.png')
+			let bb3 = PIXI.Sprite.fromImage('../../images/btnRed.png');
+			let bb4 = PIXI.Sprite.fromImage('../../images/btnGreen.png');
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
 			newBlueField.addChild(bb3);
@@ -144,13 +145,13 @@ export default class addTicket{
 			newBlueField.y = _y;
 			newBlueField.name = i;
 
-			obj.tf = new addText(i,_x+13,_y+3,20,undefined,undefined,"center");
+			obj.tf = new addText(i,_x+13,_y+3,20,"#000000",undefined,"center");
 			obj.addChild(obj.tf);
 			
 			// if(i%6)_y+=26;
 			if(i%6==0){
 				_y += 30;
-				_x = 0;
+				_x = 19;
 			} else {
 				_x += 30;
 			}
