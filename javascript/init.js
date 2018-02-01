@@ -9,6 +9,27 @@ import ResizeManager from "./core/ResizeManager"
 import Preloader from "./core/Preloader";
 import addInfoWindow from "./core/addInfoWindow";
 
+var Web3 = require('web3');
+var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9669/"));
+const acc = web3.eth.accounts
+
+console.log(acc.create().address)
+
+// web3.eth.accounts
+/*
+[ '0x5f7aaf2199f95e1b991cb7961c49be5df1050d86',
+  '0x1c0131b72fa0f67ac9c46c5f4bd8fa483d7553c3',
+  '0x10de59faaea051b7ea889011a2d8a560a75805a7',
+  '0x56e71613ff0fb6a9486555325dc6bec8e6a88c78',
+  '0x40155a39d232a0bdb98ee9f721340197af3170c5',
+  '0x4b9f184b2527a3605ec8d62dca22edb4b240bbda',
+  '0x117a6be09f6e5fbbd373f7f460c8a74a0800c92c',
+  '0x111f9a2920cbf81e4236225fcbe17c8b329bacd7',
+  '0x01b4bfbca90cbfad6d6d2a80ee9540645c7bd55a',
+  '0x71be5d7d2a53597ef73d90fd558df23c37f3aac1' ]
+>*/
+console.log(Web3)
+
 
 let app = new myclass("hello!");
 
@@ -38,6 +59,10 @@ let main_layer_tickets = new PIXI.Container();
 //слой в котором лежит графика билетов
 let layer_tickets = new PIXI.Container();
 
+//счетчик для стрелок
+let counter = 5;
+//флаг для анимаций
+let anim = false;
 
 function init() {
 	//initialize the stage
@@ -48,29 +73,6 @@ function init() {
 	document.body.appendChild(renderer.view);
 	stage = new PIXI.Container();
 	renderer.backgroundColor = 0x483E48;
-
-	let newText = new addText(currentTicket+"/"+numOfTickets,_W/2,200);
-	newText.x -= newText.width/2;
-
-	stage.addChild(newText);
-	let balance_txt = new addText(balance+" bets",100,100);
-
-	stage.addChild(balance_txt);
-
-	let address_txt = new addText("address: "+address,100,50);
-
-	stage.addChild(address_txt);
-
-	let btn_roll = new addButton("roll", 200, 1010, "roll");
-	stage.addChild(btn_roll);
-
-	// let btn_ticket = new addButton("new ticket", 600, 1010, "new ticket");
-	let btn_ticket = PIXI.Sprite.fromImage('../../images/btnAdd.png')
-	btn_ticket.interactive = true;
-	btn_ticket.buttonMode = true;
-	stage.addChild(btn_ticket);
-	btn_ticket.y =900;
-	btn_ticket.x =900;
 
 	//прелоадер, колбэк-запуск игры
 	Preloader.addAll([
@@ -171,6 +173,37 @@ function init() {
 	], function(){start();})
 
 	function start(){
+		let newText = new addText(currentTicket+"/"+numOfTickets,_W/2,200);
+		newText.x -= newText.width/2;
+
+		stage.addChild(newText);
+		let balance_txt = new addText(balance+" bets",100,100);
+
+		stage.addChild(balance_txt);
+
+		let address_txt = new addText("address: "+address,100,50);
+
+		stage.addChild(address_txt);
+
+
+		// let btn_roll = new addButton("roll", 200, 1010, "roll");
+		let btn_roll = PIXI.Sprite.fromImage('../../images/btnText.png');
+		btn_roll.interactive = true;
+		btn_roll.buttonMode = true;
+		stage.addChild(btn_roll);
+		btn_roll.x=_W/2-btn_roll.width/2;
+		btn_roll.y = 880;
+		let btn_roll_text = new addText("roll",_W/2,880,72,"#FFFFFF",undefined,"center",undefined,undefined,"Segoe");
+		stage.addChild(btn_roll_text);
+
+		// let btn_ticket = new addButton("new ticket", 600, 1010, "new ticket");
+		let btn_ticket = PIXI.Sprite.fromImage('../../images/btnAdd.png')
+		btn_ticket.interactive = true;
+		btn_ticket.buttonMode = true;
+		stage.addChild(btn_ticket);
+		btn_ticket.y = 980;
+		btn_ticket.x=_W/2-btn_ticket.width/2;
+
 		stage.addChild(main_layer_tickets);
 		main_layer_tickets.addChild(layer_tickets);
 		//win ticket
@@ -288,7 +321,8 @@ function init() {
 					alert("cant remove first ticket")
 					return;
 				}
-				layer_tickets.x+=ticket.width/2;
+				if(numOfTickets <=5)
+					layer_tickets.x+=ticket.width/2+10;
 
 				layer_tickets.removeChild(tickets[_ticket.name-1].getObj());
 				numOfTickets--;
@@ -300,18 +334,27 @@ function init() {
 				newText.setText(currentTicket+"/"+numOfTickets);
 				_ticket.changeFieldVisTrue(BlueNumbersArray[currentTicket],RedNumberArray[currentTicket]);
 
-				if(currentTicket == 1){
+				if(counter > 5)
+					counter--;
+
+				if(arrow2.visible == true){
+					layer_tickets.x+=ticket.width+20;
+				}
+
+				if(counter==numOfTickets){
+					arrow1.visible = false;
+				}
+
+				if(counter==5){
 					arrow2.visible = false;
 				}
 
-				if(numOfTickets == 1)
-					arrow1.visible = false;
 
 				balance += 2;
 				balance_txt.setText(balance+" bets");
 
 				for(let k = _ticket.name-1; k < numOfTickets; k++){
-					tickets[k].getObj().x -= 230;
+					tickets[k].getObj().x -= 237;
 					tickets[k].name -= 1;
 				}
 
@@ -320,23 +363,27 @@ function init() {
 			let ticket = _ticket.getObj();
 			tickets.push(_ticket);
 			layer_tickets.addChild(ticket);
-			ticket.x=_W/2 - ticket.width/2 +(213*(tickets.length-1));
+			ticket.x=_W/2 - ticket.width/2 +(237*(tickets.length-1));
 			ticket.y=_H/2 - ticket.height/2;
-			layer_tickets.x-=13
-			if(_bool == false)
-				layer_tickets.x-=(ticket.width/2);
+			if(_bool == false){
+				if(layer_tickets.width <= wMask){
+					layer_tickets.x-=(ticket.width/2);
+					layer_tickets.x-=10;
+				}
+			}
 			/*else{
 				ticket.x-=6.25;
 				layer_tickets.x+=6.25;
 				ticket.y-=6.25;
 			}*/
-			console.log(ticket.width);
-			console.log(layer_tickets.width);
+			//console.log(ticket.width);
+			// console.log("WIDTH",layer_tickets.width);
+			// console.log("x",layer_tickets.x);
 
-			if(layer_tickets.width == wMask){
-				layer_tickets.x+=6.5;
+			if(layer_tickets.width > wMask){
+				// layer_tickets.x+=6.5;
 				arrow1.visible = true;
-				arrow2.visible = true;
+				// arrow2.visible = true;
 			}
 			/*if(layer_tickets.width > wMask){
 				layer_tickets.x-=(ticket.width/2)+13;
@@ -345,8 +392,9 @@ function init() {
 
 		createTicket(true);
 		
-		var wMask = 1362;
-		var hMask = 720;
+		var wMask = 1165;
+		//var wMask = 1402;
+		var hMask = 580;
 
 		var masker = new PIXI.Graphics();
 		masker.beginFill(0xFF0000, 1);
@@ -356,12 +404,12 @@ function init() {
 		masker.y = _H/2;
 		masker.alpha=0.5
 		main_layer_tickets.addChild(masker);
-		// main_layer_tickets.mask=masker;
+		main_layer_tickets.mask=masker;
 
 
 		//layer_tickets.x += 30;
-		console.log("X:",layer_tickets.x)
-		console.log("WIDTH:",layer_tickets.width);
+		// console.log("X:",layer_tickets.x)
+		// console.log("WIDTH:",layer_tickets.width);
 		let arrow1 = PIXI.Sprite.fromImage('../../images/btnArrow.png');
 		let arrow2 = PIXI.Sprite.fromImage('../../images/btnArrow.png');
 		stage.addChild(arrow1);
@@ -370,10 +418,10 @@ function init() {
 		/*arrow1.scale.y/=8;
 		arrow2.scale.x/=8;
 		arrow2.scale.y/=8;*/
-		arrow1.x=720
-		arrow2.x=360
-		arrow1.y = 840;
-		arrow2.y = 840;
+		arrow1.x=1920-250
+		arrow2.x=250
+		arrow1.y = _H/2-50;
+		arrow2.y = _H/2-50;
 
 		arrow1.interactive = true;
 		arrow1.buttonMode = true;
@@ -381,24 +429,55 @@ function init() {
 		arrow2.interactive = true;
 		arrow2.buttonMode = true;
 
-		arrow1.visible=true;
-		arrow2.visible=true;
+		arrow1.visible=false;
+		arrow2.visible=false;
 
 		//стрелка вперед
 		arrow1.mousedown = function (moveData) {
 			// layer_tickets.x+=100
+			if(anim == true)
+				return;
+			anim = true;
 			animRight = true;
 			animLeft=false;
-			createjs.Tween.get(layer_tickets)/*.wait(TIME_NEW_CARD*delay)*/.to({y:0, alpha:1},300).to({x:layer_tickets.x-120},1000);
+			counter++;
+			createjs.Tween.get(layer_tickets)/*.wait(TIME_NEW_CARD*delay)*/.to({x:layer_tickets.x-237},600).call(handleComplete);;
+			arrow2.visible = true;
+			// console.log(layer_tickets.x, layer_tickets.width)
+			if(counter==numOfTickets){
+				arrow1.visible = false;
+			}
+			arrow2.visible = true;
+
 			/*var t = new TWEEN.Tween( layer_tickets).to({y:0, alpha:1});
 			t.start();*/
 		}
 		//стрелка назад
 		arrow2.mousedown = function (moveData) {
 			// layer_tickets.x-=100
+			if(anim == true)
+				return;
+			anim = true;
 			animRight = false;
 			animLeft=true;
-			createjs.Tween.get(layer_tickets)/*.wait(TIME_NEW_CARD*delay)*/.to({y:0, alpha:1},300).to({x:layer_tickets.x+120},1000);
+			counter--;
+			createjs.Tween.get(layer_tickets)/*.wait(TIME_NEW_CARD*delay)*/.to({x:layer_tickets.x+237},600).call(handleComplete);;
+			// arrow2.visible = false;
+			if(counter==5){
+				arrow2.visible = false;
+			}
+			arrow1.visible = true;
+
+			/*
+			console.log("LALALA",(layer_tickets.x));
+			if(layer_tickets.x>=-711){
+				console.log("work, ",layer_tickets.x)
+				arrow2.visible = false;
+			}*/
+		}
+
+		function handleComplete(){
+			anim = false;
 		}
 
 		/*(возможно подчеркивать красным те числа, которые не угадал, а зеленым которые угадал)*/
@@ -437,6 +516,7 @@ function update() {
 	/*if (diffTime > interval) {
 		update(diffTime);
 	}*/
+			// console.log("x",layer_tickets.x);
 
 	startTime = getTimer();
 /*

@@ -69,17 +69,17 @@ export default class addTicket{
 			let newBlueField = new PIXI.Container();
 			
 			let bb = PIXI.Sprite.fromImage('../../images/cellW.png');
-			let bb2 = PIXI.Sprite.fromImage('../../images/cellWS.png');
+			let bb2 = PIXI.Sprite.fromImage('../../images/cellWS.png');/*
 			let bb3 = PIXI.Sprite.fromImage('../../images/buttons/btnRed.png');
-			let bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');
+			let bb4 = PIXI.Sprite.fromImage('../../images/buttons/btnGreen.png');*/
 
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
-			newBlueField.addChild(bb3);
+			/*newBlueField.addChild(bb3);
 			newBlueField.addChild(bb4);
 
 			bb4.visible= false;
-			bb3.visible= false;
+			bb3.visible= false;*/
 
 			bb2.visible = false;
 			bb.visible = true;
@@ -128,16 +128,16 @@ export default class addTicket{
 			let newBlueField = new PIXI.Container();
 			
 			let bb = PIXI.Sprite.fromImage('../../images/cellR.png')
-			let bb2 = PIXI.Sprite.fromImage('../../images/cellRS.png')
+			let bb2 = PIXI.Sprite.fromImage('../../images/cellRS.png')/*
 			let bb3 = PIXI.Sprite.fromImage('../../images/btnRed.png');
-			let bb4 = PIXI.Sprite.fromImage('../../images/btnGreen.png');
+			let bb4 = PIXI.Sprite.fromImage('../../images/btnGreen.png');*/
 			newBlueField.addChild(bb);
 			newBlueField.addChild(bb2);
-			newBlueField.addChild(bb3);
+			/*newBlueField.addChild(bb3);
 			newBlueField.addChild(bb4);
 
 			bb4.visible= false;
-			bb3.visible= false;
+			bb3.visible= false;*/
 			bb2.visible = false;
 			bb.visible = true;
 			obj.addChild(newBlueField);	
