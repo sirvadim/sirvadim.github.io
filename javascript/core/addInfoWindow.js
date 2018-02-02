@@ -1,11 +1,12 @@
 import addButton from "./addButton";
+import addText from "./addText";
 export default class addInfoWindow {
 	constructor(callback){
 		var obj = new PIXI.Container();
 		
 
 		let bg_layer = new PIXI.Container();
-
+/*
 		var graphics = new PIXI.Graphics();
 
 		graphics.beginFill(0xFFFF00);
@@ -14,18 +15,30 @@ export default class addInfoWindow {
 		graphics.lineStyle(5, 0xFF0000);
 
 		// draw a rectangle
-		graphics.drawRect(0, 0, 800,600);
+		graphics.drawRect(0, 0, 800,600);*/
+		let bg = PIXI.Sprite.fromImage('../../images/wndInfo.png')
 
-		bg_layer.addChild(graphics);
+		bg_layer.addChild(bg);
 		obj.addChild(bg_layer);
 		bg_layer.x-=obj.width/2;
 		bg_layer.y-=obj.height/2;
 
-		let btn_ok = new addButton("ok", 0, 250, "ok");
+		let btn_ok = PIXI.Sprite.fromImage('../../images/btnText.png');
+		btn_ok.interactive = true;
+		btn_ok.buttonMode = true;
 		obj.addChild(btn_ok);
+		btn_ok.x=-btn_ok.width/2;//_W/2-btn_ok.width/2;
+		btn_ok.y = 250;
+		let btn_ok_text = new addText("ok",0,250,72,"#FFFFFF",undefined,"center",undefined,undefined);
+
+		//let btn_ok = new addButton("ok", 0, 250, "ok");
+		obj.addChild(btn_ok);
+		obj.addChild(btn_ok_text);
 
 		let rules_info = PIXI.Sprite.fromImage('../../images/items/rules.jpg')
 		bg_layer.addChild(rules_info);
+		rules_info.x+=10;
+		rules_info.y+=30
 		
 		obj.interactive = true;
 		rules_info.scale.x*=1.1;

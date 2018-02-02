@@ -13,7 +13,7 @@ var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9669/"));
 const acc = web3.eth.accounts
 
-console.log(acc.create().address)
+// console.log(acc.create().address)
 
 // web3.eth.accounts
 /*
@@ -28,7 +28,7 @@ console.log(acc.create().address)
   '0x01b4bfbca90cbfad6d6d2a80ee9540645c7bd55a',
   '0x71be5d7d2a53597ef73d90fd558df23c37f3aac1' ]
 >*/
-console.log(Web3)
+// console.log(Web3)
 
 
 let app = new myclass("hello!");
@@ -169,6 +169,10 @@ function init() {
 	    {
 	        name:"icoTime", 
 	        path:"../../images/icoTime.png"
+	    },
+	    {
+	        name:"wndInfo", 
+	        path:"../../images/wndInfo.png"
 	    }
 	], function(){start();})
 
@@ -203,6 +207,28 @@ function init() {
 		stage.addChild(btn_ticket);
 		btn_ticket.y = 980;
 		btn_ticket.x=_W/2-btn_ticket.width/2;
+
+		//buttons
+		let btn_contract = PIXI.Sprite.fromImage('../../images/btnContract.png')
+		btn_contract.interactive = true;
+		btn_contract.buttonMode = true;
+		stage.addChild(btn_contract);
+		btn_contract.y = 580;
+		btn_contract.x=1750;
+
+		let btnInstruct = PIXI.Sprite.fromImage('../../images/btnInstruct.png')
+		btnInstruct.interactive = true;
+		btnInstruct.buttonMode = true;
+		stage.addChild(btnInstruct);
+		btnInstruct.y = 700;
+		btnInstruct.x=1750;
+
+		let btnFullscreen = PIXI.Sprite.fromImage('../../images/btnFullscreen.png')
+		btnFullscreen.interactive = true;
+		btnFullscreen.buttonMode = true;
+		stage.addChild(btnFullscreen);
+		btnFullscreen.y = 820;
+		btnFullscreen.x=1750;
 
 		stage.addChild(main_layer_tickets);
 		main_layer_tickets.addChild(layer_tickets);
