@@ -8,11 +8,12 @@ import addTicket from "./core/addTicket"
 import ResizeManager from "./core/ResizeManager"
 import Preloader from "./core/Preloader";
 import addInfoWindow from "./core/addInfoWindow";
-
+console.log("test commit")
+/*
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9669/"));
 const acc = web3.eth.accounts
-
+*/
 // console.log(acc.create().address)
 
 // web3.eth.accounts
