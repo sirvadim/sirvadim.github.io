@@ -8,9 +8,22 @@ import addTicket from "./core/addTicket"
 import ResizeManager from "./core/ResizeManager"
 import Preloader from "./core/Preloader";
 import addInfoWindow from "./core/addInfoWindow";
+import WEB3 from 'web3'
 
-const acc = DCLib.web3.eth.accounts;
-console.log(acc.create().address)
+const myadress = "0x268eD938A4E49Df73B8885D5aE20d0E99F39241a";
+
+// const spender = "0x248736140338cb72e8efda00a72831941339bde1";
+// const spender = "0x5915c40CC210C6911b602BA84463e99BDeb29aF2";
+const spender = "0x98de260ba599c22b781ef40463732641ef22b11d";
+const abi = JSON.parse('[{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"usersTickets","outputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"chooseWinTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getReward","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"winTicketChoosen","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"blockForRandom","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"refund","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"player","type":"address"}],"name":"checkMyTicket","outputs":[{"name":"","type":"uint256[2]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"closeLottery","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"stopLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"startLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint8"}],"name":"dataPrize","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"name":"buyTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"closeLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"winTicket","outputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint8"}],"name":"dataPowerPlay","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_manager","type":"address"}],"name":"setManager","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"}],"name":"setWinTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_token","type":"address"},{"name":"_owner","type":"address"},{"name":"_startLotteryBlock","type":"uint256"},{"name":"_stopLotteryBlock","type":"uint256"},{"name":"_closeLotteryBlock","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[],"name":"WinTicketChoosen","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"","type":"uint256"}],"name":"RewardRecieved","type":"event"},{"anonymous":false,"inputs":[],"name":"jackpotRecieved","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]')
+const amount = 200000000; // 2 bets
+const contract_deposit = DCLib.Utils.bet2dec(2); // 2 bets
+const address_erc20contract = '0x95a48dca999c89e4e284930d9b9af973a7481287'
+// const abi = JSON.parse('[{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"usersTickets","outputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"chooseWinTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getReward","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"winTicketChoosen","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"blockForRandom","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"refund","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"player","type":"address"}],"name":"checkMyTicket","outputs":[{"name":"","type":"uint256[2]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"closeLottery","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"stopLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"startLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint8"}],"name":"dataPrize","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"name":"buyTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"closeLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"winTicket","outputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint8"}],"name":"dataPowerPlay","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_manager","type":"address"}],"name":"setManager","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"}],"name":"setWinTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_token","type":"address"},{"name":"_owner","type":"address"},{"name":"_startLotteryBlock","type":"uint256"},{"name":"_stopLotteryBlock","type":"uint256"},{"name":"_closeLotteryBlock","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[],"name":"WinTicketChoosen","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"","type":"uint256"}],"name":"RewardRecieved","type":"event"},{"anonymous":false,"inputs":[],"name":"jackpotRecieved","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]');
+// const abi = JSON.parse('[{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"activeLotteries","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"lotteries","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"jackpot","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"closeLottery","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_startLotteryBlock","type":"uint256"},{"name":"_stopLotteryBlock","type":"uint256"},{"name":"_closeLotteryBlock","type":"uint256"},{"name":"_tokenAmount","type":"uint256"}],"name":"createLottery","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"}],"name":"payJackpot","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"token","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_token","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]')
+// const abi = JSON.parse('[{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"uint256"}],"name":"usersTickets","outputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"chooseWinTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getReward","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"winTicketChoosen","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"blockForRandom","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"refund","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"player","type":"address"}],"name":"checkMyTicket","outputs":[{"name":"","type":"uint256[2]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"closeLottery","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"stopLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"startLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint8"}],"name":"dataPrize","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"name":"buyTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"closeLotteryBlock","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"winTicket","outputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"},{"name":"pp","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint8"}],"name":"dataPowerPlay","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_manager","type":"address"}],"name":"setManager","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"wb1","type":"uint8"},{"name":"wb2","type":"uint8"},{"name":"wb3","type":"uint8"},{"name":"wb4","type":"uint8"},{"name":"wb5","type":"uint8"},{"name":"rb","type":"uint8"}],"name":"setWinTicket","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"_token","type":"address"},{"name":"_owner","type":"address"},{"name":"_startLotteryBlock","type":"uint256"},{"name":"_stopLotteryBlock","type":"uint256"},{"name":"_closeLotteryBlock","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[],"name":"WinTicketChoosen","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"","type":"uint256"}],"name":"RewardRecieved","type":"event"},{"anonymous":false,"inputs":[],"name":"jackpotRecieved","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"previousOwner","type":"address"},{"indexed":true,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"}]')
+
+// await Eth.ERC20approve(contract_address, contract_deposit);
 
 let app = new myclass("hello!");
 
@@ -48,7 +61,11 @@ let counter = 5;
 let anim = false;
 
 function init() {
+	//TODO
+	//рандомное заполнение билета (одного или всех)
+
 	//initialize the stage
+
 	var s = document.documentElement.style;
 	s.cssText = s.cssText ? "" : "overflow:hidden;width:100%;height:100%";
 
@@ -136,7 +153,27 @@ function init() {
 	], function() {
 		start();
 	})
+	console.log(WEB3)
+	DCLib.Eth.ERC20approve(spender,amount)
+	
 
+	//init contracts
+	const contactLottery = new DCLib.web3.eth.Contract(abi, spender);
+/*
+	contactLottery.methods.createLottery(3655850, 3665850, 3765850, 200000000).send(
+		{
+			from : DCLib.Account.get().openkey,
+			gas : 900000,
+			gasPrice : 40*1000000000
+		}
+	).on('transactionHash', transactionHash=>{
+      console.log('# createLottery TX pending', transactionHash)
+      console.log('https://ropsten.etherscan.io/tx/'+transactionHash)
+    }).on('error', err=>{ 
+      console.error(err)
+      reject(false, err)
+    });
+*/
 	function start() {
 		let newText = new addText(currentTicket + "/" + numOfTickets, _W / 2, 200);
 		newText.x -= newText.width / 2;
@@ -467,7 +504,7 @@ function init() {
 				arrow2.visible = false;
 			}*/
 		}
-
+		
 		function handleComplete() {
 			anim = false;
 		}
@@ -489,6 +526,30 @@ function init() {
 		wnd.y = _H / 2;
 		stage.addChild(wnd);
 	}
+
+	let btn_ready = new addButton("btn_ready", 1400, 1010, "btn_ready");
+	stage.addChild(btn_ready);
+
+	btn_ready.mousedown = function(moveData) {		
+		contactLottery.methods.buyTicket(tickets[0].getBlueNums()[0], tickets[0].getBlueNums()[1],
+			tickets[0].getBlueNums()[2], tickets[0].getBlueNums()[3], tickets[0].getBlueNums()[4], tickets[0].getRedNums() ).send(
+			{
+				from : DCLib.Account.get().openkey,
+				gas : 900000,
+				gasPrice : 40*1000000000
+			}
+		).on('transactionHash', transactionHash=>{
+          console.log('# buyTicket TX pending', transactionHash)
+          console.log('https://ropsten.etherscan.io/tx/'+transactionHash)
+        }).on('error', err=>{ 
+          console.error(err)
+          reject(false, err)
+        });
+
+	}
+	/*function buyTicketsContract(){
+
+	}*/
 }
 
 /*

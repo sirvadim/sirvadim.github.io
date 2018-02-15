@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dclib": "^0.2.414",
     "jquery": "^3.2.1",
+    "lerna": "^2.8.0",
     "web3": "^1.0.0-beta.29"
   },
   "devDependencies": {
