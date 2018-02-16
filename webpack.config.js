@@ -21,7 +21,7 @@ module.exports = {
 		// inline: true, // онлайн перезагрузка (не хот)
 		open: true, // нпм ран старт
 		watchContentBase: true, //перезагрузка при изменении
-		port: 7777
+		port: 7778
 	},
 	plugins: [
 		new webpack.ProvidePlugin({
