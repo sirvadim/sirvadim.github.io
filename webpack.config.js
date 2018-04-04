@@ -6,8 +6,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
 	entry: [
 		'babel-polyfill',
-		path.join(__dirname, 'src/client.js'),
-		path.join(__dirname, 'test_frontend/js/index.js')
+		path.join(__dirname, 'js/config.js'),
+		path.join(__dirname, 'js/index.js')
 	],
 	output: {
 		path: path.join(__dirname, 'dist'),
@@ -19,7 +19,7 @@ module.exports = {
 		inline: true,
 		hot: true,
 		watchContentBase: true, //перезагрузка при изменении
-		port: 6651
+		port: 6650
 	},
 	plugins: [
 		new webpack.ProvidePlugin({
@@ -29,9 +29,9 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			filename: 'index.html',
 			hunks: ['blog', 'common'],
-			template: path.join(__dirname, 'src/templates/pages/index.pug')
+			template: path.join(__dirname, 'admin.html')
 		}),
-		new ExtractTextPlugin('css/style.css'),
+		new ExtractTextPlugin('style.css'),
 		// new ExtractTextPlugin('src/style/app.scss'),
 		new webpack.NamedModulesPlugin(),
 		new webpack.HotModuleReplacementPlugin()

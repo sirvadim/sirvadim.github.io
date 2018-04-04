@@ -1,0 +1,101 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add drizzle
+
+PATH: 
+  C:\Users\Admin\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\cmd;C:\Program Files\ConEmu\ConEmu\Scripts;C:\Program Files\ConEmu;C:\Program Files\ConEmu\ConEmu;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\Skype\Phone;C:\Program Files\Git\cmd;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Local\GitHubDesktop\bin;C:\Users\Admin\AppData\Roaming\npm;C:\Users\Admin\AppData\Local\Microsoft\WindowsApps;C:\Users\Admin\AppData\Local\Yarn\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  8.9.3
+
+Platform: 
+  win32 x64
+
+npm manifest: 
+  {
+    "name": "lottery",
+    "version": "1.0.0",
+    "description": "",
+    "main": "web3-light.js",
+    "scripts": {
+      "build": "webpack",
+      "start": "webpack-dev-server"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "bootstrap": "^4.0.0",
+      "jquery": "^3.2.1",
+      "popper.js": "^1.14.1",
+      "web3": "^1.0.0-beta.30"
+    },
+    "devDependencies": {
+      "babel": "^6.23.0",
+      "babel-core": "6.24.1",
+      "babel-eslint": "7.2.3",
+      "babel-loader": "7.0.0",
+      "babel-plugin-istanbul": "^4.1.5",
+      "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+      "babel-plugin-transform-es3-member-expression-literals": "^6.22.0",
+      "babel-polyfill": "^6.23.0",
+      "babel-preset-env": "^1.6.0",
+      "babel-preset-es2015": "^6.24.1",
+      "babel-preset-stage-0": "^6.24.1",
+      "babel-preset-stage-2": "^6.24.1",
+      "babel-runtime": "6.23.0",
+      "css-loader": "^0.28.10",
+      "extract-text-webpack-plugin": "^3.0.2",
+      "file-loader": "^1.1.11",
+      "html-webpack-plugin": "^3.0.4",
+      "node-sass": "^4.7.2",
+      "pug": "^2.0.0-rc.4",
+      "pug-loader": "^2.3.0",
+      "sass-loader": "^6.0.6",
+      "sinon": "^4.4.2",
+      "style-loader": "^0.20.2",
+      "webpack": "^3.11.0",
+      "webpack-dev-server": "^2.11.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: C:\Users\Admin\Documents\LotteryGame\LotteryGame\admin_panel\node_modules\sha3: Command failed.
+  Exit code: 1
+  Command: C:\WINDOWS\system32\cmd.exe
+  Arguments: /d /s /c node-gyp rebuild
+  Directory: C:\Users\Admin\Documents\LotteryGame\LotteryGame\admin_panel\node_modules\sha3
+  Output:
+  C:\Users\Admin\Documents\LotteryGame\LotteryGame\admin_panel\node_modules\sha3>if not defined npm_config_node_gyp (node "C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin\\..\..\node_modules\node-gyp\bin\node-gyp.js" rebuild )  else (node "" rebuild ) 
+  gyp info it worked if it ends with ok
+  gyp info using node-gyp@3.6.2
+  gyp info using node@8.9.3 | win32 | x64
+  gyp ERR! configure error 
+  gyp ERR! stack Error: Can't find Python executable "python", you can set the PYTHON env variable.
+  gyp ERR! stack     at PythonFinder.failNoPython (C:\Program Files\nodejs\node_modules\npm\node_modules\node-gyp\lib\configure.js:483:19)
+  gyp ERR! stack     at PythonFinder.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\node-gyp\lib\configure.js:508:16)
+  gyp ERR! stack     at C:\Program Files\nodejs\node_modules\npm\node_modules\graceful-fs\polyfills.js:284:29
+  gyp ERR! stack     at FSReqWrap.oncomplete (fs.js:152:21)
+  gyp ERR! System Windows_NT 10.0.16299
+  gyp ERR! command "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\node_modules\\node-gyp\\bin\\node-gyp.js" "rebuild"
+  gyp ERR! cwd C:\Users\Admin\Documents\LotteryGame\LotteryGame\admin_panel\node_modules\sha3
+  gyp ERR! node -v v8.9.3
+  gyp ERR! node-gyp -v v3.6.2
+  gyp ERR! not ok
+      at ProcessTermError.MessageError (C:\Program Files (x86)\Yarn\lib\cli.js:186:110)
+      at new ProcessTermError (C:\Program Files (x86)\Yarn\lib\cli.js:226:113)
+      at ChildProcess.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:30281:17)
+      at emitTwo (events.js:126:13)
+      at ChildProcess.emit (events.js:214:7)
+      at maybeClose (internal/child_process.js:925:16)
+      at Socket.stream.socket.on (internal/child_process.js:346:11)
+      at emitOne (events.js:116:13)
+      at Socket.emit (events.js:211:7)
+      at Pipe._handle.close [as _onclose] (net.js:554:12)
