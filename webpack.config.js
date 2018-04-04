@@ -1,33 +1,40 @@
 const webpack = require('webpack')
 const path = require('path')
-
-console.log(process.cwd() + '/dist')
-console.log(__dirname) //папка из которой запускается (там где вебпак конфиг)
-
-
-
-let sourcemap, watcher
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-	entry: path.join(__dirname, '/javascript/init.js'),
+	entry: [
+		'babel-polyfill',
+		path.join(__dirname, 'src/client.js'),
+		path.join(__dirname, 'test_frontend/js/index.js')
+	],
 	output: {
-		path: process.cwd(),
-		filename: 'main.bundle.js'
+		path: path.join(__dirname, 'dist'),
+		// publicPath: path.join(process.cwd(), 'src'),
+		filename: 'js/main.bundle.js'
 	},
-	watch: true, //отслеживать изменение файла
 	devServer: {
-		contentBase: process.cwd(), //за какой папкой слежу
-		// hot: true, // включение хота
-		// inline: true, // онлайн перезагрузка (не хот)
-		open: true, // нпм ран старт
+		contentBase: path.join(__dirname, 'public'), //за какой папкой слежу
+		inline: true,
+		hot: true,
 		watchContentBase: true, //перезагрузка при изменении
-		port: 7777
+		port: 6651
 	},
 	plugins: [
 		new webpack.ProvidePlugin({
 			$: 'jquery',
 			jQuery: 'jquery'
-		})
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'index.html',
+			hunks: ['blog', 'common'],
+			template: path.join(__dirname, 'src/templates/pages/index.pug')
+		}),
+		new ExtractTextPlugin('css/style.css'),
+		// new ExtractTextPlugin('src/style/app.scss'),
+		new webpack.NamedModulesPlugin(),
+		new webpack.HotModuleReplacementPlugin()
 	],
 	module: {
 		rules: [{
@@ -36,9 +43,32 @@ module.exports = {
 			use: {
 				loader: 'babel-loader',
 				options: {
-					presets: ['env']
+					presets: ['env', 'es2015', 'stage-0']
 				}
 			},
+		}, {
+			test: /\.pug$/,
+			loader: 'pug-loader',
+			options: {
+				pretty: true
+			}
+		}, {
+			test: /\.scss$/,
+			use: ExtractTextPlugin.extract({
+				use: ['css-loader', 'sass-loader']
+			})
+		}, {
+			test: /\.css$/,
+			use: ExtractTextPlugin.extract({
+				fallback: 'style-loader',
+				use: 'css-loader'
+			})
+		}, {
+			test: /\.(jpg|png|svg)$/,
+			loader: 'file-loader',
+			options: {
+				name: 'img/[name].[ext]'
+			}
 		}]
 	}
 }

@@ -1,1 +1,10 @@
+build
 node_modules
+yarn.lock
+yarn-error.log
+truffle.js
+.DS_Store
+.vscode
+karma.conf.js
+package.json
+package-lock.json

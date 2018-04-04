@@ -1,0 +1,5 @@
+import './templates/pages/index.pug'
+import './style/app.scss'
+import 'bootstrap'
+import './js/main.js'
+// import './js/init'

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="./js/index.js"></script>
+    <title>Admin Lottery</title>
+</head>
+
+<body>
+    <div class="container" id="scrLogin">
+        <br>
+        <div class="jumbotron">
+            <h1 class="display-4">Admin Lottery</h1>
+            <p class="lead">Paste Your Private Key.</p>
+                <div class="input-group">
+                    <input type="text" id="privatekey" class="form-control" placeholder="Private Key" value="">
+                    <button type="button" id="openAccount" class="btn btn-primary btn-lg btn-block">Unlock</button>
+                </div>
+            <p/>
+            <div class="alert alert-danger" role="alert" id="invalidPrivateKey" style="display:none">
+                Invalid Private Key
+            </div>
+        </div>
+    </div>
+
+    <div id="scrFactory" class="container" style="display:none">
+        <br>
+        <div class="jumbotron">
+            <h1 class="display-4">Factory</h1>
+            <p class="lead">Paste your address factory or create new factory.</p>
+                <div class="input-group">
+                    <input type="text" id="addressFactory" class="form-control" placeholder="Address Factory" value="">
+                </div>
+                <div class="btn-toolbar justify-content-between">
+                    <button type="button" id="createFactory" class="btn btn-success">Create</button>
+                    <button type="button" id="openFactory" class="btn btn-primary">Open</button>
+                </div>
+            <p/>
+            <div class="alert alert-danger" role="alert" id="invalidFactory" style="display:none">
+                Invalid Factory
+            </div>
+        </div>
+    </div>
+
+    <div id="panelFactory" class="container" style="display:none">
+        <br>
+        <p class="h3">Panel Factory</p>
+        <p class="h5" id="addressFactory">Address</p>
+        <p class="h5" id="bankFactory">Bank</p>
+        <p class="h5" id="jackpotFactory">Jackpot</p>
+        <p class="h5" id="countLotteries">Count lotteries</p>
+        <p class="lead">Enter the lottery number and get its address.</p>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">ID</span>
+                </div>
+                <div class="col-xs-1">
+                    <input type="text" id="idLottery" class="form-control" placeholder="Number" value="">
+                </div>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="getLottery" type="button">Get Lottery</button>
+                </div>
+                <input type="text" id="addressLottery" readonly class="form-control" placeholder="Address" value="">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="copyLottery" type="button">Copy</button>
+                </div>
+            </div>
+        <p/>
+        <div class="input-group">
+            <div class="col-xs-1">
+                <input type="text" id="currentBlock" readonly class="form-control" placeholder="Block" value="">
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-primary" id="getCurrentBlock" type="button">Get current block</button>
+            </div>
+        </div>
+        <p class="lead">Fill in the boxes to create a lottery. <br/>
+            <b>sellOverBlock</b> - after this block new tickets will not accepted<br/>
+            <b>stopLotteryBlock</b> - before this block wiiner's tikcet must be choosen<br/>
+            <b>closeLotteryBlock</b> - all players must get their reward before this block<br/>
+        </p>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Sell</span>
+                </div>
+                <input type="text" id="idSell" class="form-control" placeholder="Number" value="">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Stop</span>
+                </div>
+                <input type="text" id="idStop" class="form-control" placeholder="Number" value="">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Close</span>
+                </div>
+                <input type="text" id="idClose" class="form-control" placeholder="Number" value="">
+                <div class="input-group-append">
+                    <button class="btn btn-success" id="сreateLottery" type="button">Create</button>
+                </div>
+            </div>
+        <p/>
+        <div class="alert alert-danger" role="alert" id="invalidBlocks" style="display:none">
+            Invalid Blocks
+        </div>
+    </div>
+
+    <div id="panelLottery" class="container" style="display:none">
+        <br>
+        <p class="h3">Panel Lottery</p>
+        <p class="h5" id="addressLottery">Address</p>
+        <p class="h5" id="bankLottery">Bank</p>
+        <p class="h5" id="jackpotLottery">Jackpot</p>
+        <p class="h5" id="multiplier">Multiplier</p>
+        <p class="h5" id="sellOverBlock">sellOverBlock</p>
+        <p class="h5" id="blockForRandom">blockForRandom</p>
+        <p class="h5" id="stopLotteryBlock">stopLotteryBlock</p>
+        <p class="h5" id="closeLotteryBlock">closeLotteryBlock</p>
+        <p class="lead">You can assign a manager so that he can create a winning ticket or close the lottery.</p>
+            <div class="input-group">
+                <input type="text" id="idManager" class="form-control" placeholder="Address" value="">
+                <div class="input-group-append">
+                    <button class="btn btn-success" id="btnSetManger" type="button">Set manager</button>
+                </div>
+            </div>
+        <p/>
+        <p class="lead">You can play the winner ticket between <strong>blockForRandom</strong> and <strong>stopLotteryBlock</strong>.</p>
+            <button type="button" id="btnChooseWinTicket" class="btn btn-danger btn-lg btn-block">Сhoose Win Ticket</button>
+        <p/>
+        <p class="lead">You can close lottery after <strong>closeLotteryBlock</strong>.</p>
+            <button type="button" id="btnCloseLottery" class="btn btn-danger btn-lg btn-block">Close Lottery</button>
+        <p/>
+        <div class="input-group">
+            <div class="col-xs-1">
+                <input type="text" id="numberOfTickets" readonly class="form-control" placeholder="Number" value="">
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-primary" id="btnNumberOfTickets" type="button">Get count tickets</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <div class="col-xs-1">
+                <input type="text" id="winTicketChoosen" readonly class="form-control" placeholder="Boolean" value="">
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-primary" id="btnWinTicketChoosen" type="button">winTicketChoosen</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <div class="col-xs-1">
+                <input type="text" id="winTicket" readonly class="form-control" placeholder="Array" value="">
+            </div>
+            <div class="input-group-append">
+                <button class="btn btn-primary" id="btnWinTicket" type="button">winTicket</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

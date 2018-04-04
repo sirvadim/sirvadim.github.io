@@ -1,0 +1,25 @@
+body {
+    background: blue;
+}
+
+#ex1Slider .slider-selection {
+	background: #BABABA;
+}
+
+#form {
+  /* внутренний отступ */
+  padding: 20px; 
+  width: 50%;
+  background-color: #262626;
+  border: 2px solid #DB6C10;
+}
+
+.form-input:focus {
+  border: 2px solid #DB6C10;
+}
+
+#slider_ {
+	margin: 12px;
+	padding: 20px;
+}
+@import './components/ticket.scss'
