@@ -30,7 +30,15 @@
                     <button type="button" id="openAccount" class="btn btn-primary btn-lg btn-block">Unlock</button>
                     <button type="button" id="createAccount" class="btn btn-primary btn-lg btn-block">Create account</button>
                 </div>
-            <p/>
+                <div id="account" hidden="true">
+                    <p class="lead">Your Private Key (please save it)</p>
+                    <input type="text" id="privatekeyACC" class="form-control" placeholder="Private Key" value="">
+                    <button class="btn btn-primary" id="copyPriv" type="button">Copy</button>
+                    <p class="lead">Your Open Key</p>
+                    <input type="text" id="openkeyACC" class="form-control" placeholder="Open Key" value="">
+                    <button class="btn btn-primary" id="copyOpen" type="button">Copy</button>
+                </div>
+            
             <div class="alert alert-danger" role="alert" id="invalidPrivateKey" style="display:none">
                 Invalid Private Key
             </div>
@@ -57,22 +65,24 @@
     </div>
     <div id="Panel" class="container" style="display:none">
         <br>
-        <div class="input-group">
-            <div class="col-5">
-                <input type="text" id="openkeyUser" readonly class="form-control" placeholder="openkey" value="">
-            </div>
-            <div class="col-2">
-                <input type="text" id="currentBlock" readonly class="form-control" placeholder="Block" value="">
-            </div>
-            <div class="input-group-append">
-                <button class="btn btn-primary" id="getCurrentBlock" type="button">Get recommended blocks for create lottery</button>
-            </div>
-            <div class="col-2">
-                <input type="text" id="FPS" readonly class="form-control" placeholder="fps" value="fps:">
-            </div>
-            <div class="col-4">
-                <input type="text" id="condition" readonly class="form-control" placeholder="condition" value="">
-                <button class="btn btn-primary" id="openLink" type="button" disabled>open link</button>
+        <div class="jumbotron">
+            <div class="btn-toolbar justify-content-between">
+                <!-- <div class="col-5"> -->
+                    <input type="text" id="openkeyUser" readonly class="form-control" placeholder="openkey" value="">
+                <!-- </div>
+                <div class="col-2"> -->
+                    <input type="text" id="currentBlock" readonly class="form-control" placeholder="Block" value="">
+                <!-- </div> -->
+                <!-- <div class="input-group-append"> -->
+                    <button class="btn btn-primary" id="getCurrentBlock" type="button">Get recommended blocks for create lottery</button>
+                <!-- </div> -->
+                <!-- <div class="col-2"> -->
+                    <input type="text" id="FPS" readonly class="form-control" placeholder="fps" value="fps:">
+                <!-- </div> -->
+                <!-- <div class="col-4"> -->
+                    <input type="text" id="condition" readonly class="form-control" placeholder="condition" value="">
+                    <button class="btn btn-primary" id="openLink" type="button" disabled>open link</button>
+                <!-- </div> -->
             </div>
         </div>
     </div>

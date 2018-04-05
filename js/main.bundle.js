@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "62a6e1a8df38beda3fb8"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "0fab8277293c0df99c64"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -2239,6 +2239,12 @@ $(document).ready(function () {
         // initAccount();
         createAccount();
     });
+    $('button#copyPriv').click(function () {
+        copyAddress(privatekey);
+    });
+    $('button#copyOpen').click(function () {
+        copyAddress(openkey);
+    });
 
     function createAccount() {
         var acc = web3.eth.accounts.create();
@@ -2247,9 +2253,12 @@ $(document).ready(function () {
         console.log(acc, openkey, privatekey);
         web3.eth.accounts.wallet.add(privatekey);
 
-        $('#scrLogin').hide();
-        $('#Panel').show();
-        $('#scrFactory').show();
+        // $('#scrLogin').hide();
+        // $('#Panel').show();
+        // $('#scrFactory').show();
+        document.getElementById("privatekeyACC").value = privatekey;
+        document.getElementById("openkeyACC").value = openkey;
+        document.getElementById("account").hidden = false;
         document.getElementById("openkeyUser").value = openkey;
     }
 
