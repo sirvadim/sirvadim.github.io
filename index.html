@@ -63,36 +63,19 @@
             </div>
         </div>
     </div>
-    <div id="Panel" class="container" style="display:none">
-        <br>
-        <div class="jumbotron">
-            <div class="btn-toolbar justify-content-between">
-                <!-- <div class="col-5"> -->
-                    <input type="text" id="openkeyUser" readonly class="form-control" placeholder="openkey" value="">
-                <!-- </div>
-                <div class="col-2"> -->
-                    <input type="text" id="currentBlock" readonly class="form-control" placeholder="Block" value="">
-                <!-- </div> -->
-                <!-- <div class="input-group-append"> -->
-                    <button class="btn btn-primary" id="getCurrentBlock" type="button">Get recommended blocks for create lottery</button>
-                <!-- </div> -->
-                <!-- <div class="col-2"> -->
-                    <input type="text" id="FPS" readonly class="form-control" placeholder="fps" value="fps:">
-                <!-- </div> -->
-                <!-- <div class="col-4"> -->
-                    <input type="text" id="condition" readonly class="form-control" placeholder="condition" value="">
-                    <button class="btn btn-primary" id="openLink" type="button" disabled>open link</button>
-                <!-- </div> -->
-            </div>
-        </div>
-    </div>
     <div id="panelFactory" class="container" style="display:none">
         <br>
         <p class="h3">Panel Factory</p>
+        <p class="h4" id="currentBlock">Current block:</p>
         <div>
             <p class="h5" id="addressFactory">Address</p>
             <button class="btn btn-primary" id="copyAddressFactory" type="button">copy</button>
             <button class="btn btn-primary" id="ropstenAddressFactory" type="button">ropsten</button>
+        </div>
+        <div>
+            <p class="h5" id="openkeyUser">Openkey</p>
+            <button class="btn btn-primary" id="copyOpen" type="button">copy</button>
+            <button class="btn btn-primary" id="ropstenOpen" type="button">ropsten</button>
         </div>
         <div>
             <p class="h5" id="addressToken">Token</p>
@@ -150,6 +133,7 @@
                 <div class="input-group-append">
                     <button class="btn btn-success" id="сreateLottery" type="button">Create</button>
                 </div>
+                <button class="btn btn-primary" id="getCurrentBlock" type="button">blocks</button>
             </div>
         <p/>
         <div class="alert alert-danger" role="alert" id="invalidBlocks" style="display:none">
@@ -160,6 +144,7 @@
     <div id="panelLottery" class="container" style="display:none">
         <br>
         <p class="h3">Panel Lottery</p>
+        <p class="h4" id="currentBlock">Current block:</p>
         <div>
             <p class="h5" id="addressLottery">Address</p>
             <button class="btn btn-primary" id="copyAddressLottery" type="button">copy</button>
@@ -222,6 +207,26 @@
         <div class="input-group">
             <div class="input-group-append">
                 <button class="btn btn-primary" id="back" type="button">back to factory</button>
+            </div>
+        </div>
+    </div>
+    <div id="Panel" class="container" style="display:none">
+        <br>
+        <div class="jumbotron">
+            <div class="btn-toolbar justify-content-between">
+                    <div class="input-group">
+                        <input type="text" id="FPS" readonly class="form-control" placeholder="fps" value="fps:">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" id="refreshBlock" type="button">refresh block</button>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="text" id="condition" readonly class="form-control" placeholder="tx" value="">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" id="openLink" type="button" disabled>open link</button>
+                        </div>
+                    </div>
             </div>
         </div>
     </div>

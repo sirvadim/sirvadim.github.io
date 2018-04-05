@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "9ac0050925577710494f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "61c1c09e79dd71cd1e5e"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -827,7 +827,7 @@ $(document).ready(function () {
                             $('#scrLogin').hide();
                             $('#Panel').show();
                             $('#scrFactory').show();
-                            document.getElementById("openkeyUser").value = openkey;
+                            $('p.h5#openkeyUser').html("Openkey: " + openkey);
 
                         case 10:
                         case 'end':
@@ -886,6 +886,7 @@ $(document).ready(function () {
                 };
             }();
 
+            var balanceETH;
             return regeneratorRuntime.wrap(function _callee6$(_context6) {
                 while (1) {
                     switch (_context6.prev = _context6.next) {
@@ -901,9 +902,24 @@ $(document).ready(function () {
 
                         case 3:
                             _context6.next = 5;
-                            return setmngtx();
+                            return getEthBalance();
 
                         case 5:
+                            balanceETH = _context6.sent;
+
+                            if (!(balanceETH < 0.2)) {
+                                _context6.next = 9;
+                                break;
+                            }
+
+                            alert("no ETH!");
+                            return _context6.abrupt('return');
+
+                        case 9:
+                            _context6.next = 11;
+                            return setmngtx();
+
+                        case 11:
                         case 'end':
                             return _context6.stop();
                     }
@@ -918,11 +934,26 @@ $(document).ready(function () {
 
     var createFactory = function () {
         var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-            var contract, adrERC20, adrRef;
+            var balanceETH, contract, adrERC20, adrRef;
             return regeneratorRuntime.wrap(function _callee7$(_context7) {
                 while (1) {
                     switch (_context7.prev = _context7.next) {
                         case 0:
+                            _context7.next = 2;
+                            return getEthBalance();
+
+                        case 2:
+                            balanceETH = _context7.sent;
+
+                            if (!(balanceETH < 0.2)) {
+                                _context7.next = 6;
+                                break;
+                            }
+
+                            alert("no ETH!");
+                            return _context7.abrupt('return');
+
+                        case 6:
                             changeText("create factory", true);
                             $('#createFactory').hide();
                             $('#openFactory').hide();
@@ -950,7 +981,7 @@ $(document).ready(function () {
                                 initFactory();
                             });
 
-                        case 7:
+                        case 13:
                         case 'end':
                             return _context7.stop();
                     }
@@ -1026,9 +1057,7 @@ $(document).ready(function () {
                             $('#scrFactory').hide();
                             $('#panelFactory').show();
 
-                            changeText("panelFactory", true);
-
-                        case 26:
+                        case 25:
                         case 'end':
                             return _context8.stop();
                     }
@@ -1079,7 +1108,7 @@ $(document).ready(function () {
 
     var createLottery = function () {
         var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
-            var lotterytx;
+            var lotterytx, balanceETH;
             return regeneratorRuntime.wrap(function _callee11$(_context11) {
                 while (1) {
                     switch (_context11.prev = _context11.next) {
@@ -1089,7 +1118,7 @@ $(document).ready(function () {
                             closeLotteryBlock = Number($('input#idClose').val());
 
                             if (!(sellOverBlock > currentBlock && stopLotteryBlock > sellOverBlock && closeLotteryBlock > stopLotteryBlock)) {
-                                _context11.next = 9;
+                                _context11.next = 15;
                                 break;
                             }
 
@@ -1137,16 +1166,31 @@ $(document).ready(function () {
                             }();
 
                             _context11.next = 7;
-                            return lotterytx();
+                            return getEthBalance();
 
                         case 7:
-                            _context11.next = 10;
+                            balanceETH = _context11.sent;
+
+                            if (!(balanceETH < 0.2)) {
+                                _context11.next = 11;
+                                break;
+                            }
+
+                            alert("no ETH!");
+                            return _context11.abrupt('return');
+
+                        case 11:
+                            _context11.next = 13;
+                            return lotterytx();
+
+                        case 13:
+                            _context11.next = 16;
                             break;
 
-                        case 9:
+                        case 15:
                             $('#invalidBlocks').show();
 
-                        case 10:
+                        case 16:
                         case 'end':
                             return _context11.stop();
                     }
@@ -1165,29 +1209,27 @@ $(document).ready(function () {
                 while (1) {
                     switch (_context12.prev = _context12.next) {
                         case 0:
-                            changeText("loading", true);
-
                             if (!(numLottery == undefined)) {
-                                _context12.next = 5;
+                                _context12.next = 4;
                                 break;
                             }
 
-                            _context12.next = 4;
+                            _context12.next = 3;
                             return refreshCountLotteries();
 
-                        case 4:
+                        case 3:
                             numLottery = countLotteries - 1;
 
-                        case 5:
-                            _context12.next = 7;
+                        case 4:
+                            _context12.next = 6;
                             return contractLotteryFactory.methods.lotteries(numLottery).call();
 
-                        case 7:
+                        case 6:
                             addressLottery = _context12.sent;
-                            _context12.next = 10;
+                            _context12.next = 9;
                             return initLottery();
 
-                        case 10:
+                        case 9:
                         case 'end':
                             return _context12.stop();
                     }
@@ -1242,9 +1284,8 @@ $(document).ready(function () {
 
                             if (_thisActive == false) $('#panelActiveLottery').hide();else $('#panelActiveLottery').show();
                             $('#panelLottery').show();
-                            changeText("panelLottery", true);
 
-                        case 22:
+                        case 21:
                         case 'end':
                             return _context13.stop();
                     }
@@ -1259,13 +1300,13 @@ $(document).ready(function () {
 
     var chooseWinTicket = function () {
         var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
-            var choosetx;
+            var choosetx, balanceETH;
             return regeneratorRuntime.wrap(function _callee15$(_context15) {
                 while (1) {
                     switch (_context15.prev = _context15.next) {
                         case 0:
                             if (!(currentBlock > blockForRandom)) {
-                                _context15.next = 4;
+                                _context15.next = 10;
                                 break;
                             }
 
@@ -1312,9 +1353,24 @@ $(document).ready(function () {
                             }();
 
                             _context15.next = 4;
-                            return choosetx();
+                            return getEthBalance();
 
                         case 4:
+                            balanceETH = _context15.sent;
+
+                            if (!(balanceETH < 0.2)) {
+                                _context15.next = 8;
+                                break;
+                            }
+
+                            alert("no ETH!");
+                            return _context15.abrupt('return');
+
+                        case 8:
+                            _context15.next = 10;
+                            return choosetx();
+
+                        case 10:
                         case 'end':
                             return _context15.stop();
                     }
@@ -1329,6 +1385,7 @@ $(document).ready(function () {
 
     var closeLottery = function () {
         var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
+            var balanceETH;
             return regeneratorRuntime.wrap(function _callee16$(_context16) {
                 while (1) {
                     switch (_context16.prev = _context16.next) {
@@ -1342,39 +1399,54 @@ $(document).ready(function () {
 
                         case 4:
                             if (!(currentBlock > closeLotteryBlock)) {
-                                _context16.next = 24;
+                                _context16.next = 30;
                                 break;
                             }
 
                             _context16.next = 7;
-                            return closetx();
+                            return getEthBalance();
 
                         case 7:
-                            _context16.next = 9;
-                            return getActiveLottery();
+                            balanceETH = _context16.sent;
 
-                        case 9:
-                            if (!(activeLottery == false)) {
-                                _context16.next = 24;
+                            if (!(balanceETH < 0.2)) {
+                                _context16.next = 11;
                                 break;
                             }
 
-                            _context16.next = 12;
+                            alert("no ETH!");
+                            return _context16.abrupt('return');
+
+                        case 11:
+                            _context16.next = 13;
+                            return closetx();
+
+                        case 13:
+                            _context16.next = 15;
+                            return getActiveLottery();
+
+                        case 15:
+                            if (!(activeLottery == false)) {
+                                _context16.next = 30;
+                                break;
+                            }
+
+                            _context16.next = 18;
                             return refreshTokenAddress();
 
-                        case 12:
-                            _context16.next = 14;
+                        case 18:
+                            _context16.next = 20;
                             return refreshBankFactory();
 
-                        case 14:
-                            _context16.next = 16;
+                        case 20:
+                            _context16.next = 22;
                             return refreshJackpotFactory();
 
-                        case 16:
-                            _context16.next = 18;
+                        case 22:
+                            _context16.next = 24;
                             return refreshCountLotteries();
 
-                        case 18:
+                        case 24:
 
                             $('p.h5#addressFactory').html("Address: " + addressFactory);
 
@@ -1384,7 +1456,7 @@ $(document).ready(function () {
                             $('#descriptCreateLottery').show();
                             $('#inputCreateLottery').show();
 
-                        case 24:
+                        case 30:
                         case 'end':
                             return _context16.stop();
                     }
@@ -1542,12 +1614,11 @@ $(document).ready(function () {
                             _context22.next = 2;
                             return web3.eth.getBlockNumber(function (error, res) {
                                 currentBlock = Number(res);
-                                document.getElementById("currentBlock").value = currentBlock;
+                                $('p.h4#currentBlock').html("Current block: " + currentBlock);
                             });
 
                         case 2:
-                            // await getCurrentBlock();
-                            window.setTimeout(getCurrentBlock, 10000);
+                            window.setTimeout(getCurrentBlock, 1000);
 
                         case 3:
                         case 'end':
@@ -1790,19 +1861,20 @@ $(document).ready(function () {
         };
     }();
 
-    var refreshTokenAddress = function () {
+    var getEthBalance = function () {
         var _ref32 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32() {
+            var _ethBalance;
+
             return regeneratorRuntime.wrap(function _callee32$(_context32) {
                 while (1) {
                     switch (_context32.prev = _context32.next) {
                         case 0:
                             _context32.next = 2;
-                            return contractLotteryFactory.methods.token().call();
+                            return web3.eth.getBalance(openkey);
 
                         case 2:
-                            tokenAddress = _context32.sent;
-
-                            $('p.h5#addressToken').html("Token: " + tokenAddress);
+                            _ethBalance = _context32.sent;
+                            return _context32.abrupt('return', parseInt(_ethBalance) / Math.pow(10, 18));
 
                         case 4:
                         case 'end':
@@ -1812,27 +1884,26 @@ $(document).ready(function () {
             }, _callee32, this);
         }));
 
-        return function refreshTokenAddress() {
+        return function getEthBalance() {
             return _ref32.apply(this, arguments);
         };
     }();
 
-    var refreshBankFactory = function () {
+    var refreshTokenAddress = function () {
         var _ref33 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33() {
             return regeneratorRuntime.wrap(function _callee33$(_context33) {
                 while (1) {
                     switch (_context33.prev = _context33.next) {
                         case 0:
                             _context33.next = 2;
-                            return contractLotteryFactory.methods.bank().call();
+                            return contractLotteryFactory.methods.token().call();
 
                         case 2:
-                            bankFactory = _context33.sent;
+                            tokenAddress = _context33.sent;
 
-                            bankFactory = parseInt(bankFactory) / Math.pow(10, 18);
-                            $('p.h5#bankFactory').html("Bank: " + bankFactory);
+                            $('p.h5#addressToken').html("Token: " + tokenAddress);
 
-                        case 5:
+                        case 4:
                         case 'end':
                             return _context33.stop();
                     }
@@ -1840,25 +1911,25 @@ $(document).ready(function () {
             }, _callee33, this);
         }));
 
-        return function refreshBankFactory() {
+        return function refreshTokenAddress() {
             return _ref33.apply(this, arguments);
         };
     }();
 
-    var refreshJackpotFactory = function () {
+    var refreshBankFactory = function () {
         var _ref34 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34() {
             return regeneratorRuntime.wrap(function _callee34$(_context34) {
                 while (1) {
                     switch (_context34.prev = _context34.next) {
                         case 0:
                             _context34.next = 2;
-                            return contractLotteryFactory.methods.jackpot().call();
+                            return contractLotteryFactory.methods.bank().call();
 
                         case 2:
-                            jackpotFactory = _context34.sent;
+                            bankFactory = _context34.sent;
 
-                            jackpotFactory = parseInt(jackpotFactory) / Math.pow(10, 18);
-                            $('p.h5#jackpotFactory').html("Jackpot: " + jackpotFactory);
+                            bankFactory = parseInt(bankFactory) / Math.pow(10, 18);
+                            $('p.h5#bankFactory').html("Bank: " + bankFactory);
 
                         case 5:
                         case 'end':
@@ -1868,26 +1939,27 @@ $(document).ready(function () {
             }, _callee34, this);
         }));
 
-        return function refreshJackpotFactory() {
+        return function refreshBankFactory() {
             return _ref34.apply(this, arguments);
         };
     }();
 
-    var refreshCountLotteries = function () {
+    var refreshJackpotFactory = function () {
         var _ref35 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35() {
             return regeneratorRuntime.wrap(function _callee35$(_context35) {
                 while (1) {
                     switch (_context35.prev = _context35.next) {
                         case 0:
                             _context35.next = 2;
-                            return contractLotteryFactory.methods.getLengthLotteries().call();
+                            return contractLotteryFactory.methods.jackpot().call();
 
                         case 2:
-                            countLotteries = _context35.sent;
+                            jackpotFactory = _context35.sent;
 
-                            $('p.h5#countLotteries').html("Count lotteries: " + countLotteries);
+                            jackpotFactory = parseInt(jackpotFactory) / Math.pow(10, 18);
+                            $('p.h5#jackpotFactory').html("Jackpot: " + jackpotFactory);
 
-                        case 4:
+                        case 5:
                         case 'end':
                             return _context35.stop();
                     }
@@ -1895,27 +1967,26 @@ $(document).ready(function () {
             }, _callee35, this);
         }));
 
-        return function refreshCountLotteries() {
+        return function refreshJackpotFactory() {
             return _ref35.apply(this, arguments);
         };
     }();
 
-    var refreshBankLottery = function () {
+    var refreshCountLotteries = function () {
         var _ref36 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee36() {
             return regeneratorRuntime.wrap(function _callee36$(_context36) {
                 while (1) {
                     switch (_context36.prev = _context36.next) {
                         case 0:
                             _context36.next = 2;
-                            return contractLottery.methods.bank().call();
+                            return contractLotteryFactory.methods.getLengthLotteries().call();
 
                         case 2:
-                            bankLottery = _context36.sent;
+                            countLotteries = _context36.sent;
 
-                            bankLottery = parseInt(bankLottery) / Math.pow(10, 18);
-                            $('p.h5#bankLottery').html("Bank: " + bankLottery);
+                            $('p.h5#countLotteries').html("Count lotteries: " + countLotteries);
 
-                        case 5:
+                        case 4:
                         case 'end':
                             return _context36.stop();
                     }
@@ -1923,25 +1994,25 @@ $(document).ready(function () {
             }, _callee36, this);
         }));
 
-        return function refreshBankLottery() {
+        return function refreshCountLotteries() {
             return _ref36.apply(this, arguments);
         };
     }();
 
-    var refreshJackpotLottery = function () {
+    var refreshBankLottery = function () {
         var _ref37 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee37() {
             return regeneratorRuntime.wrap(function _callee37$(_context37) {
                 while (1) {
                     switch (_context37.prev = _context37.next) {
                         case 0:
                             _context37.next = 2;
-                            return contractLottery.methods.jackpot().call();
+                            return contractLottery.methods.bank().call();
 
                         case 2:
-                            jackpotLottery = _context37.sent;
+                            bankLottery = _context37.sent;
 
-                            jackpotLottery = parseInt(jackpotLottery) / Math.pow(10, 18);
-                            $('p.h5#jackpotLottery').html("Jackpot: " + jackpotLottery);
+                            bankLottery = parseInt(bankLottery) / Math.pow(10, 18);
+                            $('p.h5#bankLottery').html("Bank: " + bankLottery);
 
                         case 5:
                         case 'end':
@@ -1951,26 +2022,27 @@ $(document).ready(function () {
             }, _callee37, this);
         }));
 
-        return function refreshJackpotLottery() {
+        return function refreshBankLottery() {
             return _ref37.apply(this, arguments);
         };
     }();
 
-    var refreshMultiplier = function () {
+    var refreshJackpotLottery = function () {
         var _ref38 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee38() {
             return regeneratorRuntime.wrap(function _callee38$(_context38) {
                 while (1) {
                     switch (_context38.prev = _context38.next) {
                         case 0:
                             _context38.next = 2;
-                            return contractLottery.methods.multiplier().call();
+                            return contractLottery.methods.jackpot().call();
 
                         case 2:
-                            multiplier = _context38.sent;
+                            jackpotLottery = _context38.sent;
 
-                            $('p.h5#multiplier').html("Multiplier: " + multiplier);
+                            jackpotLottery = parseInt(jackpotLottery) / Math.pow(10, 18);
+                            $('p.h5#jackpotLottery').html("Jackpot: " + jackpotLottery);
 
-                        case 4:
+                        case 5:
                         case 'end':
                             return _context38.stop();
                     }
@@ -1978,24 +2050,24 @@ $(document).ready(function () {
             }, _callee38, this);
         }));
 
-        return function refreshMultiplier() {
+        return function refreshJackpotLottery() {
             return _ref38.apply(this, arguments);
         };
     }();
 
-    var getAdrRef = function () {
+    var refreshMultiplier = function () {
         var _ref39 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee39() {
             return regeneratorRuntime.wrap(function _callee39$(_context39) {
                 while (1) {
                     switch (_context39.prev = _context39.next) {
                         case 0:
                             _context39.next = 2;
-                            return contractLotteryFactory.methods.adrRef().call();
+                            return contractLottery.methods.multiplier().call();
 
                         case 2:
-                            adrRef = _context39.sent;
+                            multiplier = _context39.sent;
 
-                            $('p.h5#addressRef').html("Ref: " + adrRef);
+                            $('p.h5#multiplier').html("Multiplier: " + multiplier);
 
                         case 4:
                         case 'end':
@@ -2005,24 +2077,24 @@ $(document).ready(function () {
             }, _callee39, this);
         }));
 
-        return function getAdrRef() {
+        return function refreshMultiplier() {
             return _ref39.apply(this, arguments);
         };
     }();
 
-    var refreshBlockForRandom = function () {
+    var getAdrRef = function () {
         var _ref40 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee40() {
             return regeneratorRuntime.wrap(function _callee40$(_context40) {
                 while (1) {
                     switch (_context40.prev = _context40.next) {
                         case 0:
                             _context40.next = 2;
-                            return contractLottery.methods.blockForRandom().call();
+                            return contractLotteryFactory.methods.adrRef().call();
 
                         case 2:
-                            blockForRandom = _context40.sent;
+                            adrRef = _context40.sent;
 
-                            $('p.h5#blockForRandom').html("blockForRandom: " + blockForRandom);
+                            $('p.h5#addressRef').html("Ref: " + adrRef);
 
                         case 4:
                         case 'end':
@@ -2032,8 +2104,35 @@ $(document).ready(function () {
             }, _callee40, this);
         }));
 
-        return function refreshBlockForRandom() {
+        return function getAdrRef() {
             return _ref40.apply(this, arguments);
+        };
+    }();
+
+    var refreshBlockForRandom = function () {
+        var _ref41 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee41() {
+            return regeneratorRuntime.wrap(function _callee41$(_context41) {
+                while (1) {
+                    switch (_context41.prev = _context41.next) {
+                        case 0:
+                            _context41.next = 2;
+                            return contractLottery.methods.blockForRandom().call();
+
+                        case 2:
+                            blockForRandom = _context41.sent;
+
+                            $('p.h5#blockForRandom').html("blockForRandom: " + blockForRandom);
+
+                        case 4:
+                        case 'end':
+                            return _context41.stop();
+                    }
+                }
+            }, _callee41, this);
+        }));
+
+        return function refreshBlockForRandom() {
+            return _ref41.apply(this, arguments);
         };
     }();
 
@@ -2093,7 +2192,6 @@ $(document).ready(function () {
             while (1) {
                 switch (_context.prev = _context.next) {
                     case 0:
-                        changeText("loading", true);
                         invalid = false;
 
                         addressFactory = $('input#addressFactory').val();
@@ -2106,25 +2204,25 @@ $(document).ready(function () {
                         //if (addressFactory.length != 42 || addressFactory.match(/0x[0-9A-Fa-f]{40}/) == null)
 
                         if (web3.utils.isAddress(addressFactory)) {
-                            _context.next = 8;
+                            _context.next = 7;
                             break;
                         }
 
                         invalid = true;
-                        _context.next = 13;
+                        _context.next = 12;
                         break;
 
-                    case 8:
+                    case 7:
                         contractLotteryFactory = new web3.eth.Contract(abiLotteryFactory, addressFactory);
-                        _context.next = 11;
+                        _context.next = 10;
                         return contractLotteryFactory.methods.owner().call();
 
-                    case 11:
+                    case 10:
                         ownerFactory = _context.sent;
 
                         if (openkey != ownerFactory) invalid = true;
 
-                    case 13:
+                    case 12:
 
                         if (invalid && !debug) {
                             $('#invalidFactory').show();
@@ -2133,7 +2231,7 @@ $(document).ready(function () {
                             initFactory();
                         }
 
-                    case 14:
+                    case 13:
                     case 'end':
                         return _context.stop();
                 }
@@ -2245,12 +2343,17 @@ $(document).ready(function () {
     $('button#copyOpen').click(function () {
         copyAddress(openkey);
     });
+    $('button#ropstenOpen').click(function () {
+        ropstenAddress(openkey, true);
+    });
+    $('button#refreshBlock').click(function () {
+        refreshBlock();
+    });
 
     function createAccount() {
         var acc = web3.eth.accounts.create();
         openkey = acc.address;
         privatekey = acc.privateKey;
-        console.log(acc, openkey, privatekey);
         web3.eth.accounts.wallet.add(privatekey);
 
         // $('#scrLogin').hide();
@@ -2314,7 +2417,6 @@ $(document).ready(function () {
         document.execCommand("copy");
         window.getSelection().removeAllRanges();
         document.body.removeChild(dummy);
-        changeText("copied!", true);
     }
 
     function ropstenAddress(adr, flag) {
@@ -2335,7 +2437,7 @@ $(document).ready(function () {
         $('#scrLogin').hide();
         $('#Panel').show();
         $('#scrFactory').show();
-        document.getElementById("openkeyUser").value = openkey;
+        $('p.h5#openkeyUser').html("Openkey: " + openkey);
     }
 
     function changeText(argument, flag) {
@@ -2396,7 +2498,12 @@ $(document).ready(function () {
         document.execCommand("Copy");
 
         window.getSelection().removeAllRanges();
-        changeText("copied", true);
+    }
+
+    function refreshBlock() {
+        if (currentBlock !== currentBlock || currentBlock == undefined || currentBlock == null) {
+            getCurrentBlock();
+        }
     }
 
     getCurrentBlock();
