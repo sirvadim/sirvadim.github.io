@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "0ea3e4811b94b3ff15ba"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "62a6e1a8df38beda3fb8"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -786,6 +786,8 @@ exports.default = window.configJS;
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _web = __webpack_require__("./node_modules/web3/src/index.js");
 
 var _web2 = _interopRequireDefault(_web);
@@ -803,16 +805,53 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 // var solc = require('solc')
 var web3 = new _web2.default(new _web2.default.providers.HttpProvider("https://ropsten.infura.io/JCnK5ifEPH9qcQkX0Ahl"));
 $(document).ready(function () {
+    var initAccount = function () {
+        var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+            var dataAcc;
+            return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                while (1) {
+                    switch (_context4.prev = _context4.next) {
+                        case 0:
+                            _context4.next = 2;
+                            return getAccountFromServer();
+
+                        case 2:
+                            dataAcc = _context4.sent;
+
+                            privatekey = dataAcc || web3.eth.accounts.create().privateKey;
+
+                            console.log([' 👤 New account created:', openkey]);
+
+                            web3.eth.accounts.wallet.add(privatekey);
+
+                            $('#scrLogin').hide();
+                            $('#Panel').show();
+                            $('#scrFactory').show();
+                            document.getElementById("openkeyUser").value = openkey;
+
+                        case 10:
+                        case 'end':
+                            return _context4.stop();
+                    }
+                }
+            }, _callee4, this);
+        }));
+
+        return function initAccount() {
+            return _ref4.apply(this, arguments);
+        };
+    }();
+
     var setManager = function () {
-        var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+        var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
             var setmngtx = function () {
-                var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+                var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
                     var receipt;
-                    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                    return regeneratorRuntime.wrap(function _callee5$(_context5) {
                         while (1) {
-                            switch (_context4.prev = _context4.next) {
+                            switch (_context5.prev = _context5.next) {
                                 case 0:
-                                    _context4.next = 2;
+                                    _context5.next = 2;
                                     return contractLottery.methods.setManager(addressManager).send({
                                         from: openkey,
                                         gas: 4700000,
@@ -830,59 +869,59 @@ $(document).ready(function () {
                                     });
 
                                 case 2:
-                                    receipt = _context4.sent;
+                                    receipt = _context5.sent;
 
                                     console.log('📌 contract.setManager receipt:');
 
                                 case 4:
                                 case 'end':
-                                    return _context4.stop();
+                                    return _context5.stop();
                             }
                         }
-                    }, _callee4, this);
+                    }, _callee5, this);
                 }));
 
                 return function setmngtx() {
-                    return _ref5.apply(this, arguments);
+                    return _ref6.apply(this, arguments);
                 };
             }();
 
-            return regeneratorRuntime.wrap(function _callee5$(_context5) {
+            return regeneratorRuntime.wrap(function _callee6$(_context6) {
                 while (1) {
-                    switch (_context5.prev = _context5.next) {
+                    switch (_context6.prev = _context6.next) {
                         case 0:
                             addressManager = $('input#idManager').val();
 
                             if (web3.utils.isAddress(addressManager)) {
-                                _context5.next = 3;
+                                _context6.next = 3;
                                 break;
                             }
 
-                            return _context5.abrupt('return');
+                            return _context6.abrupt('return');
 
                         case 3:
-                            _context5.next = 5;
+                            _context6.next = 5;
                             return setmngtx();
 
                         case 5:
                         case 'end':
-                            return _context5.stop();
+                            return _context6.stop();
                     }
                 }
-            }, _callee5, this);
+            }, _callee6, this);
         }));
 
         return function setManager() {
-            return _ref4.apply(this, arguments);
+            return _ref5.apply(this, arguments);
         };
     }();
 
     var createFactory = function () {
-        var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+        var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
             var contract, adrERC20, adrRef;
-            return regeneratorRuntime.wrap(function _callee6$(_context6) {
+            return regeneratorRuntime.wrap(function _callee7$(_context7) {
                 while (1) {
-                    switch (_context6.prev = _context6.next) {
+                    switch (_context7.prev = _context7.next) {
                         case 0:
                             changeText("create factory", true);
                             $('#createFactory').hide();
@@ -913,47 +952,47 @@ $(document).ready(function () {
 
                         case 7:
                         case 'end':
-                            return _context6.stop();
+                            return _context7.stop();
                     }
                 }
-            }, _callee6, this);
+            }, _callee7, this);
         }));
 
         return function createFactory() {
-            return _ref6.apply(this, arguments);
+            return _ref7.apply(this, arguments);
         };
     }();
 
     var initFactory = function () {
-        var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-            return regeneratorRuntime.wrap(function _callee7$(_context7) {
+        var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+            return regeneratorRuntime.wrap(function _callee8$(_context8) {
                 while (1) {
-                    switch (_context7.prev = _context7.next) {
+                    switch (_context8.prev = _context8.next) {
                         case 0:
                             if (contractLotteryFactory == undefined) {
                                 contractLotteryFactory = new web3.eth.Contract(abiLotteryFactory, addressFactory);
                             }
-                            _context7.next = 3;
+                            _context8.next = 3;
                             return getActiveLottery();
 
                         case 3:
-                            _context7.next = 5;
+                            _context8.next = 5;
                             return getAdrRef();
 
                         case 5:
-                            _context7.next = 7;
+                            _context8.next = 7;
                             return refreshTokenAddress();
 
                         case 7:
-                            _context7.next = 9;
+                            _context8.next = 9;
                             return refreshBankFactory();
 
                         case 9:
-                            _context7.next = 11;
+                            _context8.next = 11;
                             return refreshJackpotFactory();
 
                         case 11:
-                            _context7.next = 13;
+                            _context8.next = 13;
                             return refreshCountLotteries();
 
                         case 13:
@@ -964,17 +1003,17 @@ $(document).ready(function () {
                             }
 
                             if (!activeLottery) {
-                                _context7.next = 19;
+                                _context8.next = 19;
                                 break;
                             }
 
                             $('#descriptCreateLottery').hide();
                             $('#inputCreateLottery').hide();
-                            _context7.next = 22;
+                            _context8.next = 22;
                             break;
 
                         case 19:
-                            _context7.next = 21;
+                            _context8.next = 21;
                             return getCreateBlocks();
 
                         case 21:
@@ -991,27 +1030,27 @@ $(document).ready(function () {
 
                         case 26:
                         case 'end':
-                            return _context7.stop();
+                            return _context8.stop();
                     }
                 }
-            }, _callee7, this);
+            }, _callee8, this);
         }));
 
         return function initFactory() {
-            return _ref7.apply(this, arguments);
+            return _ref8.apply(this, arguments);
         };
     }();
 
     var back = function () {
-        var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
-            return regeneratorRuntime.wrap(function _callee8$(_context8) {
+        var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+            return regeneratorRuntime.wrap(function _callee9$(_context9) {
                 while (1) {
-                    switch (_context8.prev = _context8.next) {
+                    switch (_context9.prev = _context9.next) {
                         case 0:
                             $('#panelLottery').hide();
                             $('#panelFactory').show();
 
-                            _context8.next = 4;
+                            _context9.next = 4;
                             return getActiveLottery();
 
                         case 4:
@@ -1027,41 +1066,41 @@ $(document).ready(function () {
 
                         case 5:
                         case 'end':
-                            return _context8.stop();
+                            return _context9.stop();
                     }
                 }
-            }, _callee8, this);
+            }, _callee9, this);
         }));
 
         return function back() {
-            return _ref8.apply(this, arguments);
+            return _ref9.apply(this, arguments);
         };
     }();
 
     var createLottery = function () {
-        var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+        var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
             var lotterytx;
-            return regeneratorRuntime.wrap(function _callee10$(_context10) {
+            return regeneratorRuntime.wrap(function _callee11$(_context11) {
                 while (1) {
-                    switch (_context10.prev = _context10.next) {
+                    switch (_context11.prev = _context11.next) {
                         case 0:
                             sellOverBlock = Number($('input#idSell').val());
                             stopLotteryBlock = Number($('input#idStop').val());
                             closeLotteryBlock = Number($('input#idClose').val());
 
                             if (!(sellOverBlock > currentBlock && stopLotteryBlock > sellOverBlock && closeLotteryBlock > stopLotteryBlock)) {
-                                _context10.next = 9;
+                                _context11.next = 9;
                                 break;
                             }
 
                             lotterytx = function () {
-                                var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+                                var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
                                     var receipt;
-                                    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+                                    return regeneratorRuntime.wrap(function _callee10$(_context10) {
                                         while (1) {
-                                            switch (_context9.prev = _context9.next) {
+                                            switch (_context10.prev = _context10.next) {
                                                 case 0:
-                                                    _context9.next = 2;
+                                                    _context10.next = 2;
                                                     return contractLotteryFactory.methods.createLottery(sellOverBlock, stopLotteryBlock, closeLotteryBlock).send({
                                                         from: openkey,
                                                         gas: 4700000,
@@ -1082,71 +1121,30 @@ $(document).ready(function () {
                                                     });
 
                                                 case 2:
-                                                    receipt = _context9.sent;
+                                                    receipt = _context10.sent;
 
                                                 case 3:
                                                 case 'end':
-                                                    return _context9.stop();
+                                                    return _context10.stop();
                                             }
                                         }
-                                    }, _callee9, this);
+                                    }, _callee10, this);
                                 }));
 
                                 return function lotterytx() {
-                                    return _ref10.apply(this, arguments);
+                                    return _ref11.apply(this, arguments);
                                 };
                             }();
 
-                            _context10.next = 7;
+                            _context11.next = 7;
                             return lotterytx();
 
                         case 7:
-                            _context10.next = 10;
+                            _context11.next = 10;
                             break;
 
                         case 9:
                             $('#invalidBlocks').show();
-
-                        case 10:
-                        case 'end':
-                            return _context10.stop();
-                    }
-                }
-            }, _callee10, this);
-        }));
-
-        return function createLottery() {
-            return _ref9.apply(this, arguments);
-        };
-    }();
-
-    var openLottery = function () {
-        var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(numLottery) {
-            return regeneratorRuntime.wrap(function _callee11$(_context11) {
-                while (1) {
-                    switch (_context11.prev = _context11.next) {
-                        case 0:
-                            changeText("loading", true);
-
-                            if (!(numLottery == undefined)) {
-                                _context11.next = 5;
-                                break;
-                            }
-
-                            _context11.next = 4;
-                            return refreshCountLotteries();
-
-                        case 4:
-                            numLottery = countLotteries - 1;
-
-                        case 5:
-                            _context11.next = 7;
-                            return contractLotteryFactory.methods.lotteries(numLottery).call();
-
-                        case 7:
-                            addressLottery = _context11.sent;
-                            _context11.next = 10;
-                            return initLottery();
 
                         case 10:
                         case 'end':
@@ -1156,18 +1154,59 @@ $(document).ready(function () {
             }, _callee11, this);
         }));
 
+        return function createLottery() {
+            return _ref10.apply(this, arguments);
+        };
+    }();
+
+    var openLottery = function () {
+        var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(numLottery) {
+            return regeneratorRuntime.wrap(function _callee12$(_context12) {
+                while (1) {
+                    switch (_context12.prev = _context12.next) {
+                        case 0:
+                            changeText("loading", true);
+
+                            if (!(numLottery == undefined)) {
+                                _context12.next = 5;
+                                break;
+                            }
+
+                            _context12.next = 4;
+                            return refreshCountLotteries();
+
+                        case 4:
+                            numLottery = countLotteries - 1;
+
+                        case 5:
+                            _context12.next = 7;
+                            return contractLotteryFactory.methods.lotteries(numLottery).call();
+
+                        case 7:
+                            addressLottery = _context12.sent;
+                            _context12.next = 10;
+                            return initLottery();
+
+                        case 10:
+                        case 'end':
+                            return _context12.stop();
+                    }
+                }
+            }, _callee12, this);
+        }));
+
         return function openLottery(_x) {
-            return _ref11.apply(this, arguments);
+            return _ref12.apply(this, arguments);
         };
     }();
 
     var initLottery = function () {
-        var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12() {
+        var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
             var _thisActive;
 
-            return regeneratorRuntime.wrap(function _callee12$(_context12) {
+            return regeneratorRuntime.wrap(function _callee13$(_context13) {
                 while (1) {
-                    switch (_context12.prev = _context12.next) {
+                    switch (_context13.prev = _context13.next) {
                         case 0:
                             contractLottery = new web3.eth.Contract(abiLottery, addressLottery);
 
@@ -1175,15 +1214,15 @@ $(document).ready(function () {
                             refreshJackpotLottery();
                             refreshMultiplier();
                             refreshBlockForRandom();
-                            _context12.next = 7;
+                            _context13.next = 7;
                             return getSellOverBlock();
 
                         case 7:
-                            _context12.next = 9;
+                            _context13.next = 9;
                             return getStopLotteryBlock();
 
                         case 9:
-                            _context12.next = 11;
+                            _context13.next = 11;
                             return getCloseLotteryBlock();
 
                         case 11:
@@ -1194,11 +1233,11 @@ $(document).ready(function () {
 
                             $('#panelFactory').hide();
 
-                            _context12.next = 18;
+                            _context13.next = 18;
                             return contractLotteryFactory.methods.activeLotteries(addressLottery).call();
 
                         case 18:
-                            _thisActive = _context12.sent;
+                            _thisActive = _context13.sent;
 
 
                             if (_thisActive == false) $('#panelActiveLottery').hide();else $('#panelActiveLottery').show();
@@ -1207,37 +1246,37 @@ $(document).ready(function () {
 
                         case 22:
                         case 'end':
-                            return _context12.stop();
+                            return _context13.stop();
                     }
                 }
-            }, _callee12, this);
+            }, _callee13, this);
         }));
 
         return function initLottery() {
-            return _ref12.apply(this, arguments);
+            return _ref13.apply(this, arguments);
         };
     }();
 
     var chooseWinTicket = function () {
-        var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
+        var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
             var choosetx;
-            return regeneratorRuntime.wrap(function _callee14$(_context14) {
+            return regeneratorRuntime.wrap(function _callee15$(_context15) {
                 while (1) {
-                    switch (_context14.prev = _context14.next) {
+                    switch (_context15.prev = _context15.next) {
                         case 0:
                             if (!(currentBlock > blockForRandom)) {
-                                _context14.next = 4;
+                                _context15.next = 4;
                                 break;
                             }
 
                             choosetx = function () {
-                                var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13() {
+                                var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
                                     var receipt;
-                                    return regeneratorRuntime.wrap(function _callee13$(_context13) {
+                                    return regeneratorRuntime.wrap(function _callee14$(_context14) {
                                         while (1) {
-                                            switch (_context13.prev = _context13.next) {
+                                            switch (_context14.prev = _context14.next) {
                                                 case 0:
-                                                    _context13.next = 2;
+                                                    _context14.next = 2;
                                                     return contractLottery.methods.chooseWinTicket().send({
                                                         from: openkey,
                                                         gas: 4700000,
@@ -1255,84 +1294,84 @@ $(document).ready(function () {
                                                     });
 
                                                 case 2:
-                                                    receipt = _context13.sent;
+                                                    receipt = _context14.sent;
 
                                                     console.log('📌 contract.choose receipt:');
 
                                                 case 4:
                                                 case 'end':
-                                                    return _context13.stop();
+                                                    return _context14.stop();
                                             }
                                         }
-                                    }, _callee13, this);
+                                    }, _callee14, this);
                                 }));
 
                                 return function choosetx() {
-                                    return _ref14.apply(this, arguments);
+                                    return _ref15.apply(this, arguments);
                                 };
                             }();
 
-                            _context14.next = 4;
+                            _context15.next = 4;
                             return choosetx();
 
                         case 4:
                         case 'end':
-                            return _context14.stop();
+                            return _context15.stop();
                     }
                 }
-            }, _callee14, this);
+            }, _callee15, this);
         }));
 
         return function chooseWinTicket() {
-            return _ref13.apply(this, arguments);
+            return _ref14.apply(this, arguments);
         };
     }();
 
     var closeLottery = function () {
-        var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
-            return regeneratorRuntime.wrap(function _callee15$(_context15) {
+        var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16() {
+            return regeneratorRuntime.wrap(function _callee16$(_context16) {
                 while (1) {
-                    switch (_context15.prev = _context15.next) {
+                    switch (_context16.prev = _context16.next) {
                         case 0:
-                            _context15.next = 2;
+                            _context16.next = 2;
                             return getStopLotteryBlock();
 
                         case 2:
-                            _context15.next = 4;
+                            _context16.next = 4;
                             return getCloseLotteryBlock();
 
                         case 4:
                             if (!(currentBlock > closeLotteryBlock)) {
-                                _context15.next = 24;
+                                _context16.next = 24;
                                 break;
                             }
 
-                            _context15.next = 7;
+                            _context16.next = 7;
                             return closetx();
 
                         case 7:
-                            _context15.next = 9;
+                            _context16.next = 9;
                             return getActiveLottery();
 
                         case 9:
                             if (!(activeLottery == false)) {
-                                _context15.next = 24;
+                                _context16.next = 24;
                                 break;
                             }
 
-                            _context15.next = 12;
+                            _context16.next = 12;
                             return refreshTokenAddress();
 
                         case 12:
-                            _context15.next = 14;
+                            _context16.next = 14;
                             return refreshBankFactory();
 
                         case 14:
-                            _context15.next = 16;
+                            _context16.next = 16;
                             return refreshJackpotFactory();
 
                         case 16:
-                            _context15.next = 18;
+                            _context16.next = 18;
                             return refreshCountLotteries();
 
                         case 18:
@@ -1347,40 +1386,40 @@ $(document).ready(function () {
 
                         case 24:
                         case 'end':
-                            return _context15.stop();
+                            return _context16.stop();
                     }
                 }
-            }, _callee15, this);
+            }, _callee16, this);
         }));
 
         return function closeLottery() {
-            return _ref15.apply(this, arguments);
+            return _ref16.apply(this, arguments);
         };
     }();
 
     var getLottery = function () {
-        var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17() {
+        var _ref18 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18() {
             var _numOfLottery, _addressOfLottery;
 
-            return regeneratorRuntime.wrap(function _callee17$(_context17) {
+            return regeneratorRuntime.wrap(function _callee18$(_context18) {
                 while (1) {
-                    switch (_context17.prev = _context17.next) {
+                    switch (_context18.prev = _context18.next) {
                         case 0:
                             _numOfLottery = Number(document.getElementById("idLottery").value);
 
                             if (!(_numOfLottery < 0 || _numOfLottery > countLotteries - 1)) {
-                                _context17.next = 3;
+                                _context18.next = 3;
                                 break;
                             }
 
-                            return _context17.abrupt('return');
+                            return _context18.abrupt('return');
 
                         case 3:
-                            _context17.next = 5;
+                            _context18.next = 5;
                             return contractLotteryFactory.methods.lotteries(_numOfLottery).call();
 
                         case 5:
-                            _addressOfLottery = _context17.sent;
+                            _addressOfLottery = _context18.sent;
 
 
                             document.getElementById("addressLottery").value = _addressOfLottery;
@@ -1388,50 +1427,50 @@ $(document).ready(function () {
 
                         case 8:
                         case 'end':
-                            return _context17.stop();
+                            return _context18.stop();
                     }
                 }
-            }, _callee17, this);
+            }, _callee18, this);
         }));
 
         return function getLottery() {
-            return _ref17.apply(this, arguments);
+            return _ref18.apply(this, arguments);
         };
     }();
 
     var btnUserTickets = function () {
-        var _ref18 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee18() {
+        var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19() {
             var adr, val, numTicketsPlayer;
-            return regeneratorRuntime.wrap(function _callee18$(_context18) {
+            return regeneratorRuntime.wrap(function _callee19$(_context19) {
                 while (1) {
-                    switch (_context18.prev = _context18.next) {
+                    switch (_context19.prev = _context19.next) {
                         case 0:
                             adr = String(document.getElementById("userTickets1").value);
                             val = document.getElementById("userTickets2").value;
 
                             if (web3.utils.isAddress(adr)) {
-                                _context18.next = 4;
+                                _context19.next = 4;
                                 break;
                             }
 
-                            return _context18.abrupt('return');
+                            return _context19.abrupt('return');
 
                         case 4:
-                            _context18.next = 6;
+                            _context19.next = 6;
                             return getLengthTicketsPlayer(adr);
 
                         case 6:
-                            numTicketsPlayer = _context18.sent;
+                            numTicketsPlayer = _context19.sent;
 
                             if (!(val >= numTicketsPlayer || val < 0)) {
-                                _context18.next = 9;
+                                _context19.next = 9;
                                 break;
                             }
 
-                            return _context18.abrupt('return');
+                            return _context19.abrupt('return');
 
                         case 9:
-                            _context18.next = 11;
+                            _context19.next = 11;
                             return contractLottery.methods.usersTickets(adr, val).call().then(function (res) {
                                 var curTicket = [res[0], res[1], res[2], res[3], res[4], res[5], res[6]];
                                 document.getElementById("userTicketsRes").value = curTicket;
@@ -1440,29 +1479,29 @@ $(document).ready(function () {
 
                         case 11:
                         case 'end':
-                            return _context18.stop();
+                            return _context19.stop();
                     }
                 }
-            }, _callee18, this);
+            }, _callee19, this);
         }));
 
         return function btnUserTickets() {
-            return _ref18.apply(this, arguments);
+            return _ref19.apply(this, arguments);
         };
     }();
 
     var getCreateBlocks = function () {
-        var _ref19 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20() {
-            return regeneratorRuntime.wrap(function _callee20$(_context20) {
+        var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21() {
+            return regeneratorRuntime.wrap(function _callee21$(_context21) {
                 while (1) {
-                    switch (_context20.prev = _context20.next) {
+                    switch (_context21.prev = _context21.next) {
                         case 0:
-                            _context20.next = 2;
+                            _context21.next = 2;
                             return web3.eth.getBlockNumber(function () {
-                                var _ref20 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee19(error, res) {
-                                    return regeneratorRuntime.wrap(function _callee19$(_context19) {
+                                var _ref21 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee20(error, res) {
+                                    return regeneratorRuntime.wrap(function _callee20$(_context20) {
                                         while (1) {
-                                            switch (_context19.prev = _context19.next) {
+                                            switch (_context20.prev = _context20.next) {
                                                 case 0:
                                                     document.getElementById("idSell").value = currentBlock + 100;
                                                     document.getElementById("idStop").value = currentBlock + 180;
@@ -1470,37 +1509,37 @@ $(document).ready(function () {
 
                                                 case 3:
                                                 case 'end':
-                                                    return _context19.stop();
+                                                    return _context20.stop();
                                             }
                                         }
-                                    }, _callee19, this);
+                                    }, _callee20, this);
                                 }));
 
                                 return function (_x4, _x5) {
-                                    return _ref20.apply(this, arguments);
+                                    return _ref21.apply(this, arguments);
                                 };
                             }());
 
                         case 2:
                         case 'end':
-                            return _context20.stop();
+                            return _context21.stop();
                     }
                 }
-            }, _callee20, this);
+            }, _callee21, this);
         }));
 
         return function getCreateBlocks() {
-            return _ref19.apply(this, arguments);
+            return _ref20.apply(this, arguments);
         };
     }();
 
     var getCurrentBlock = function () {
-        var _ref21 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee21() {
-            return regeneratorRuntime.wrap(function _callee21$(_context21) {
+        var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22() {
+            return regeneratorRuntime.wrap(function _callee22$(_context22) {
                 while (1) {
-                    switch (_context21.prev = _context21.next) {
+                    switch (_context22.prev = _context22.next) {
                         case 0:
-                            _context21.next = 2;
+                            _context22.next = 2;
                             return web3.eth.getBlockNumber(function (error, res) {
                                 currentBlock = Number(res);
                                 document.getElementById("currentBlock").value = currentBlock;
@@ -1512,50 +1551,26 @@ $(document).ready(function () {
 
                         case 3:
                         case 'end':
-                            return _context21.stop();
-                    }
-                }
-            }, _callee21, this);
-        }));
-
-        return function getCurrentBlock() {
-            return _ref21.apply(this, arguments);
-        };
-    }();
-
-    var getSellOverBlock = function () {
-        var _ref22 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee22() {
-            return regeneratorRuntime.wrap(function _callee22$(_context22) {
-                while (1) {
-                    switch (_context22.prev = _context22.next) {
-                        case 0:
-                            _context22.next = 2;
-                            return contractLottery.methods.sellOverBlock().call().then(function (res) {
-                                sellOverBlock = res;
-                            });
-
-                        case 2:
-                        case 'end':
                             return _context22.stop();
                     }
                 }
             }, _callee22, this);
         }));
 
-        return function getSellOverBlock() {
+        return function getCurrentBlock() {
             return _ref22.apply(this, arguments);
         };
     }();
 
-    var getCloseLotteryBlock = function () {
+    var getSellOverBlock = function () {
         var _ref23 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee23() {
             return regeneratorRuntime.wrap(function _callee23$(_context23) {
                 while (1) {
                     switch (_context23.prev = _context23.next) {
                         case 0:
                             _context23.next = 2;
-                            return contractLottery.methods.closeLotteryBlock().call().then(function (res) {
-                                closeLotteryBlock = res;
+                            return contractLottery.methods.sellOverBlock().call().then(function (res) {
+                                sellOverBlock = res;
                             });
 
                         case 2:
@@ -1566,20 +1581,20 @@ $(document).ready(function () {
             }, _callee23, this);
         }));
 
-        return function getCloseLotteryBlock() {
+        return function getSellOverBlock() {
             return _ref23.apply(this, arguments);
         };
     }();
 
-    var getStopLotteryBlock = function () {
+    var getCloseLotteryBlock = function () {
         var _ref24 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee24() {
             return regeneratorRuntime.wrap(function _callee24$(_context24) {
                 while (1) {
                     switch (_context24.prev = _context24.next) {
                         case 0:
                             _context24.next = 2;
-                            return contractLottery.methods.stopLotteryBlock().call().then(function (res) {
-                                stopLotteryBlock = res;
+                            return contractLottery.methods.closeLotteryBlock().call().then(function (res) {
+                                closeLotteryBlock = res;
                             });
 
                         case 2:
@@ -1590,21 +1605,20 @@ $(document).ready(function () {
             }, _callee24, this);
         }));
 
-        return function getStopLotteryBlock() {
+        return function getCloseLotteryBlock() {
             return _ref24.apply(this, arguments);
         };
     }();
 
-    var getNumberOfTickets = function () {
+    var getStopLotteryBlock = function () {
         var _ref25 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee25() {
             return regeneratorRuntime.wrap(function _callee25$(_context25) {
                 while (1) {
                     switch (_context25.prev = _context25.next) {
                         case 0:
                             _context25.next = 2;
-                            return contractLottery.methods.numberOfTickets().call().then(function (res) {
-                                numberOfTickets = res;
-                                document.getElementById("numberOfTickets").value = numberOfTickets;
+                            return contractLottery.methods.stopLotteryBlock().call().then(function (res) {
+                                stopLotteryBlock = res;
                             });
 
                         case 2:
@@ -1615,24 +1629,24 @@ $(document).ready(function () {
             }, _callee25, this);
         }));
 
-        return function getNumberOfTickets() {
+        return function getStopLotteryBlock() {
             return _ref25.apply(this, arguments);
         };
     }();
 
-    var getActiveLottery = function () {
+    var getNumberOfTickets = function () {
         var _ref26 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee26() {
             return regeneratorRuntime.wrap(function _callee26$(_context26) {
                 while (1) {
                     switch (_context26.prev = _context26.next) {
                         case 0:
                             _context26.next = 2;
-                            return contractLotteryFactory.methods.activeLottery().call();
+                            return contractLottery.methods.numberOfTickets().call().then(function (res) {
+                                numberOfTickets = res;
+                                document.getElementById("numberOfTickets").value = numberOfTickets;
+                            });
 
                         case 2:
-                            activeLottery = _context26.sent;
-
-                        case 3:
                         case 'end':
                             return _context26.stop();
                     }
@@ -1640,22 +1654,22 @@ $(document).ready(function () {
             }, _callee26, this);
         }));
 
-        return function getActiveLottery() {
+        return function getNumberOfTickets() {
             return _ref26.apply(this, arguments);
         };
     }();
 
-    var getLengthLotteries = function () {
+    var getActiveLottery = function () {
         var _ref27 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee27() {
             return regeneratorRuntime.wrap(function _callee27$(_context27) {
                 while (1) {
                     switch (_context27.prev = _context27.next) {
                         case 0:
                             _context27.next = 2;
-                            return contractLotteryFactory.methods.getLengthLotteries().call();
+                            return contractLotteryFactory.methods.activeLottery().call();
 
                         case 2:
-                            lengthLotteries = _context27.sent;
+                            activeLottery = _context27.sent;
 
                         case 3:
                         case 'end':
@@ -1665,26 +1679,24 @@ $(document).ready(function () {
             }, _callee27, this);
         }));
 
-        return function getLengthLotteries() {
+        return function getActiveLottery() {
             return _ref27.apply(this, arguments);
         };
     }();
 
-    var getLengthTicketsPlayer = function () {
-        var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28(adr) {
-            var numTicketsPlayer;
+    var getLengthLotteries = function () {
+        var _ref28 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee28() {
             return regeneratorRuntime.wrap(function _callee28$(_context28) {
                 while (1) {
                     switch (_context28.prev = _context28.next) {
                         case 0:
                             _context28.next = 2;
-                            return contractLottery.methods.getLengthTickets(adr).call();
+                            return contractLotteryFactory.methods.getLengthLotteries().call();
 
                         case 2:
-                            numTicketsPlayer = _context28.sent;
-                            return _context28.abrupt('return', numTicketsPlayer);
+                            lengthLotteries = _context28.sent;
 
-                        case 4:
+                        case 3:
                         case 'end':
                             return _context28.stop();
                     }
@@ -1692,24 +1704,26 @@ $(document).ready(function () {
             }, _callee28, this);
         }));
 
-        return function getLengthTicketsPlayer(_x6) {
+        return function getLengthLotteries() {
             return _ref28.apply(this, arguments);
         };
     }();
 
-    var getWinTicketChoosen = function () {
-        var _ref29 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29() {
+    var getLengthTicketsPlayer = function () {
+        var _ref29 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee29(adr) {
+            var numTicketsPlayer;
             return regeneratorRuntime.wrap(function _callee29$(_context29) {
                 while (1) {
                     switch (_context29.prev = _context29.next) {
                         case 0:
                             _context29.next = 2;
-                            return contractLottery.methods.winTicketChoosen().call().then(function (res) {
-                                winTicketChoosen = res;
-                                document.getElementById("winTicketChoosen").value = winTicketChoosen;
-                            });
+                            return contractLottery.methods.getLengthTickets(adr).call();
 
                         case 2:
+                            numTicketsPlayer = _context29.sent;
+                            return _context29.abrupt('return', numTicketsPlayer);
+
+                        case 4:
                         case 'end':
                             return _context29.stop();
                     }
@@ -1717,18 +1731,43 @@ $(document).ready(function () {
             }, _callee29, this);
         }));
 
-        return function getWinTicketChoosen() {
+        return function getLengthTicketsPlayer(_x6) {
             return _ref29.apply(this, arguments);
         };
     }();
 
-    var getWinTicket = function () {
+    var getWinTicketChoosen = function () {
         var _ref30 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee30() {
             return regeneratorRuntime.wrap(function _callee30$(_context30) {
                 while (1) {
                     switch (_context30.prev = _context30.next) {
                         case 0:
                             _context30.next = 2;
+                            return contractLottery.methods.winTicketChoosen().call().then(function (res) {
+                                winTicketChoosen = res;
+                                document.getElementById("winTicketChoosen").value = winTicketChoosen;
+                            });
+
+                        case 2:
+                        case 'end':
+                            return _context30.stop();
+                    }
+                }
+            }, _callee30, this);
+        }));
+
+        return function getWinTicketChoosen() {
+            return _ref30.apply(this, arguments);
+        };
+    }();
+
+    var getWinTicket = function () {
+        var _ref31 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee31() {
+            return regeneratorRuntime.wrap(function _callee31$(_context31) {
+                while (1) {
+                    switch (_context31.prev = _context31.next) {
+                        case 0:
+                            _context31.next = 2;
                             return getWinTicketChoosen();
 
                         case 2:
@@ -1740,60 +1779,32 @@ $(document).ready(function () {
 
                         case 3:
                         case 'end':
-                            return _context30.stop();
-                    }
-                }
-            }, _callee30, this);
-        }));
-
-        return function getWinTicket() {
-            return _ref30.apply(this, arguments);
-        };
-    }();
-
-    var refreshTokenAddress = function () {
-        var _ref31 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee31() {
-            return regeneratorRuntime.wrap(function _callee31$(_context31) {
-                while (1) {
-                    switch (_context31.prev = _context31.next) {
-                        case 0:
-                            _context31.next = 2;
-                            return contractLotteryFactory.methods.token().call();
-
-                        case 2:
-                            tokenAddress = _context31.sent;
-
-                            $('p.h5#addressToken').html("Token: " + tokenAddress);
-
-                        case 4:
-                        case 'end':
                             return _context31.stop();
                     }
                 }
             }, _callee31, this);
         }));
 
-        return function refreshTokenAddress() {
+        return function getWinTicket() {
             return _ref31.apply(this, arguments);
         };
     }();
 
-    var refreshBankFactory = function () {
+    var refreshTokenAddress = function () {
         var _ref32 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee32() {
             return regeneratorRuntime.wrap(function _callee32$(_context32) {
                 while (1) {
                     switch (_context32.prev = _context32.next) {
                         case 0:
                             _context32.next = 2;
-                            return contractLotteryFactory.methods.bank().call();
+                            return contractLotteryFactory.methods.token().call();
 
                         case 2:
-                            bankFactory = _context32.sent;
+                            tokenAddress = _context32.sent;
 
-                            bankFactory = parseInt(bankFactory) / Math.pow(10, 18);
-                            $('p.h5#bankFactory').html("Bank: " + bankFactory);
+                            $('p.h5#addressToken').html("Token: " + tokenAddress);
 
-                        case 5:
+                        case 4:
                         case 'end':
                             return _context32.stop();
                     }
@@ -1801,25 +1812,25 @@ $(document).ready(function () {
             }, _callee32, this);
         }));
 
-        return function refreshBankFactory() {
+        return function refreshTokenAddress() {
             return _ref32.apply(this, arguments);
         };
     }();
 
-    var refreshJackpotFactory = function () {
+    var refreshBankFactory = function () {
         var _ref33 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee33() {
             return regeneratorRuntime.wrap(function _callee33$(_context33) {
                 while (1) {
                     switch (_context33.prev = _context33.next) {
                         case 0:
                             _context33.next = 2;
-                            return contractLotteryFactory.methods.jackpot().call();
+                            return contractLotteryFactory.methods.bank().call();
 
                         case 2:
-                            jackpotFactory = _context33.sent;
+                            bankFactory = _context33.sent;
 
-                            jackpotFactory = parseInt(jackpotFactory) / Math.pow(10, 18);
-                            $('p.h5#jackpotFactory').html("Jackpot: " + jackpotFactory);
+                            bankFactory = parseInt(bankFactory) / Math.pow(10, 18);
+                            $('p.h5#bankFactory').html("Bank: " + bankFactory);
 
                         case 5:
                         case 'end':
@@ -1829,26 +1840,27 @@ $(document).ready(function () {
             }, _callee33, this);
         }));
 
-        return function refreshJackpotFactory() {
+        return function refreshBankFactory() {
             return _ref33.apply(this, arguments);
         };
     }();
 
-    var refreshCountLotteries = function () {
+    var refreshJackpotFactory = function () {
         var _ref34 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee34() {
             return regeneratorRuntime.wrap(function _callee34$(_context34) {
                 while (1) {
                     switch (_context34.prev = _context34.next) {
                         case 0:
                             _context34.next = 2;
-                            return contractLotteryFactory.methods.getLengthLotteries().call();
+                            return contractLotteryFactory.methods.jackpot().call();
 
                         case 2:
-                            countLotteries = _context34.sent;
+                            jackpotFactory = _context34.sent;
 
-                            $('p.h5#countLotteries').html("Count lotteries: " + countLotteries);
+                            jackpotFactory = parseInt(jackpotFactory) / Math.pow(10, 18);
+                            $('p.h5#jackpotFactory').html("Jackpot: " + jackpotFactory);
 
-                        case 4:
+                        case 5:
                         case 'end':
                             return _context34.stop();
                     }
@@ -1856,27 +1868,26 @@ $(document).ready(function () {
             }, _callee34, this);
         }));
 
-        return function refreshCountLotteries() {
+        return function refreshJackpotFactory() {
             return _ref34.apply(this, arguments);
         };
     }();
 
-    var refreshBankLottery = function () {
+    var refreshCountLotteries = function () {
         var _ref35 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee35() {
             return regeneratorRuntime.wrap(function _callee35$(_context35) {
                 while (1) {
                     switch (_context35.prev = _context35.next) {
                         case 0:
                             _context35.next = 2;
-                            return contractLottery.methods.bank().call();
+                            return contractLotteryFactory.methods.getLengthLotteries().call();
 
                         case 2:
-                            bankLottery = _context35.sent;
+                            countLotteries = _context35.sent;
 
-                            bankLottery = parseInt(bankLottery) / Math.pow(10, 18);
-                            $('p.h5#bankLottery').html("Bank: " + bankLottery);
+                            $('p.h5#countLotteries').html("Count lotteries: " + countLotteries);
 
-                        case 5:
+                        case 4:
                         case 'end':
                             return _context35.stop();
                     }
@@ -1884,25 +1895,25 @@ $(document).ready(function () {
             }, _callee35, this);
         }));
 
-        return function refreshBankLottery() {
+        return function refreshCountLotteries() {
             return _ref35.apply(this, arguments);
         };
     }();
 
-    var refreshJackpotLottery = function () {
+    var refreshBankLottery = function () {
         var _ref36 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee36() {
             return regeneratorRuntime.wrap(function _callee36$(_context36) {
                 while (1) {
                     switch (_context36.prev = _context36.next) {
                         case 0:
                             _context36.next = 2;
-                            return contractLottery.methods.jackpot().call();
+                            return contractLottery.methods.bank().call();
 
                         case 2:
-                            jackpotLottery = _context36.sent;
+                            bankLottery = _context36.sent;
 
-                            jackpotLottery = parseInt(jackpotLottery) / Math.pow(10, 18);
-                            $('p.h5#jackpotLottery').html("Jackpot: " + jackpotLottery);
+                            bankLottery = parseInt(bankLottery) / Math.pow(10, 18);
+                            $('p.h5#bankLottery').html("Bank: " + bankLottery);
 
                         case 5:
                         case 'end':
@@ -1912,26 +1923,27 @@ $(document).ready(function () {
             }, _callee36, this);
         }));
 
-        return function refreshJackpotLottery() {
+        return function refreshBankLottery() {
             return _ref36.apply(this, arguments);
         };
     }();
 
-    var refreshMultiplier = function () {
+    var refreshJackpotLottery = function () {
         var _ref37 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee37() {
             return regeneratorRuntime.wrap(function _callee37$(_context37) {
                 while (1) {
                     switch (_context37.prev = _context37.next) {
                         case 0:
                             _context37.next = 2;
-                            return contractLottery.methods.multiplier().call();
+                            return contractLottery.methods.jackpot().call();
 
                         case 2:
-                            multiplier = _context37.sent;
+                            jackpotLottery = _context37.sent;
 
-                            $('p.h5#multiplier').html("Multiplier: " + multiplier);
+                            jackpotLottery = parseInt(jackpotLottery) / Math.pow(10, 18);
+                            $('p.h5#jackpotLottery').html("Jackpot: " + jackpotLottery);
 
-                        case 4:
+                        case 5:
                         case 'end':
                             return _context37.stop();
                     }
@@ -1939,24 +1951,24 @@ $(document).ready(function () {
             }, _callee37, this);
         }));
 
-        return function refreshMultiplier() {
+        return function refreshJackpotLottery() {
             return _ref37.apply(this, arguments);
         };
     }();
 
-    var getAdrRef = function () {
+    var refreshMultiplier = function () {
         var _ref38 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee38() {
             return regeneratorRuntime.wrap(function _callee38$(_context38) {
                 while (1) {
                     switch (_context38.prev = _context38.next) {
                         case 0:
                             _context38.next = 2;
-                            return contractLotteryFactory.methods.adrRef().call();
+                            return contractLottery.methods.multiplier().call();
 
                         case 2:
-                            adrRef = _context38.sent;
+                            multiplier = _context38.sent;
 
-                            $('p.h5#addressRef').html("Ref: " + adrRef);
+                            $('p.h5#multiplier').html("Multiplier: " + multiplier);
 
                         case 4:
                         case 'end':
@@ -1966,24 +1978,24 @@ $(document).ready(function () {
             }, _callee38, this);
         }));
 
-        return function getAdrRef() {
+        return function refreshMultiplier() {
             return _ref38.apply(this, arguments);
         };
     }();
 
-    var refreshBlockForRandom = function () {
+    var getAdrRef = function () {
         var _ref39 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee39() {
             return regeneratorRuntime.wrap(function _callee39$(_context39) {
                 while (1) {
                     switch (_context39.prev = _context39.next) {
                         case 0:
                             _context39.next = 2;
-                            return contractLottery.methods.blockForRandom().call();
+                            return contractLotteryFactory.methods.adrRef().call();
 
                         case 2:
-                            blockForRandom = _context39.sent;
+                            adrRef = _context39.sent;
 
-                            $('p.h5#blockForRandom').html("blockForRandom: " + blockForRandom);
+                            $('p.h5#addressRef').html("Ref: " + adrRef);
 
                         case 4:
                         case 'end':
@@ -1993,8 +2005,35 @@ $(document).ready(function () {
             }, _callee39, this);
         }));
 
-        return function refreshBlockForRandom() {
+        return function getAdrRef() {
             return _ref39.apply(this, arguments);
+        };
+    }();
+
+    var refreshBlockForRandom = function () {
+        var _ref40 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee40() {
+            return regeneratorRuntime.wrap(function _callee40$(_context40) {
+                while (1) {
+                    switch (_context40.prev = _context40.next) {
+                        case 0:
+                            _context40.next = 2;
+                            return contractLottery.methods.blockForRandom().call();
+
+                        case 2:
+                            blockForRandom = _context40.sent;
+
+                            $('p.h5#blockForRandom').html("blockForRandom: " + blockForRandom);
+
+                        case 4:
+                        case 'end':
+                            return _context40.stop();
+                    }
+                }
+            }, _callee40, this);
+        }));
+
+        return function refreshBlockForRandom() {
+            return _ref40.apply(this, arguments);
         };
     }();
 
@@ -2196,6 +2235,66 @@ $(document).ready(function () {
     $('button#openLink').click(function () {
         ropstenAddress(curTX, false);
     });
+    $('button#createAccount').click(function () {
+        // initAccount();
+        createAccount();
+    });
+
+    function createAccount() {
+        var acc = web3.eth.accounts.create();
+        openkey = acc.address;
+        privatekey = acc.privateKey;
+        console.log(acc, openkey, privatekey);
+        web3.eth.accounts.wallet.add(privatekey);
+
+        $('#scrLogin').hide();
+        $('#Panel').show();
+        $('#scrFactory').show();
+        document.getElementById("openkeyUser").value = openkey;
+    }
+
+    var flag = 'statusGetAccountfromServer';
+
+    function getAccountFromServer() {
+        var status = flag;
+
+        if (status) {
+            if (status === 'wait') {
+                return new Promise(function (resolve, reject) {
+                    var waitTimer = function waitTimer() {
+                        setTimeout(function () {
+                            var newStatus = flag;
+                            if ((typeof newStatus === 'undefined' ? 'undefined' : _typeof(newStatus)) === 'object' && newStatus.privateKey) {
+                                _wallet = newStatus;
+                                resolve(newStatus);
+                            } else {
+                                waitTimer();
+                            }
+                        }, 1000);
+                    };
+                    waitTimer();
+                });
+            }
+            return;
+        }
+
+        flag = 'wait';
+
+        return fetch('https://platform.dao.casino/faucet?get=account').then(function (res) {
+            return res.json();
+        }).then(function (acc) {
+            console.log(['Server account data:', acc]);
+            flag = JSON.stringify(acc);
+            openkey = acc.address;
+            console.log("openkey:", openkey);
+
+            return acc.privateKey;
+            // return acc.privateKey
+        }).catch(function (e) {
+            // Utils.debugLog(e)
+            return false;
+        });
+    }
 
     function copyAddress(adr) {
         var dummy = document.createElement("input");
@@ -2239,13 +2338,13 @@ $(document).ready(function () {
         var _this = this;
 
         return new Promise(function () {
-            var _ref16 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee16(resolve, reject) {
+            var _ref17 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee17(resolve, reject) {
                 var receipt;
-                return regeneratorRuntime.wrap(function _callee16$(_context16) {
+                return regeneratorRuntime.wrap(function _callee17$(_context17) {
                     while (1) {
-                        switch (_context16.prev = _context16.next) {
+                        switch (_context17.prev = _context17.next) {
                             case 0:
-                                _context16.next = 2;
+                                _context17.next = 2;
                                 return contractLottery.methods.closeLottery().send({
                                     from: openkey,
                                     gas: 4700000,
@@ -2263,21 +2362,21 @@ $(document).ready(function () {
                                 });
 
                             case 2:
-                                receipt = _context16.sent;
+                                receipt = _context17.sent;
 
                                 console.log('📌 contract.close receipt:');
                                 resolve();
 
                             case 5:
                             case 'end':
-                                return _context16.stop();
+                                return _context17.stop();
                         }
                     }
-                }, _callee16, _this);
+                }, _callee17, _this);
             }));
 
             return function (_x2, _x3) {
-                return _ref16.apply(this, arguments);
+                return _ref17.apply(this, arguments);
             };
         }());
     }
@@ -11341,7 +11440,7 @@ function isnan (val) {
 
 var Buffer = __webpack_require__("./node_modules/safe-buffer/index.js").Buffer
 var Transform = __webpack_require__("./node_modules/stream-browserify/index.js").Transform
-var StringDecoder = __webpack_require__("./node_modules/node-libs-browser/node_modules/string_decoder/lib/string_decoder.js").StringDecoder
+var StringDecoder = __webpack_require__("./node_modules/string_decoder/lib/string_decoder.js").StringDecoder
 var inherits = __webpack_require__("./node_modules/inherits/inherits_browser.js")
 
 function CipherBase (hashMode) {
@@ -43173,309 +43272,6 @@ utils.encode = function encode(arr, enc) {
 
 /***/ }),
 
-/***/ "./node_modules/node-libs-browser/node_modules/string_decoder/lib/string_decoder.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-
-/*<replacement>*/
-
-var Buffer = __webpack_require__("./node_modules/safe-buffer/index.js").Buffer;
-/*</replacement>*/
-
-var isEncoding = Buffer.isEncoding || function (encoding) {
-  encoding = '' + encoding;
-  switch (encoding && encoding.toLowerCase()) {
-    case 'hex':case 'utf8':case 'utf-8':case 'ascii':case 'binary':case 'base64':case 'ucs2':case 'ucs-2':case 'utf16le':case 'utf-16le':case 'raw':
-      return true;
-    default:
-      return false;
-  }
-};
-
-function _normalizeEncoding(enc) {
-  if (!enc) return 'utf8';
-  var retried;
-  while (true) {
-    switch (enc) {
-      case 'utf8':
-      case 'utf-8':
-        return 'utf8';
-      case 'ucs2':
-      case 'ucs-2':
-      case 'utf16le':
-      case 'utf-16le':
-        return 'utf16le';
-      case 'latin1':
-      case 'binary':
-        return 'latin1';
-      case 'base64':
-      case 'ascii':
-      case 'hex':
-        return enc;
-      default:
-        if (retried) return; // undefined
-        enc = ('' + enc).toLowerCase();
-        retried = true;
-    }
-  }
-};
-
-// Do not cache `Buffer.isEncoding` when checking encoding names as some
-// modules monkey-patch it to support additional encodings
-function normalizeEncoding(enc) {
-  var nenc = _normalizeEncoding(enc);
-  if (typeof nenc !== 'string' && (Buffer.isEncoding === isEncoding || !isEncoding(enc))) throw new Error('Unknown encoding: ' + enc);
-  return nenc || enc;
-}
-
-// StringDecoder provides an interface for efficiently splitting a series of
-// buffers into a series of JS strings without breaking apart multi-byte
-// characters.
-exports.StringDecoder = StringDecoder;
-function StringDecoder(encoding) {
-  this.encoding = normalizeEncoding(encoding);
-  var nb;
-  switch (this.encoding) {
-    case 'utf16le':
-      this.text = utf16Text;
-      this.end = utf16End;
-      nb = 4;
-      break;
-    case 'utf8':
-      this.fillLast = utf8FillLast;
-      nb = 4;
-      break;
-    case 'base64':
-      this.text = base64Text;
-      this.end = base64End;
-      nb = 3;
-      break;
-    default:
-      this.write = simpleWrite;
-      this.end = simpleEnd;
-      return;
-  }
-  this.lastNeed = 0;
-  this.lastTotal = 0;
-  this.lastChar = Buffer.allocUnsafe(nb);
-}
-
-StringDecoder.prototype.write = function (buf) {
-  if (buf.length === 0) return '';
-  var r;
-  var i;
-  if (this.lastNeed) {
-    r = this.fillLast(buf);
-    if (r === undefined) return '';
-    i = this.lastNeed;
-    this.lastNeed = 0;
-  } else {
-    i = 0;
-  }
-  if (i < buf.length) return r ? r + this.text(buf, i) : this.text(buf, i);
-  return r || '';
-};
-
-StringDecoder.prototype.end = utf8End;
-
-// Returns only complete characters in a Buffer
-StringDecoder.prototype.text = utf8Text;
-
-// Attempts to complete a partial non-UTF-8 character using bytes from a Buffer
-StringDecoder.prototype.fillLast = function (buf) {
-  if (this.lastNeed <= buf.length) {
-    buf.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, this.lastNeed);
-    return this.lastChar.toString(this.encoding, 0, this.lastTotal);
-  }
-  buf.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, buf.length);
-  this.lastNeed -= buf.length;
-};
-
-// Checks the type of a UTF-8 byte, whether it's ASCII, a leading byte, or a
-// continuation byte. If an invalid byte is detected, -2 is returned.
-function utf8CheckByte(byte) {
-  if (byte <= 0x7F) return 0;else if (byte >> 5 === 0x06) return 2;else if (byte >> 4 === 0x0E) return 3;else if (byte >> 3 === 0x1E) return 4;
-  return byte >> 6 === 0x02 ? -1 : -2;
-}
-
-// Checks at most 3 bytes at the end of a Buffer in order to detect an
-// incomplete multi-byte UTF-8 character. The total number of bytes (2, 3, or 4)
-// needed to complete the UTF-8 character (if applicable) are returned.
-function utf8CheckIncomplete(self, buf, i) {
-  var j = buf.length - 1;
-  if (j < i) return 0;
-  var nb = utf8CheckByte(buf[j]);
-  if (nb >= 0) {
-    if (nb > 0) self.lastNeed = nb - 1;
-    return nb;
-  }
-  if (--j < i || nb === -2) return 0;
-  nb = utf8CheckByte(buf[j]);
-  if (nb >= 0) {
-    if (nb > 0) self.lastNeed = nb - 2;
-    return nb;
-  }
-  if (--j < i || nb === -2) return 0;
-  nb = utf8CheckByte(buf[j]);
-  if (nb >= 0) {
-    if (nb > 0) {
-      if (nb === 2) nb = 0;else self.lastNeed = nb - 3;
-    }
-    return nb;
-  }
-  return 0;
-}
-
-// Validates as many continuation bytes for a multi-byte UTF-8 character as
-// needed or are available. If we see a non-continuation byte where we expect
-// one, we "replace" the validated continuation bytes we've seen so far with
-// a single UTF-8 replacement character ('\ufffd'), to match v8's UTF-8 decoding
-// behavior. The continuation byte check is included three times in the case
-// where all of the continuation bytes for a character exist in the same buffer.
-// It is also done this way as a slight performance increase instead of using a
-// loop.
-function utf8CheckExtraBytes(self, buf, p) {
-  if ((buf[0] & 0xC0) !== 0x80) {
-    self.lastNeed = 0;
-    return '\ufffd';
-  }
-  if (self.lastNeed > 1 && buf.length > 1) {
-    if ((buf[1] & 0xC0) !== 0x80) {
-      self.lastNeed = 1;
-      return '\ufffd';
-    }
-    if (self.lastNeed > 2 && buf.length > 2) {
-      if ((buf[2] & 0xC0) !== 0x80) {
-        self.lastNeed = 2;
-        return '\ufffd';
-      }
-    }
-  }
-}
-
-// Attempts to complete a multi-byte UTF-8 character using bytes from a Buffer.
-function utf8FillLast(buf) {
-  var p = this.lastTotal - this.lastNeed;
-  var r = utf8CheckExtraBytes(this, buf, p);
-  if (r !== undefined) return r;
-  if (this.lastNeed <= buf.length) {
-    buf.copy(this.lastChar, p, 0, this.lastNeed);
-    return this.lastChar.toString(this.encoding, 0, this.lastTotal);
-  }
-  buf.copy(this.lastChar, p, 0, buf.length);
-  this.lastNeed -= buf.length;
-}
-
-// Returns all complete UTF-8 characters in a Buffer. If the Buffer ended on a
-// partial character, the character's bytes are buffered until the required
-// number of bytes are available.
-function utf8Text(buf, i) {
-  var total = utf8CheckIncomplete(this, buf, i);
-  if (!this.lastNeed) return buf.toString('utf8', i);
-  this.lastTotal = total;
-  var end = buf.length - (total - this.lastNeed);
-  buf.copy(this.lastChar, 0, end);
-  return buf.toString('utf8', i, end);
-}
-
-// For UTF-8, a replacement character is added when ending on a partial
-// character.
-function utf8End(buf) {
-  var r = buf && buf.length ? this.write(buf) : '';
-  if (this.lastNeed) return r + '\ufffd';
-  return r;
-}
-
-// UTF-16LE typically needs two bytes per character, but even if we have an even
-// number of bytes available, we need to check if we end on a leading/high
-// surrogate. In that case, we need to wait for the next two bytes in order to
-// decode the last character properly.
-function utf16Text(buf, i) {
-  if ((buf.length - i) % 2 === 0) {
-    var r = buf.toString('utf16le', i);
-    if (r) {
-      var c = r.charCodeAt(r.length - 1);
-      if (c >= 0xD800 && c <= 0xDBFF) {
-        this.lastNeed = 2;
-        this.lastTotal = 4;
-        this.lastChar[0] = buf[buf.length - 2];
-        this.lastChar[1] = buf[buf.length - 1];
-        return r.slice(0, -1);
-      }
-    }
-    return r;
-  }
-  this.lastNeed = 1;
-  this.lastTotal = 2;
-  this.lastChar[0] = buf[buf.length - 1];
-  return buf.toString('utf16le', i, buf.length - 1);
-}
-
-// For UTF-16LE we do not explicitly append special replacement characters if we
-// end on a partial character, we simply let v8 handle that.
-function utf16End(buf) {
-  var r = buf && buf.length ? this.write(buf) : '';
-  if (this.lastNeed) {
-    var end = this.lastTotal - this.lastNeed;
-    return r + this.lastChar.toString('utf16le', 0, end);
-  }
-  return r;
-}
-
-function base64Text(buf, i) {
-  var n = (buf.length - i) % 3;
-  if (n === 0) return buf.toString('base64', i);
-  this.lastNeed = 3 - n;
-  this.lastTotal = 3;
-  if (n === 1) {
-    this.lastChar[0] = buf[buf.length - 1];
-  } else {
-    this.lastChar[0] = buf[buf.length - 2];
-    this.lastChar[1] = buf[buf.length - 1];
-  }
-  return buf.toString('base64', i, buf.length - n);
-}
-
-function base64End(buf) {
-  var r = buf && buf.length ? this.write(buf) : '';
-  if (this.lastNeed) return r + this.lastChar.toString('base64', 0, 3 - this.lastNeed);
-  return r;
-}
-
-// Pass bytes on through for single-byte encodings (e.g. ascii, latin1, hex)
-function simpleWrite(buf) {
-  return buf.toString(this.encoding);
-}
-
-function simpleEnd(buf) {
-  return buf && buf.length ? this.write(buf) : '';
-}
-
-/***/ }),
-
 /***/ "./node_modules/number-to-bn/node_modules/bn.js/lib/bn.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -51532,10 +51328,13 @@ var Writable = __webpack_require__("./node_modules/readable-stream/lib/_stream_w
 
 util.inherits(Duplex, Readable);
 
-var keys = objectKeys(Writable.prototype);
-for (var v = 0; v < keys.length; v++) {
-  var method = keys[v];
-  if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
+{
+  // avoid scope creep, the keys array can then be collected
+  var keys = objectKeys(Writable.prototype);
+  for (var v = 0; v < keys.length; v++) {
+    var method = keys[v];
+    if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
+  }
 }
 
 function Duplex(options) {
@@ -51553,6 +51352,16 @@ function Duplex(options) {
 
   this.once('end', onend);
 }
+
+Object.defineProperty(Duplex.prototype, 'writableHighWaterMark', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function () {
+    return this._writableState.highWaterMark;
+  }
+});
 
 // the no-half-open enforcer
 function onend() {
@@ -51596,12 +51405,6 @@ Duplex.prototype._destroy = function (err, cb) {
 
   pna.nextTick(cb, err);
 };
-
-function forEach(xs, f) {
-  for (var i = 0, l = xs.length; i < l; i++) {
-    f(xs[i], i);
-  }
-}
 
 /***/ }),
 
@@ -51834,7 +51637,7 @@ function ReadableState(options, stream) {
   this.decoder = null;
   this.encoding = null;
   if (options.encoding) {
-    if (!StringDecoder) StringDecoder = __webpack_require__("./node_modules/node-libs-browser/node_modules/string_decoder/lib/string_decoder.js").StringDecoder;
+    if (!StringDecoder) StringDecoder = __webpack_require__("./node_modules/string_decoder/lib/string_decoder.js").StringDecoder;
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
@@ -51990,7 +51793,7 @@ Readable.prototype.isPaused = function () {
 
 // backwards compatibility.
 Readable.prototype.setEncoding = function (enc) {
-  if (!StringDecoder) StringDecoder = __webpack_require__("./node_modules/node-libs-browser/node_modules/string_decoder/lib/string_decoder.js").StringDecoder;
+  if (!StringDecoder) StringDecoder = __webpack_require__("./node_modules/string_decoder/lib/string_decoder.js").StringDecoder;
   this._readableState.decoder = new StringDecoder(enc);
   this._readableState.encoding = enc;
   return this;
@@ -52541,6 +52344,16 @@ Readable.prototype.wrap = function (stream) {
   return this;
 };
 
+Object.defineProperty(Readable.prototype, 'readableHighWaterMark', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function () {
+    return this._readableState.highWaterMark;
+  }
+});
+
 // exposed for testing purposes only.
 Readable._fromList = fromList;
 
@@ -52663,12 +52476,6 @@ function endReadableNT(state, stream) {
     state.endEmitted = true;
     stream.readable = false;
     stream.emit('end');
-  }
-}
-
-function forEach(xs, f) {
-  for (var i = 0, l = xs.length; i < l; i++) {
-    f(xs[i], i);
   }
 }
 
@@ -53276,6 +53083,16 @@ function decodeChunk(state, chunk, encoding) {
   }
   return chunk;
 }
+
+Object.defineProperty(Writable.prototype, 'writableHighWaterMark', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function () {
+    return this._writableState.highWaterMark;
+  }
+});
 
 // if we're already writing something, then just put this
 // in the queue, and wait our turn.  Otherwise, call _write
@@ -56298,6 +56115,309 @@ module.exports = function (str) {
 	});
 };
 
+
+/***/ }),
+
+/***/ "./node_modules/string_decoder/lib/string_decoder.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+/*<replacement>*/
+
+var Buffer = __webpack_require__("./node_modules/safe-buffer/index.js").Buffer;
+/*</replacement>*/
+
+var isEncoding = Buffer.isEncoding || function (encoding) {
+  encoding = '' + encoding;
+  switch (encoding && encoding.toLowerCase()) {
+    case 'hex':case 'utf8':case 'utf-8':case 'ascii':case 'binary':case 'base64':case 'ucs2':case 'ucs-2':case 'utf16le':case 'utf-16le':case 'raw':
+      return true;
+    default:
+      return false;
+  }
+};
+
+function _normalizeEncoding(enc) {
+  if (!enc) return 'utf8';
+  var retried;
+  while (true) {
+    switch (enc) {
+      case 'utf8':
+      case 'utf-8':
+        return 'utf8';
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return 'utf16le';
+      case 'latin1':
+      case 'binary':
+        return 'latin1';
+      case 'base64':
+      case 'ascii':
+      case 'hex':
+        return enc;
+      default:
+        if (retried) return; // undefined
+        enc = ('' + enc).toLowerCase();
+        retried = true;
+    }
+  }
+};
+
+// Do not cache `Buffer.isEncoding` when checking encoding names as some
+// modules monkey-patch it to support additional encodings
+function normalizeEncoding(enc) {
+  var nenc = _normalizeEncoding(enc);
+  if (typeof nenc !== 'string' && (Buffer.isEncoding === isEncoding || !isEncoding(enc))) throw new Error('Unknown encoding: ' + enc);
+  return nenc || enc;
+}
+
+// StringDecoder provides an interface for efficiently splitting a series of
+// buffers into a series of JS strings without breaking apart multi-byte
+// characters.
+exports.StringDecoder = StringDecoder;
+function StringDecoder(encoding) {
+  this.encoding = normalizeEncoding(encoding);
+  var nb;
+  switch (this.encoding) {
+    case 'utf16le':
+      this.text = utf16Text;
+      this.end = utf16End;
+      nb = 4;
+      break;
+    case 'utf8':
+      this.fillLast = utf8FillLast;
+      nb = 4;
+      break;
+    case 'base64':
+      this.text = base64Text;
+      this.end = base64End;
+      nb = 3;
+      break;
+    default:
+      this.write = simpleWrite;
+      this.end = simpleEnd;
+      return;
+  }
+  this.lastNeed = 0;
+  this.lastTotal = 0;
+  this.lastChar = Buffer.allocUnsafe(nb);
+}
+
+StringDecoder.prototype.write = function (buf) {
+  if (buf.length === 0) return '';
+  var r;
+  var i;
+  if (this.lastNeed) {
+    r = this.fillLast(buf);
+    if (r === undefined) return '';
+    i = this.lastNeed;
+    this.lastNeed = 0;
+  } else {
+    i = 0;
+  }
+  if (i < buf.length) return r ? r + this.text(buf, i) : this.text(buf, i);
+  return r || '';
+};
+
+StringDecoder.prototype.end = utf8End;
+
+// Returns only complete characters in a Buffer
+StringDecoder.prototype.text = utf8Text;
+
+// Attempts to complete a partial non-UTF-8 character using bytes from a Buffer
+StringDecoder.prototype.fillLast = function (buf) {
+  if (this.lastNeed <= buf.length) {
+    buf.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, this.lastNeed);
+    return this.lastChar.toString(this.encoding, 0, this.lastTotal);
+  }
+  buf.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, buf.length);
+  this.lastNeed -= buf.length;
+};
+
+// Checks the type of a UTF-8 byte, whether it's ASCII, a leading byte, or a
+// continuation byte. If an invalid byte is detected, -2 is returned.
+function utf8CheckByte(byte) {
+  if (byte <= 0x7F) return 0;else if (byte >> 5 === 0x06) return 2;else if (byte >> 4 === 0x0E) return 3;else if (byte >> 3 === 0x1E) return 4;
+  return byte >> 6 === 0x02 ? -1 : -2;
+}
+
+// Checks at most 3 bytes at the end of a Buffer in order to detect an
+// incomplete multi-byte UTF-8 character. The total number of bytes (2, 3, or 4)
+// needed to complete the UTF-8 character (if applicable) are returned.
+function utf8CheckIncomplete(self, buf, i) {
+  var j = buf.length - 1;
+  if (j < i) return 0;
+  var nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) self.lastNeed = nb - 1;
+    return nb;
+  }
+  if (--j < i || nb === -2) return 0;
+  nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) self.lastNeed = nb - 2;
+    return nb;
+  }
+  if (--j < i || nb === -2) return 0;
+  nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) {
+      if (nb === 2) nb = 0;else self.lastNeed = nb - 3;
+    }
+    return nb;
+  }
+  return 0;
+}
+
+// Validates as many continuation bytes for a multi-byte UTF-8 character as
+// needed or are available. If we see a non-continuation byte where we expect
+// one, we "replace" the validated continuation bytes we've seen so far with
+// a single UTF-8 replacement character ('\ufffd'), to match v8's UTF-8 decoding
+// behavior. The continuation byte check is included three times in the case
+// where all of the continuation bytes for a character exist in the same buffer.
+// It is also done this way as a slight performance increase instead of using a
+// loop.
+function utf8CheckExtraBytes(self, buf, p) {
+  if ((buf[0] & 0xC0) !== 0x80) {
+    self.lastNeed = 0;
+    return '\ufffd';
+  }
+  if (self.lastNeed > 1 && buf.length > 1) {
+    if ((buf[1] & 0xC0) !== 0x80) {
+      self.lastNeed = 1;
+      return '\ufffd';
+    }
+    if (self.lastNeed > 2 && buf.length > 2) {
+      if ((buf[2] & 0xC0) !== 0x80) {
+        self.lastNeed = 2;
+        return '\ufffd';
+      }
+    }
+  }
+}
+
+// Attempts to complete a multi-byte UTF-8 character using bytes from a Buffer.
+function utf8FillLast(buf) {
+  var p = this.lastTotal - this.lastNeed;
+  var r = utf8CheckExtraBytes(this, buf, p);
+  if (r !== undefined) return r;
+  if (this.lastNeed <= buf.length) {
+    buf.copy(this.lastChar, p, 0, this.lastNeed);
+    return this.lastChar.toString(this.encoding, 0, this.lastTotal);
+  }
+  buf.copy(this.lastChar, p, 0, buf.length);
+  this.lastNeed -= buf.length;
+}
+
+// Returns all complete UTF-8 characters in a Buffer. If the Buffer ended on a
+// partial character, the character's bytes are buffered until the required
+// number of bytes are available.
+function utf8Text(buf, i) {
+  var total = utf8CheckIncomplete(this, buf, i);
+  if (!this.lastNeed) return buf.toString('utf8', i);
+  this.lastTotal = total;
+  var end = buf.length - (total - this.lastNeed);
+  buf.copy(this.lastChar, 0, end);
+  return buf.toString('utf8', i, end);
+}
+
+// For UTF-8, a replacement character is added when ending on a partial
+// character.
+function utf8End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) return r + '\ufffd';
+  return r;
+}
+
+// UTF-16LE typically needs two bytes per character, but even if we have an even
+// number of bytes available, we need to check if we end on a leading/high
+// surrogate. In that case, we need to wait for the next two bytes in order to
+// decode the last character properly.
+function utf16Text(buf, i) {
+  if ((buf.length - i) % 2 === 0) {
+    var r = buf.toString('utf16le', i);
+    if (r) {
+      var c = r.charCodeAt(r.length - 1);
+      if (c >= 0xD800 && c <= 0xDBFF) {
+        this.lastNeed = 2;
+        this.lastTotal = 4;
+        this.lastChar[0] = buf[buf.length - 2];
+        this.lastChar[1] = buf[buf.length - 1];
+        return r.slice(0, -1);
+      }
+    }
+    return r;
+  }
+  this.lastNeed = 1;
+  this.lastTotal = 2;
+  this.lastChar[0] = buf[buf.length - 1];
+  return buf.toString('utf16le', i, buf.length - 1);
+}
+
+// For UTF-16LE we do not explicitly append special replacement characters if we
+// end on a partial character, we simply let v8 handle that.
+function utf16End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) {
+    var end = this.lastTotal - this.lastNeed;
+    return r + this.lastChar.toString('utf16le', 0, end);
+  }
+  return r;
+}
+
+function base64Text(buf, i) {
+  var n = (buf.length - i) % 3;
+  if (n === 0) return buf.toString('base64', i);
+  this.lastNeed = 3 - n;
+  this.lastTotal = 3;
+  if (n === 1) {
+    this.lastChar[0] = buf[buf.length - 1];
+  } else {
+    this.lastChar[0] = buf[buf.length - 2];
+    this.lastChar[1] = buf[buf.length - 1];
+  }
+  return buf.toString('base64', i, buf.length - n);
+}
+
+function base64End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) return r + this.lastChar.toString('base64', 0, 3 - this.lastNeed);
+  return r;
+}
+
+// Pass bytes on through for single-byte encodings (e.g. ascii, latin1, hex)
+function simpleWrite(buf) {
+  return buf.toString(this.encoding);
+}
+
+function simpleEnd(buf) {
+  return buf && buf.length ? this.write(buf) : '';
+}
 
 /***/ }),
 
