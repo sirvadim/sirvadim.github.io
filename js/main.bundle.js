@@ -61,7 +61,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "23545bcbe1686965d895"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "6d6633c692357ccf8d5a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -908,18 +908,21 @@ $(document).ready(function () {
                             balanceETH = _context6.sent;
 
                             if (!(balanceETH < 0.2)) {
-                                _context6.next = 9;
+                                _context6.next = 11;
                                 break;
                             }
 
-                            alert("no ETH!");
+                            $('#invalidETH').show();
                             return _context6.abrupt('return');
 
-                        case 9:
-                            _context6.next = 11;
+                        case 11:
+                            $('#invalidETH').hide();
+
+                        case 12:
+                            _context6.next = 14;
                             return setmngtx();
 
-                        case 11:
+                        case 14:
                         case 'end':
                             return _context6.stop();
                     }
@@ -946,14 +949,17 @@ $(document).ready(function () {
                             balanceETH = _context7.sent;
 
                             if (!(balanceETH < 0.2)) {
-                                _context7.next = 6;
+                                _context7.next = 8;
                                 break;
                             }
 
-                            alert("no ETH!");
+                            $('#invalidETH').show();
                             return _context7.abrupt('return');
 
-                        case 6:
+                        case 8:
+                            $('#invalidETH').hide();
+
+                        case 9:
                             changeText("create factory", true);
                             $('#createFactory').hide();
                             $('#openFactory').hide();
@@ -981,7 +987,7 @@ $(document).ready(function () {
                                 initFactory();
                             });
 
-                        case 13:
+                        case 16:
                         case 'end':
                             return _context7.stop();
                     }
@@ -1118,7 +1124,7 @@ $(document).ready(function () {
                             closeLotteryBlock = Number($('input#idClose').val());
 
                             if (!(sellOverBlock > currentBlock && stopLotteryBlock > sellOverBlock && closeLotteryBlock > stopLotteryBlock)) {
-                                _context11.next = 15;
+                                _context11.next = 18;
                                 break;
                             }
 
@@ -1172,25 +1178,28 @@ $(document).ready(function () {
                             balanceETH = _context11.sent;
 
                             if (!(balanceETH < 0.2)) {
-                                _context11.next = 11;
+                                _context11.next = 13;
                                 break;
                             }
 
-                            alert("no ETH!");
+                            $('#invalidETH').show();
                             return _context11.abrupt('return');
 
-                        case 11:
-                            _context11.next = 13;
+                        case 13:
+                            $('#invalidETH').hide();
+
+                        case 14:
+                            _context11.next = 16;
                             return lotterytx();
 
-                        case 13:
-                            _context11.next = 16;
+                        case 16:
+                            _context11.next = 19;
                             break;
 
-                        case 15:
+                        case 18:
                             $('#invalidBlocks').show();
 
-                        case 16:
+                        case 19:
                         case 'end':
                             return _context11.stop();
                     }
@@ -1306,7 +1315,7 @@ $(document).ready(function () {
                     switch (_context15.prev = _context15.next) {
                         case 0:
                             if (!(currentBlock > blockForRandom)) {
-                                _context15.next = 10;
+                                _context15.next = 13;
                                 break;
                             }
 
@@ -1359,18 +1368,21 @@ $(document).ready(function () {
                             balanceETH = _context15.sent;
 
                             if (!(balanceETH < 0.2)) {
-                                _context15.next = 8;
+                                _context15.next = 10;
                                 break;
                             }
 
-                            alert("no ETH!");
+                            $('#invalidETH').show();
                             return _context15.abrupt('return');
 
-                        case 8:
-                            _context15.next = 10;
+                        case 10:
+                            $('#invalidETH').hide();
+
+                        case 11:
+                            _context15.next = 13;
                             return choosetx();
 
-                        case 10:
+                        case 13:
                         case 'end':
                             return _context15.stop();
                     }
@@ -1399,7 +1411,7 @@ $(document).ready(function () {
 
                         case 4:
                             if (!(currentBlock > closeLotteryBlock)) {
-                                _context16.next = 30;
+                                _context16.next = 33;
                                 break;
                             }
 
@@ -1410,43 +1422,46 @@ $(document).ready(function () {
                             balanceETH = _context16.sent;
 
                             if (!(balanceETH < 0.2)) {
-                                _context16.next = 11;
+                                _context16.next = 13;
                                 break;
                             }
 
-                            alert("no ETH!");
+                            $('#invalidETH').show();
                             return _context16.abrupt('return');
 
-                        case 11:
-                            _context16.next = 13;
+                        case 13:
+                            $('#invalidETH').hide();
+
+                        case 14:
+                            _context16.next = 16;
                             return closetx();
 
-                        case 13:
-                            _context16.next = 15;
+                        case 16:
+                            _context16.next = 18;
                             return getActiveLottery();
 
-                        case 15:
+                        case 18:
                             if (!(activeLottery == false)) {
-                                _context16.next = 30;
+                                _context16.next = 33;
                                 break;
                             }
 
-                            _context16.next = 18;
+                            _context16.next = 21;
                             return refreshTokenAddress();
 
-                        case 18:
-                            _context16.next = 20;
+                        case 21:
+                            _context16.next = 23;
                             return refreshBankFactory();
 
-                        case 20:
-                            _context16.next = 22;
+                        case 23:
+                            _context16.next = 25;
                             return refreshJackpotFactory();
 
-                        case 22:
-                            _context16.next = 24;
+                        case 25:
+                            _context16.next = 27;
                             return refreshCountLotteries();
 
-                        case 24:
+                        case 27:
 
                             $('p.h5#addressFactory').html("Address: " + addressFactory);
 
@@ -1456,7 +1471,7 @@ $(document).ready(function () {
                             $('#descriptCreateLottery').show();
                             $('#inputCreateLottery').show();
 
-                        case 30:
+                        case 33:
                         case 'end':
                             return _context16.stop();
                     }
